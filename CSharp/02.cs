@@ -4,6 +4,7 @@ namespace Advent2019
 {
     public class Challenge02 : Challenge
     {
+        IntCodeEmulator ICE = new IntCodeEmulator();
         public override object Task1()
         {
             string[] parts = input[0].Split(',');
@@ -13,37 +14,13 @@ namespace Advent2019
             intCode[1] = 12;
             intCode[2] = 2;
 
-            return RunCode(intCode);
-        }
-
-        private int RunCode(int[] intCode)
-        {
-            for (int position = 0; position < intCode.Length; position += 4)
-            {
-                int opCode = intCode[position];
-                switch (opCode)
-                {
-                    case 1:
-                        int a = intCode[intCode[position + 1]];
-                        int b = intCode[intCode[position + 2]];
-                        intCode[intCode[position + 3]] = a + b;
-                        break;
-                    case 2:
-                        int c = intCode[intCode[position + 1]];
-                        int d = intCode[intCode[position + 2]];
-                        intCode[intCode[position + 3]] = c * d;
-                        break;
-                    case 99:
-                        return intCode[0];
-                    default:
-                        return -1;
-                }
-            }
-            return -1;
+            ICE.Run(intCode);
+            return intCode[0];
         }
 
         public override object Task2()
         {
+
             const int reqOutput = 19690720;
 
             string[] parts = input[0].Split(',');
@@ -59,11 +36,10 @@ namespace Advent2019
                     Array.Copy(intCode, testCode, intCode.Length);
                     testCode[1] = noun;
                     testCode[2] = verb;
-                    if (RunCode(testCode) == reqOutput) return (100 * noun) + verb;
+                    ICE.Run(testCode);
+                    if (testCode[0] == reqOutput) return (100 * noun) + verb;
                 }
             }
-
-
             return null;
         }
     }
