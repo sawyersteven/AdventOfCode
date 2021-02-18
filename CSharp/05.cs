@@ -1,30 +1,39 @@
+using Advent2019.IntCode;
 namespace Advent2019
 {
     public class Challenge05 : Challenge
     {
-        IntCodeEmulator ICE = new IntCodeEmulator();
         public override object Task1()
         {
-            ICE.Run(input[0], 1);
+            int[] program = IntCode.Tools.ParseCode(input[0]);
 
-            for (int i = 0; i < ICE.output.Count - 1; i++)
+            Emulator ICE = new Emulator(program);
+
+            (ExitCode, int) result = (0, 0);
+            while (true)
             {
-                if (ICE.output[i] != 0) return "FailedDiag";
+                (ExitCode, int) r = ICE.Run(1);
+                if (r.Item1 == ExitCode.Complete) break;
+                result = r;
             }
 
-            return ICE.output[ICE.output.Count - 1];
+            return result.Item2;
         }
 
         public override object Task2()
         {
-            ICE.Run(input[0], 5);
+            int[] program = IntCode.Tools.ParseCode(input[0]);
+            Emulator ICE = new Emulator(program);
 
-            for (int i = 0; i < ICE.output.Count - 1; i++)
+            (ExitCode, int) result = (0, 0);
+            while (true)
             {
-                if (ICE.output[i] != 0) return "FailedDiag";
+                (ExitCode, int) r = ICE.Run(5);
+                if (r.Item1 == ExitCode.Complete) break;
+                result = r;
             }
 
-            return ICE.output[ICE.output.Count - 1];
+            return result.Item2;
         }
     }
 }
