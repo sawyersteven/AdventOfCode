@@ -14,7 +14,7 @@ namespace Advent2019
             ICE.Reboot(program);
             ICE.Run();
 
-            return program[0];
+            return ICE.program[0];
         }
 
         public override object Task2()
@@ -36,7 +36,7 @@ namespace Advent2019
                     testCode[2] = verb;
                     ICE.Reboot(testCode);
                     ICE.Run();
-                    if (testCode[0] == reqOutput) return (100 * noun) + verb;
+                    if (ICE.program[0] == reqOutput) return (100 * noun) + verb;
                 }
             }
             return null;
