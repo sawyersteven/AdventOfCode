@@ -4,7 +4,7 @@ namespace Advent2019
 {
     namespace IntCode
     {
-        using Result = ValueTuple<ExitCode, int>;
+        using Result = ValueTuple<ExitCode, long>;
 
         public enum ExitCode
         {
@@ -17,11 +17,11 @@ namespace Advent2019
 
         public static class Tools
         {
-            public static int[] ParseCode(string code)
+            public static long[] ParseCode(string code)
             {
                 string[] parts = code.Split(',');
-                int[] intCode = new int[parts.Length];
-                for (int i = 0; i < intCode.Length; i++) intCode[i] = int.Parse(parts[i]);
+                long[] intCode = new long[parts.Length];
+                for (long i = 0; i < intCode.Length; i++) intCode[i] = long.Parse(parts[i]);
                 return intCode;
             }
         }
@@ -60,89 +60,125 @@ namespace Advent2019
         /// </summary>
         public class Emulator
         {
-            private int[] _program;
-            public int[] program
+            private long[] _Memory;
+            public long[] Memory
             {
-                get => _program;
+                get => _Memory;
                 private set
                 {
                     if (value == null)
                     {
-                        _program = null;
+                        _Memory = null;
                         return;
                     }
-                    _program = new int[value.Length];
-                    Array.Copy(value, _program, value.Length);
+                    _Memory = new long[value.Length * 100];
+                    Array.Copy(value, _Memory, value.Length);
                 }
             }
-            private int position = 0;
+            private long position = 0;
+            private long relativeBase = 0;
 
-            public Emulator(int[] program)
+            public Emulator(long[] program)
             {
-                this.program = program;
+                this.Memory = program;
             }
 
-            public void Reboot(int[] program)
+            public Result Reboot(long[] program)
             {
                 position = 0;
-                this.program = program;
+                this.Memory = program;
+                return (ExitCode.Null, 0);
             }
 
-            int Param1() => (program[position] / 100 % 10) == 0 ? program[program[position + 1]] : program[position + 1];
-            int Param2() => (program[position] / 1000 % 10) == 0 ? program[program[position + 2]] : program[position + 2];
-            void Write(int val) => program[program[position + 3]] = val;
+            long Param(int ind)
+            {
+                long mode = Memory[position] / (ind == 1 ? 100 : 1000) % 10;
+                long p = Memory[position + ind];
+                if (mode == 0) // position
+                {
+                    return Memory[p];
+                }
+                else if (mode == 1) // immediate
+                {
+                    return p;
+                }
+                else // relative
+                {
+                    return Memory[relativeBase + p];
+                }
+            }
 
+            void Write(long val) => Memory[Memory[position + 3]] = val;
+
+            private static class OP
+            {
+                public const long ADD = 1;
+                public const long MUL = 2;
+                public const long INP = 3;
+                public const long OUT = 4;
+                public const long TRU = 5;
+                public const long FAL = 6;
+                public const long LTN = 7;
+                public const long EQL = 8;
+                public const long SRB = 9;
+            }
 
             private Result r = (ExitCode.Null, 0);
-            public Result Run(params int[] c3Input)
+            public Result Run(params long[] c3Input)
             {
-                int inputInd = 0;
+                long inputInd = 0;
 
-                while (position < program.Length)
+                while (position < Memory.Length)
                 {
-                    int opCode = program[position] % 100;
+                    long opCode = Memory[position] % 100;
                     switch (opCode)
                     {
-                        case 1:
-                            Write(Param1() + Param2());
+                        case OP.ADD:
+                            Write(Param(1) + Param(2));
                             position += 4;
                             break;
-                        case 2:
-                            Write(Param1() * Param2());
+                        case OP.MUL:
+                            Write(Param(1) * Param(2));
                             position += 4;
                             break;
-                        case 3:
-                            program[program[position + 1]] = c3Input[inputInd];
+                        case OP.INP:
+                            long dst = Param(1);
+                            Memory[dst] = c3Input[inputInd];
+                            //Memory[Memory[position + 1]] = c3Input[inputInd];
                             inputInd++;
                             position += 2;
                             break;
-                        case 4:
-                            int ret = Param1();
+                        case OP.OUT:
+                            long ret = Param(1);
                             position += 2;
                             r.Item1 = ExitCode.OutputDelivery;
                             r.Item2 = ret;
                             return r;
-                        case 5:
-                            if (Param1() != 0) position = Param2();
+                        case OP.TRU:
+                            if (Param(1) != 0) position = Param(2);
                             else position += 3;
                             break;
-                        case 6:
-                            if (Param1() == 0) position = Param2();
+                        case OP.FAL:
+                            if (Param(1) == 0) position = Param(2);
                             else position += 3;
                             break;
-                        case 7:
-                            Write((Param1() < Param2()) ? 1 : 0);
+                        case OP.LTN:
+                            Write((Param(1) < Param(2)) ? 1 : 0);
                             position += 4;
                             break;
-                        case 8:
-                            Write((Param1() == Param2()) ? 1 : 0);
+                        case OP.EQL:
+                            Write((Param(1) == Param(2)) ? 1 : 0);
                             position += 4;
+                            break;
+                        case OP.SRB:
+                            relativeBase += Param(1);
+                            position += 2;
                             break;
                         case 99:
                             r.Item1 = ExitCode.Complete;
                             return r;
                         default:
-                            return (ExitCode.InvalidCommand, program[position] % 100);
+                            return (ExitCode.InvalidCommand, Memory[position] % 100);
                     }
                 }
                 return (ExitCode.EOF, 0);

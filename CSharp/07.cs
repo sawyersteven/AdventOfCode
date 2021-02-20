@@ -5,13 +5,13 @@ namespace Advent2019
 {
     public class Challenge07 : Challenge
     {
-        private int[] thrusterCode;
+        private long[] thrusterCode;
         public override object Task1()
         {
             thrusterCode = IntCode.Tools.ParseCode(input[0]);
             IntCode.Emulator ICE = new IntCode.Emulator(null);
-            int maxSignal = 0;
-            (IntCode.ExitCode, int) response = (IntCode.ExitCode.Null, 0);
+            long maxSignal = 0;
+            (IntCode.ExitCode, long) response = (IntCode.ExitCode.Null, 0);
             foreach (int[] arr in Permutate(new int[] { 0, 1, 2, 3, 4 }))
             {
                 response.Item2 = 0;
@@ -63,10 +63,10 @@ namespace Advent2019
             }
 
             int[] phaseSettings = new int[] { 5, 6, 7, 8, 9 };
-            int maxSignal = 0;
+            long maxSignal = 0;
             foreach (int[] arr in Permutate(phaseSettings))
             {
-                int sig = RunFeedbackLoop(arr);
+                long sig = RunFeedbackLoop(arr);
                 if (sig > maxSignal)
                 {
                     maxSignal = sig;
@@ -75,9 +75,9 @@ namespace Advent2019
             return maxSignal;
         }
 
-        private int RunFeedbackLoop(int[] settings)
+        private long RunFeedbackLoop(int[] settings)
         {
-            (IntCode.ExitCode, int) response = (IntCode.ExitCode.Null, 0);
+            (IntCode.ExitCode, long) response = (IntCode.ExitCode.Null, 0);
             for (int i = 0; i < thrusters.Length; i++)
             {
                 thrusters[i].Reboot(thrusterCode);

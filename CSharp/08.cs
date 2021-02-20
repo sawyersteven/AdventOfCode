@@ -8,7 +8,7 @@ namespace Advent2019
     {
         const int W = 25;
         const int H = 6;
-        const int layerSize = 25 * 6;
+        const int layerSize = W * H;
         const char black = '0';
         const char white = '1';
         const char transparent = '2';
@@ -48,7 +48,6 @@ namespace Advent2019
             }
 
             char[][] image = new char[H][];
-
             for (int h = 0; h < H; h++)
             {
                 image[h] = new char[W];
