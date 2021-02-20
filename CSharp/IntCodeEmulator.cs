@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Advent2019
 {
@@ -90,25 +92,18 @@ namespace Advent2019
                 return (ExitCode.Null, 0);
             }
 
-            long Param(int ind)
+            private long[] divisors = new long[] { 0, 100, 1000, 10000 };
+            private long Addr(long pos)
             {
-                long mode = Memory[position] / (ind == 1 ? 100 : 1000) % 10;
-                long p = Memory[position + ind];
-                if (mode == 0) // position
+                long mode = (Memory[position] / divisors[pos]) % 10;
+                return mode switch
                 {
-                    return Memory[p];
-                }
-                else if (mode == 1) // immediate
-                {
-                    return p;
-                }
-                else // relative
-                {
-                    return Memory[relativeBase + p];
-                }
+                    0 => Memory[position + pos],
+                    1 => position + pos,
+                    2 => relativeBase + Memory[position + pos],
+                    _ => throw new ArgumentException()
+                };
             }
-
-            void Write(long val) => Memory[Memory[position + 3]] = val;
 
             private static class OP
             {
@@ -124,8 +119,10 @@ namespace Advent2019
             }
 
             private Result r = (ExitCode.Null, 0);
-            public Result Run(params long[] c3Input)
+            private static int[] modeMask = new int[] { 0, 100, 1000, 10000 };
+            public Result Run(params long[] input)
             {
+                Queue<long> inpQueue = new Queue<long>(input);
                 long inputInd = 0;
 
                 while (position < Memory.Length)
@@ -134,44 +131,42 @@ namespace Advent2019
                     switch (opCode)
                     {
                         case OP.ADD:
-                            Write(Param(1) + Param(2));
+                            Memory[Addr(3)] = Memory[Addr(1)] + Memory[Addr(2)];
                             position += 4;
                             break;
                         case OP.MUL:
-                            Write(Param(1) * Param(2));
+                            Memory[Addr(3)] = Memory[Addr(1)] * Memory[Addr(2)];
                             position += 4;
                             break;
                         case OP.INP:
-                            long dst = Param(1);
-                            Memory[dst] = c3Input[inputInd];
-                            //Memory[Memory[position + 1]] = c3Input[inputInd];
+                            Memory[Addr(1)] = inpQueue.Dequeue();
                             inputInd++;
                             position += 2;
                             break;
                         case OP.OUT:
-                            long ret = Param(1);
+                            long ret = Memory[Addr(1)];
                             position += 2;
                             r.Item1 = ExitCode.OutputDelivery;
                             r.Item2 = ret;
                             return r;
                         case OP.TRU:
-                            if (Param(1) != 0) position = Param(2);
+                            if (Memory[Addr(1)] != 0) position = Memory[Addr(2)];
                             else position += 3;
                             break;
                         case OP.FAL:
-                            if (Param(1) == 0) position = Param(2);
+                            if (Memory[Addr(1)] == 0) position = Memory[Addr(2)];
                             else position += 3;
                             break;
                         case OP.LTN:
-                            Write((Param(1) < Param(2)) ? 1 : 0);
+                            Memory[Addr(3)] = (Memory[Addr(1)] < Memory[Addr(2)]) ? 1 : 0;
                             position += 4;
                             break;
                         case OP.EQL:
-                            Write((Param(1) == Param(2)) ? 1 : 0);
+                            Memory[Addr(3)] = (Memory[Addr(1)] == Memory[Addr(2)]) ? 1 : 0;
                             position += 4;
                             break;
                         case OP.SRB:
-                            relativeBase += Param(1);
+                            relativeBase += Memory[Addr(1)];
                             position += 2;
                             break;
                         case 99:

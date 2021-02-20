@@ -9,10 +9,7 @@ namespace Advent2019
         public override object Task1()
         {
             IntCode.Emulator ICE = new IntCode.Emulator(IntCode.Tools.ParseCode(input[0]));
-            var response = ICE.Run(1);
-            return response.Item2;
-
-            return null;
+            return ICE.Run(1).Item2;
         }
 
         private void Test()
