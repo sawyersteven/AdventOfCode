@@ -62,6 +62,9 @@ namespace Advent2019
         /// </summary>
         public class Emulator
         {
+            private long position = 0;
+            private long relativeBase = 0;
+
             private long[] _Memory;
             public long[] Memory
             {
@@ -73,36 +76,101 @@ namespace Advent2019
                         _Memory = null;
                         return;
                     }
-                    _Memory = new long[value.Length * 100];
+                    _Memory = new long[value.Length + 100];
                     Array.Copy(value, _Memory, value.Length);
                 }
             }
-            private long position = 0;
-            private long relativeBase = 0;
 
-            public Emulator(long[] program)
-            {
-                this.Memory = program;
-            }
-
-            public Result Reboot(long[] program)
+            public Result Boot(long[] program)
             {
                 position = 0;
                 this.Memory = program;
                 return (ExitCode.Null, 0);
             }
 
-            private long[] divisors = new long[] { 0, 100, 1000, 10000 };
+            private static readonly long[] divisors = new long[] { 0, 100, 1000, 10000 };
             private long Addr(long pos)
             {
-                long mode = (Memory[position] / divisors[pos]) % 10;
+                long mode = (_Memory[position] / divisors[pos]) % 10;
                 return mode switch
                 {
-                    0 => Memory[position + pos],
+                    0 => _Memory[position + pos],
                     1 => position + pos,
-                    2 => relativeBase + Memory[position + pos],
+                    2 => relativeBase + _Memory[position + pos],
                     _ => throw new ArgumentException()
                 };
+            }
+
+            private void Write(long val, long address)
+            {
+                if (address > _Memory.Length - 1)
+                {
+                    long[] m = new long[address + 100];
+                    Array.Copy(_Memory, m, _Memory.Length);
+                    _Memory = m;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("  Expanding Memory");
+                    Console.ResetColor();
+                }
+                _Memory[address] = val;
+            }
+
+            private Result r = (ExitCode.Null, 0);
+            public Result Run(params long[] input)
+            {
+                Queue<long> inpQueue = new Queue<long>(input);
+
+                while (position < _Memory.Length)
+                {
+                    long opCode = Memory[position] % 100;
+                    switch (opCode)
+                    {
+                        case OP.ADD:
+                            Write(_Memory[Addr(1)] + _Memory[Addr(2)], Addr(3));
+                            position += 4;
+                            break;
+                        case OP.MUL:
+                            Write(_Memory[Addr(1)] * _Memory[Addr(2)], Addr(3));
+                            position += 4;
+                            break;
+                        case OP.INP:
+                            Write(inpQueue.Dequeue(), Addr(1));
+                            position += 2;
+                            break;
+                        case OP.OUT:
+                            long ret = _Memory[Addr(1)];
+                            position += 2;
+                            r.Item1 = ExitCode.OutputDelivery;
+                            r.Item2 = ret;
+                            return r;
+                        case OP.TRU:
+                            if (_Memory[Addr(1)] != 0) position = _Memory[Addr(2)];
+                            else position += 3;
+                            break;
+                        case OP.FAL:
+                            if (_Memory[Addr(1)] == 0) position = _Memory[Addr(2)];
+                            else position += 3;
+                            break;
+                        case OP.LTN:
+                            Write((_Memory[Addr(1)] < _Memory[Addr(2)]) ? 1 : 0, Addr(3));
+                            position += 4;
+                            break;
+                        case OP.EQL:
+                            Write((_Memory[Addr(1)] == _Memory[Addr(2)]) ? 1 : 0, Addr(3));
+                            position += 4;
+                            break;
+                        case OP.SRB:
+                            relativeBase += _Memory[Addr(1)];
+                            position += 2;
+                            break;
+                        case 99:
+                            r.Item1 = ExitCode.Complete;
+                            return r;
+                        default:
+                            return (ExitCode.InvalidCommand, _Memory[position] % 100);
+                    }
+                }
+                return (ExitCode.EOF, 0);
             }
 
             private static class OP
@@ -116,67 +184,6 @@ namespace Advent2019
                 public const long LTN = 7;
                 public const long EQL = 8;
                 public const long SRB = 9;
-            }
-
-            private Result r = (ExitCode.Null, 0);
-            private static int[] modeMask = new int[] { 0, 100, 1000, 10000 };
-            public Result Run(params long[] input)
-            {
-                Queue<long> inpQueue = new Queue<long>(input);
-                long inputInd = 0;
-
-                while (position < Memory.Length)
-                {
-                    long opCode = Memory[position] % 100;
-                    switch (opCode)
-                    {
-                        case OP.ADD:
-                            Memory[Addr(3)] = Memory[Addr(1)] + Memory[Addr(2)];
-                            position += 4;
-                            break;
-                        case OP.MUL:
-                            Memory[Addr(3)] = Memory[Addr(1)] * Memory[Addr(2)];
-                            position += 4;
-                            break;
-                        case OP.INP:
-                            Memory[Addr(1)] = inpQueue.Dequeue();
-                            inputInd++;
-                            position += 2;
-                            break;
-                        case OP.OUT:
-                            long ret = Memory[Addr(1)];
-                            position += 2;
-                            r.Item1 = ExitCode.OutputDelivery;
-                            r.Item2 = ret;
-                            return r;
-                        case OP.TRU:
-                            if (Memory[Addr(1)] != 0) position = Memory[Addr(2)];
-                            else position += 3;
-                            break;
-                        case OP.FAL:
-                            if (Memory[Addr(1)] == 0) position = Memory[Addr(2)];
-                            else position += 3;
-                            break;
-                        case OP.LTN:
-                            Memory[Addr(3)] = (Memory[Addr(1)] < Memory[Addr(2)]) ? 1 : 0;
-                            position += 4;
-                            break;
-                        case OP.EQL:
-                            Memory[Addr(3)] = (Memory[Addr(1)] == Memory[Addr(2)]) ? 1 : 0;
-                            position += 4;
-                            break;
-                        case OP.SRB:
-                            relativeBase += Memory[Addr(1)];
-                            position += 2;
-                            break;
-                        case 99:
-                            r.Item1 = ExitCode.Complete;
-                            return r;
-                        default:
-                            return (ExitCode.InvalidCommand, Memory[position] % 100);
-                    }
-                }
-                return (ExitCode.EOF, 0);
             }
         }
     }
