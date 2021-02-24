@@ -62,6 +62,7 @@ namespace Advent2019
         /// </summary>
         public class Emulator
         {
+            private const int memExpandLen = 100;
             private long position = 0;
             private long relativeBase = 0;
 
@@ -76,7 +77,7 @@ namespace Advent2019
                         _Memory = null;
                         return;
                     }
-                    _Memory = new long[value.Length + 100];
+                    _Memory = new long[value.Length + memExpandLen];
                     Array.Copy(value, _Memory, value.Length);
                 }
             }
@@ -101,18 +102,32 @@ namespace Advent2019
                 };
             }
 
+            private void ExpandMemory(long reqAddress)
+            {
+                long[] m = new long[reqAddress + memExpandLen];
+                Array.Copy(_Memory, m, _Memory.Length);
+                _Memory = m;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("* Expanding Memory");
+                Console.ResetColor();
+            }
+
             private void Write(long val, long address)
             {
                 if (address > _Memory.Length - 1)
                 {
-                    long[] m = new long[address + 100];
-                    Array.Copy(_Memory, m, _Memory.Length);
-                    _Memory = m;
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("  Expanding Memory");
-                    Console.ResetColor();
+                    ExpandMemory(address);
                 }
                 _Memory[address] = val;
+            }
+
+            private long Read(long address)
+            {
+                if (address > _Memory.Length - 1)
+                {
+                    ExpandMemory(address);
+                }
+                return _Memory[address];
             }
 
             private Result r = (ExitCode.Null, 0);
@@ -126,11 +141,11 @@ namespace Advent2019
                     switch (opCode)
                     {
                         case OP.ADD:
-                            Write(_Memory[Addr(1)] + _Memory[Addr(2)], Addr(3));
+                            Write(Read(Addr(1)) + Read(Addr(2)), Addr(3));
                             position += 4;
                             break;
                         case OP.MUL:
-                            Write(_Memory[Addr(1)] * _Memory[Addr(2)], Addr(3));
+                            Write(Read(Addr(1)) * Read(Addr(2)), Addr(3));
                             position += 4;
                             break;
                         case OP.INP:
@@ -138,36 +153,36 @@ namespace Advent2019
                             position += 2;
                             break;
                         case OP.OUT:
-                            long ret = _Memory[Addr(1)];
+                            long ret = Read(Addr(1));
                             position += 2;
                             r.Item1 = ExitCode.OutputDelivery;
                             r.Item2 = ret;
                             return r;
                         case OP.TRU:
-                            if (_Memory[Addr(1)] != 0) position = _Memory[Addr(2)];
+                            if (Read(Addr(1)) != 0) position = Read(Addr(2));
                             else position += 3;
                             break;
                         case OP.FAL:
-                            if (_Memory[Addr(1)] == 0) position = _Memory[Addr(2)];
+                            if (Read(Addr(1)) == 0) position = Read(Addr(2));
                             else position += 3;
                             break;
                         case OP.LTN:
-                            Write((_Memory[Addr(1)] < _Memory[Addr(2)]) ? 1 : 0, Addr(3));
+                            Write(Read(Addr(1)) < Read(Addr(2)) ? 1 : 0, Addr(3)); // todo:
                             position += 4;
                             break;
                         case OP.EQL:
-                            Write((_Memory[Addr(1)] == _Memory[Addr(2)]) ? 1 : 0, Addr(3));
+                            Write((Read(Addr(1)) == Read(Addr(2))) ? 1 : 0, Addr(3));
                             position += 4;
                             break;
                         case OP.SRB:
-                            relativeBase += _Memory[Addr(1)];
+                            relativeBase += Read(Addr(1));
                             position += 2;
                             break;
                         case 99:
                             r.Item1 = ExitCode.Complete;
                             return r;
                         default:
-                            return (ExitCode.InvalidCommand, _Memory[position] % 100);
+                            return (ExitCode.InvalidCommand, Read(position) % 100);
                     }
                 }
                 return (ExitCode.EOF, 0);
