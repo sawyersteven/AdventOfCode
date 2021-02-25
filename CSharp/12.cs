@@ -9,13 +9,11 @@ namespace Advent2019
         private struct Moon
         {
             public Vector3 Position;
-            public readonly Vector3 StartPosition;
             public Vector3 Velocity;
 
             public Moon(int x, int y, int z)
             {
                 Position = new Vector3(x, y, z);
-                StartPosition = Position;
                 Velocity = new Vector3();
             }
         }
@@ -117,36 +115,22 @@ namespace Advent2019
             {
                 SimulateStep(moons);
 
-                if (intervals[0] == 0)
+                bool[] stopped = new bool[] { true, true, true };
+
+                for (int i = 0; i < moons.Length; i++)
                 {
-                    bool stopped = true;
-                    for (int i = 0; i < moons.Length; i++) stopped &= moons[i].Velocity.X == 0;
-                    if (stopped)
-                    {
-                        found++;
-                        intervals[0] = step * 2;
-                    }
+                    stopped[0] &= moons[i].Velocity.X == 0;
+                    stopped[1] &= moons[i].Velocity.Y == 0;
+                    stopped[2] &= moons[i].Velocity.Z == 0;
                 }
 
-                if (intervals[1] == 0)
-                {
-                    bool stopped = true;
-                    for (int i = 0; i < moons.Length; i++) stopped &= moons[i].Velocity.Y == 0;
-                    if (stopped)
-                    {
-                        found++;
-                        intervals[1] = step * 2;
-                    }
-                }
 
-                if (intervals[2] == 0)
+                for (int i = 0; i < intervals.Length; i++)
                 {
-                    bool stopped = true;
-                    for (int i = 0; i < moons.Length; i++) stopped &= moons[i].Velocity.Z == 0;
-                    if (stopped)
+                    if (intervals[i] == 0 && stopped[i])
                     {
+                        intervals[i] = step * 2;
                         found++;
-                        intervals[2] = step * 2;
                     }
                 }
             }
