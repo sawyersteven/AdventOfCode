@@ -30,7 +30,6 @@ namespace Advent2019
             return blockTiles;
         }
 
-        private long score = 0;
         public override object Task2()
         {
             IntCode.Emulator ICE = new IntCode.Emulator();
