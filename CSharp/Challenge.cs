@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -40,6 +41,24 @@ namespace Advent2019
         {
             Time = time;
             Answer = answer?.ToString();
+        }
+    }
+
+    public static class Tools
+    {
+        public static void Print2DGrid(char[,] grid)
+        {
+            int H = grid.GetLength(0);
+            int W = grid.GetLength(1);
+            for (int col = 0; col < H; col++)
+            {
+                char[] r = new char[W];
+                for (int row = 0; row < W; row++)
+                {
+                    r[row] = grid[col, row];
+                }
+                Console.WriteLine(string.Join("", r));
+            }
         }
     }
 }

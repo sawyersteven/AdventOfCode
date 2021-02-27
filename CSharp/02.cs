@@ -7,7 +7,7 @@ namespace Advent2019
         Emulator ICE = new Emulator();
         public override object Task1()
         {
-            long[] program = Tools.ParseCode(input[0]);
+            long[] program = IntCode.Tools.ParseCode(input[0]);
             program[1] = 12;
             program[2] = 2;
 
