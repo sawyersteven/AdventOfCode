@@ -101,28 +101,29 @@ namespace Advent2019
             }
 
             List<int> s = new List<int>();
-            for (int _ = 0; _ < multiplier / 2; _++)
+            for (int _ = 0; _ < multiplier; _++)
             {
                 s.AddRange(signal);
             }
             signal = s.ToArray();
 
-            int o = int.Parse(input[0].Substring(0, 7));
-            int offset = o - signal.Length;
+            int midPoint = signal.Length / 2;
+
+            int offset = int.Parse(input[0].Substring(0, 7));
 
             for (int _ = 0; _ < 100; _++)
             {
                 int[] result = new int[signal.Length];
 
                 int signalTotal = 0;
-                for (int __ = 1; __ < signal.Length; __++)
+                for (int __ = midPoint - 1; __ < signal.Length; __++)
                 {
                     signalTotal += signal[__];
                 }
 
                 result[0] = signalTotal % 10;
 
-                for (int rowOffset = 1; rowOffset < signal.Length; rowOffset++)
+                for (int rowOffset = midPoint; rowOffset < signal.Length; rowOffset++)
                 {
                     signalTotal -= signal[rowOffset - 1];
                     result[rowOffset] = signalTotal % 10;
