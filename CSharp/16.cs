@@ -81,57 +81,45 @@ namespace Advent2019
             numbers starting from the row index and take the ones digit.
 
             To make this easier we can pretend the first half of the signal
-            doesn't even exist and start with a pattern of all ones [1...]
-            Sum the signal, take the ones digit.
-            Since the next pattern is [0,1...] we can simply subtract the first
-            signal number, take the ones digit, and continue in this fashion until
-            the signal has been processed.
-            
-            Naturally, this works for every test input, but not the actual challenge input...
+            doesn't even exist. Additionally, we can ignore all of the signal *before*
+            the offset position. The patterns remains the same, starting with all
+            ones, then [0, 1...] and so on.
 
+            Working backward, we keep a running total of the sigal's values.
+            Where i == signal.Length - 1, we can add signal[i] to the total, then
+            replace signal[i] with the ones digit of the total. Continue backward
+            until the signal is consumed to complete the phase.
             */
+
             const int multiplier = 10_000;
-
-            int totalLen = multiplier * input[0].Length;
-
-            int[] signal = new int[input[0].Length];
-            for (int i = 0; i < signal.Length; i++)
-            {
-                signal[i] = (int)char.GetNumericValue(input[0][i]);
-            }
-
-            List<int> s = new List<int>();
-            for (int _ = 0; _ < multiplier; _++)
-            {
-                s.AddRange(signal);
-            }
-            signal = s.ToArray();
-
-            int midPoint = signal.Length / 2;
-
             int offset = int.Parse(input[0].Substring(0, 7));
 
-            for (int _ = 0; _ < 100; _++)
+            int[] baseSignal = new int[input[0].Length];
+            for (int i = 0; i < baseSignal.Length; i++)
             {
-                int[] result = new int[signal.Length];
-
-                int signalTotal = 0;
-                for (int __ = midPoint - 1; __ < signal.Length; __++)
-                {
-                    signalTotal += signal[__];
-                }
-
-                result[0] = signalTotal % 10;
-
-                for (int rowOffset = midPoint; rowOffset < signal.Length; rowOffset++)
-                {
-                    signalTotal -= signal[rowOffset - 1];
-                    result[rowOffset] = signalTotal % 10;
-                }
-                signal = result;
+                baseSignal[i] = (int)char.GetNumericValue(input[0][i]);
             }
 
-            return string.Join("", new ArraySegment<int>(signal, offset, 8));
+            int totalLen = input[0].Length * multiplier;
+            int[] signal = new int[totalLen - offset];
+            for ((int i, int j) = (signal.Length - 1, baseSignal.Length - 1); i > -1; i--, j--)
+            {
+                if (j == -1) j = baseSignal.Length - 1;
+                signal[i] = baseSignal[j];
+            }
+
+            int signalTotal = 0;
+            for (int _ = 0; _ < 100; _++)
+            {
+                for (int i = signal.Length - 1; i > -1; i--)
+                {
+                    signalTotal += signal[i];
+                    signal[i] = signalTotal % 10;
+                }
+                signalTotal = 0;
+            }
+
+            return string.Join("", new ArraySegment<int>(signal, 0, 8));
         }
     }
 }
