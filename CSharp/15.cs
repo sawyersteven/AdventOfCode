@@ -71,8 +71,8 @@ namespace Advent2019
                     currentDir = CW(CW(currentDir));
                     continue;
                 }
-
-                response = ICE.Run(currentDir);
+                ICE.QueueInput(currentDir);
+                response = ICE.Run();
                 switch (response.Item2)
                 {
                     case 0:

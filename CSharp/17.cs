@@ -46,7 +46,6 @@ namespace Advent2019
             return alignParamSum;
         }
 
-        private const char NL = (char)10;
         public override object Task2()
         {
             IntCode.Emulator ICE = new IntCode.Emulator();
@@ -72,37 +71,25 @@ namespace Advent2019
 
             Queue<char> outputbuffer = new Queue<char>();
 
-            WaitForNextPrompt(ICE);
+            ICE.Run();
+            SendString(ICE, Main);
+            ICE.Run();
+            SendString(ICE, A);
+            ICE.Run();
+            SendString(ICE, B);
+            ICE.Run();
+            SendString(ICE, C);
+            ICE.Run();
+            SendString(ICE, "y");
 
-            Send(ICE, Main);
-            WaitForNextPrompt(ICE);
-            Send(ICE, A);
-            WaitForNextPrompt(ICE);
-            Send(ICE, B);
-            WaitForNextPrompt(ICE);
-            Send(ICE, C);
-            WaitForNextPrompt(ICE);
-            Send(ICE, "y");
-
-            while (response.Item1 != IntCode.ExitCode.Complete)
+            while (true)
             {
                 response = ICE.Run();
+                if (response.Item1 == IntCode.ExitCode.Complete) return response.Item2;
             }
-
-            return response.Item2;
         }
 
-        private void WaitForNextPrompt(IntCode.Emulator ICE)
-        {
-            char last = ' ';
-            while (last != ':' && last != '?')
-            {
-                last = (char)ICE.Run().Item2;
-            }
-            ICE.Run();
-        }
-
-        private long Send(IntCode.Emulator ICE, string instructions)
+        private long SendString(IntCode.Emulator ICE, string instructions)
         {
             long[] inst = new long[instructions.Length + 1];
             for (int i = 0; i < instructions.Length; i++)
@@ -110,7 +97,8 @@ namespace Advent2019
                 inst[i] = instructions[i];
             }
             inst[inst.Length - 1] = (char)10;
-            return ICE.Run(inst).Item2;
+            ICE.QueueInput(inst);
+            return ICE.Run().Item2;
         }
     }
 }

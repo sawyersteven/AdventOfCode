@@ -42,7 +42,8 @@ namespace Advent2019
             HashSet<Vector2Int> paintedTiles = new HashSet<Vector2Int>();
             for (int i = 0; ; i++)
             {
-                response = ICE.Run((long)char.GetNumericValue(grid[loc.y, loc.x]));
+                ICE.QueueInput((long)char.GetNumericValue(grid[loc.y, loc.x]));
+                response = ICE.Run();
                 if (response.Item1 != IntCode.ExitCode.OutputDelivery) break;
 
                 grid[loc.y, loc.x] = response.Item2.ToString()[0];

@@ -10,7 +10,8 @@ namespace Advent2019
         {
             IntCode.Emulator ICE = new IntCode.Emulator();
             ICE.Boot(IntCode.Tools.ParseCode(input[0]));
-            return ICE.Run(1).Item2;
+            ICE.QueueInput(1);
+            return ICE.Run().Item2;
         }
 
         private void Test()
@@ -46,7 +47,8 @@ namespace Advent2019
         {
             IntCode.Emulator ICE = new IntCode.Emulator();
             ICE.Boot(IntCode.Tools.ParseCode(input[0]));
-            return ICE.Run(2).Item2;
+            ICE.QueueInput(2);
+            return ICE.Run().Item2;
         }
     }
 }

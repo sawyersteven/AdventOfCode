@@ -10,6 +10,7 @@ namespace Advent2019
 
         public enum ExitCode
         {
+            InputRequest = 74,
             EOF = 38,
             OutputDelivery = 4,
             Complete = 99,
@@ -82,6 +83,18 @@ namespace Advent2019
                 }
             }
 
+            private Queue<long> inpQueue = new Queue<long>();
+
+            public void QueueInput(params long[] input)
+            {
+                foreach (long i in input) inpQueue.Enqueue(i);
+            }
+
+            public void EmptyInputQueue()
+            {
+                inpQueue.Clear();
+            }
+
             public void ExpandMem(int by)
             {
                 long[] m = new long[_Memory.Length + by];
@@ -138,10 +151,8 @@ namespace Advent2019
             }
 
             private Result r = (ExitCode.Null, 0);
-            public Result Run(params long[] input)
+            public Result Run()
             {
-                Queue<long> inpQueue = new Queue<long>(input);
-
                 while (position < _Memory.Length)
                 {
                     long opCode = Memory[position] % 100;
@@ -156,6 +167,10 @@ namespace Advent2019
                             position += 4;
                             break;
                         case OP.INP:
+                            if (inpQueue.Count == 0)
+                            {
+                                return (ExitCode.InputRequest, 0);
+                            }
                             Write(inpQueue.Dequeue(), Addr(1));
                             position += 2;
                             break;

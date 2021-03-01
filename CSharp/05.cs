@@ -13,7 +13,8 @@ namespace Advent2019
             (ExitCode, long) result = (0, 0);
             while (true)
             {
-                (ExitCode, long) r = ICE.Run(1);
+                ICE.QueueInput(1);
+                (ExitCode, long) r = ICE.Run();
                 if (r.Item1 == ExitCode.Complete) break;
                 result = r;
             }
@@ -30,7 +31,8 @@ namespace Advent2019
             (ExitCode, long) result = (0, 0);
             while (true)
             {
-                result = ICE.Run(5);
+                ICE.QueueInput(5);
+                result = ICE.Run();
                 if (result.Item1 == ExitCode.Complete) break;
             }
 

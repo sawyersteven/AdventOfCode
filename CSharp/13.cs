@@ -51,10 +51,15 @@ namespace Advent2019
             }
 
             // play
-            for (int _ = 0; ; _++)
+            while (true)
             {
-                response = ICE.Run(comp(ballX, paddleX));
+                response = ICE.Run();
                 if (response.Item1 == IntCode.ExitCode.Complete) return response.Item2;
+                if (response.Item1 == IntCode.ExitCode.InputRequest)
+                {
+                    ICE.QueueInput(comp(ballX, paddleX));
+                    ICE.Run();
+                }
                 long x = response.Item2;
                 long y = ICE.Run().Item2;
                 long z = ICE.Run().Item2;

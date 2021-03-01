@@ -18,7 +18,8 @@ namespace Advent2019
                 foreach (int s in arr)
                 {
                     ICE.Boot(thrusterCode);
-                    response = ICE.Run(s, response.Item2);
+                    ICE.QueueInput(s, response.Item2);
+                    response = ICE.Run();
 
                 }
                 if (response.Item2 > maxSignal) maxSignal = response.Item2;
@@ -81,15 +82,17 @@ namespace Advent2019
             for (int i = 0; i < thrusters.Length; i++)
             {
                 thrusters[i].Boot(thrusterCode);
-                response = thrusters[i].Run(settings[i], response.Item2);
+                thrusters[i].ExpandMem(20_000_000); // yup
+                thrusters[i].QueueInput(settings[i], response.Item2);
+                response = thrusters[i].Run();
             }
 
             int currentThruster = 0;
             while (true)
             {
                 IntCode.Emulator thruster = thrusters[currentThruster];
-
-                response = thruster.Run(response.Item2);
+                thruster.QueueInput(response.Item2);
+                response = thruster.Run();
 
                 if (response.Item1 == IntCode.ExitCode.Complete && currentThruster == thrusters.Length - 1) return response.Item2;
 
