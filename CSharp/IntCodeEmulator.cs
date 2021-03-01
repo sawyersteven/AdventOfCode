@@ -62,7 +62,7 @@ namespace Advent2019
         /// </summary>
         public class Emulator
         {
-            private const int memExpandLen = 100;
+            private const int memExpandLen = 200;
             private long position = 0;
             private long relativeBase = 0;
 
@@ -80,6 +80,13 @@ namespace Advent2019
                     _Memory = new long[value.Length + memExpandLen];
                     Array.Copy(value, _Memory, value.Length);
                 }
+            }
+
+            public void ExpandMem(int by)
+            {
+                long[] m = new long[_Memory.Length + by];
+                Array.Copy(_Memory, m, _Memory.Length);
+                _Memory = m;
             }
 
             public Result Boot(long[] program)
