@@ -1,134 +1,122 @@
-//#define VISUAL
-
-using System;
 using System.Collections.Generic;
+using System;
 
-namespace Advent2019
+namespace Grids
 {
     public class AStar
     {
-        private class Location
+        public class Node
         {
-            public Vector2Int Point;
-            public int G;
-            public int H;
-            public int F;
-            public Location Parent;
+            public Node Parent;
+            public Vector2Int Position;
+            public int FScore => Steps + HeuristicScore;
+            public int Steps;
+            public int HeuristicScore;
+
+            public Node(Vector2Int position, Node parent)
+            {
+                Position = position;
+                Parent = parent;
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
+            public override string ToString()
+            {
+                return Position.ToString();
+            }
         }
 
-        public static Vector2Int[] FindPath(char[,] grid, Vector2Int begin, Vector2Int end, char walls)
+        private readonly Func<Vector2Int, Vector2Int, int> Heuristic;
+
+        public AStar(Func<Vector2Int, Vector2Int, int> heuristic = null)
         {
-            Location start = new Location() { Point = begin };
-            Location target = new Location() { Point = end };
 
-            List<Location> Open = new List<Location>();
-            List<Location> Closed = new List<Location>();
-            int g = 0;
+            Heuristic = heuristic ?? ManhattanDistance;
+        }
 
-            Open.Add(start);
-            Location current = null;
-            while (Open.Count > 0)
+        private int ManhattanDistance(Vector2Int a, Vector2Int b) => a.ManhattanDistance(b);
+
+
+        private IEnumerable<Vector2Int> NextMoves(Vector2Int position, HashSet<Vector2Int> blockedCells)
+        {
+            foreach (Vector2Int cd in Vector2Int.CardinalDirections)
             {
-                current = LowestF(Open);
-                Open.Remove(current);
-                Closed.Add(current);
+                Vector2Int n = position + cd;
+                if (!blockedCells.Contains(n)) yield return n;
 
-                if (current.Point == end) break;
+            }
+        }
+        public Node[] FindPath(Vector2Int start, Vector2Int end, HashSet<Vector2Int> blockedCells)
+        {
+            if (start == end) return new Node[0];
 
-                g++;
-                var a = AdjacentMoves(grid, current.Point, walls);
-                foreach (Vector2Int adjPoint in a)
+            Node startNode = new Node(start, null);
+            List<Node> open = new List<Node>();
+            HashSet<Vector2Int> closed = new HashSet<Vector2Int>(); // hashset
+
+            open.Add(startNode);
+
+            Node current;
+            while (open.Count > 0)
+            {
+                open.Sort((a, b) => (a.FScore >= b.FScore) ? 1 : -1); // actually faster than a sorted set.
+                current = open[0];
+                open.RemoveAt(0);
+                closed.Add(current.Position);
+
+                if (current.Position == end)
                 {
-                    if (ContainsMatchingPoint(Closed, adjPoint)) continue;
+                    return MakePath(current);
+                }
 
-                    Location adjacent = new Location() { Point = adjPoint };
+                foreach (Vector2Int v in NextMoves(current.Position, blockedCells))
+                {
+                    if (closed.Contains(v)) continue;
 
-                    if (!ContainsMatchingPoint(Open, adjacent.Point))
+                    Node n = new Node(v, current);
+                    n.Steps = current.Steps + 1;
+                    n.HeuristicScore = Heuristic(n.Position, end);
+
+                    Node existing = MatchingPoint(open, v);
+                    if (existing == null)
                     {
-                        adjacent.G = g;
-                        adjacent.H = HScore(adjacent.Point, target.Point);
-                        adjacent.F = adjacent.G + adjacent.H;
-                        adjacent.Parent = current;
-                        Open.Insert(0, adjacent);
+                        open.Add(n);
                     }
                     else
                     {
-                        if (g + adjacent.H < adjacent.F)
+                        if (n.FScore < existing.FScore)
                         {
-                            adjacent.G = g;
-                            adjacent.F = adjacent.G + adjacent.H;
-                            adjacent.Parent = current;
+                            open.Remove(existing);
+                            open.Add(n);
                         }
                     }
                 }
-#if VISUAL
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.SetCursorPosition(current.Point.x, current.Point.y + 4);
-                Console.Write('·');
-                System.Threading.Thread.Sleep(50);
-#endif
             }
-#if VISUAL
-            Console.ForegroundColor = ConsoleColor.Red;
-            while (current.Parent != null)
-            {
-                Console.SetCursorPosition(current.Point.x, current.Point.y + 4);
-                Console.Write('■');
-                current = current.Parent;
-                System.Threading.Thread.Sleep(50);
-            }
-            Console.ResetColor();
-            Console.SetCursorPosition(grid.GetLength(1) + 10, grid.GetLength(0));
-#endif
-
-            int len = 0;
-            Location n = current;
-            while (n.Parent != null)
-            {
-                len += 1;
-                n = n.Parent;
-            }
-            Vector2Int[] Path = new Vector2Int[len];
-            for (int i = len - 1; i >= 0; i--)
-            {
-                Path[i] = current.Point;
-                current = current.Parent;
-            }
-            return Path;
+            return null;
         }
 
-        static int HScore(Vector2Int location, Vector2Int target)
+        private Node[] MakePath(Node endNode)
         {
-            return Math.Abs(target.x - location.x) + Math.Abs(target.y - location.y);
-        }
-
-        private static bool ContainsMatchingPoint(List<Location> locations, Vector2Int point)
-        {
-            for (int i = 0; i < locations.Count; i++)
+            Node[] path = new Node[endNode.Steps];
+            for (int i = path.Length - 1; i > -1; i--)
             {
-                if (locations[i].Point == point) return true;
+                path[i] = endNode;
+                endNode = endNode.Parent;
             }
-            return false;
+            return path;
         }
 
-        private static List<Vector2Int> AdjacentMoves(char[,] grid, Vector2Int point, char walls) // can return V2?
+        private Node MatchingPoint(IEnumerable<Node> nodes, Vector2Int position)
         {
-            List<Vector2Int> adjacents = new List<Vector2Int>();
-            if (grid[point.y + 1, point.x] != walls) adjacents.Add(new Vector2Int(point.x, point.y + 1));
-            if (grid[point.y - 1, point.x] != walls) adjacents.Add(new Vector2Int(point.x, point.y - 1));
-            if (grid[point.y, point.x + 1] != walls) adjacents.Add(new Vector2Int(point.x + 1, point.y));
-            if (grid[point.y, point.x - 1] != walls) adjacents.Add(new Vector2Int(point.x - 1, point.y));
-            return adjacents;
-        }
-
-        private static Location LowestF(List<Location> locations)
-        {
-            Location lowest = locations[0];
-            for (int i = 1; i < locations.Count; i++)
+            foreach (Node n in nodes)
             {
-                if (locations[i].F < lowest.F) lowest = locations[i];
+                if (n.Position == position) return n;
             }
-            return lowest;
+            return null;
         }
     }
 }

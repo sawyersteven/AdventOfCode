@@ -1,6 +1,6 @@
 using System;
 
-namespace Advent2019
+namespace Grids
 {
     // Mostly based on Unity's Vector2Int
     public struct Vector2Int
@@ -82,10 +82,17 @@ namespace Advent2019
             return ang < 0 ? ang + 360 : ang;
         }
 
+        public int ManhattanDistance(Vector2Int other)
+        {
+            return Math.Abs(x - other.x) + Math.Abs(y - other.y);
+        }
+
         public static readonly Vector2Int Up = new Vector2Int(0, 1);
         public static readonly Vector2Int Down = new Vector2Int(0, -1);
         public static readonly Vector2Int Left = new Vector2Int(-1, 0);
         public static readonly Vector2Int Right = new Vector2Int(1, 0);
+
+        public static readonly Vector2Int[] CardinalDirections = new Vector2Int[] { Up, Right, Down, Left };
 
     }
 }
