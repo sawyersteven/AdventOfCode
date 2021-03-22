@@ -1,3 +1,3 @@
-# Advent_2020
+# AdventOfCode
 
-Non-competitive solutions to Advent of Code 2020
+Non-competitive solutions to Advent of Code
