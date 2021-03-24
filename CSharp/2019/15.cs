@@ -47,8 +47,8 @@ namespace Advent2019
         Vector2Int endPosition;
         public override object Task1()
         {
-            IntCode.Emulator ICE = new IntCode.Emulator();
-            var response = ICE.Boot(IntCode.Tools.ParseCode(input[0]));
+            IntCode.Emulator ICE = new IntCode.Emulator(input[0]);
+            var response = IntCode.Emulator.ResultTemplate;
 
             grid = new char[gridSize, gridSize];
             Vector2Int currentPos = new Vector2Int(gridSize / 2, gridSize / 2);

@@ -34,9 +34,8 @@ namespace Advent2019
 
         private int RunBot(char[,] grid)
         {
-            IntCode.Emulator ICE = new IntCode.Emulator();
-            long[] program = IntCode.Tools.ParseCode(input[0]);
-            var response = ICE.Boot(program);
+            IntCode.Emulator ICE = new IntCode.Emulator(input[0]);
+            var response = IntCode.Emulator.ResultTemplate;
 
             long dir = 0;
             Vector2Int loc = new Vector2Int(gridSize / 2, gridSize / 2);

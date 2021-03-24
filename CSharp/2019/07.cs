@@ -10,18 +10,18 @@ namespace Advent2019
         public override object Task1()
         {
             thrusterCode = IntCode.Tools.ParseCode(input[0]);
-            IntCode.Emulator ICE = new IntCode.Emulator();
+            IntCode.Emulator ICE = new IntCode.Emulator(thrusterCode);
             long maxSignal = 0;
-            (IntCode.ExitCode, long) response = (IntCode.ExitCode.Null, 0);
+
+            var response = IntCode.Emulator.ResultTemplate;
             foreach (int[] arr in Permutate(new int[] { 0, 1, 2, 3, 4 }))
             {
                 response.Item2 = 0;
                 foreach (int s in arr)
                 {
-                    ICE.Boot(thrusterCode);
+                    ICE.Reboot();
                     ICE.QueueInput(s, response.Item2);
                     response = ICE.Run();
-
                 }
                 if (response.Item2 > maxSignal) maxSignal = response.Item2;
             }
@@ -61,7 +61,7 @@ namespace Advent2019
             thrusters = new IntCode.Emulator[5];
             for (int i = 0; i < 5; i++)
             {
-                thrusters[i] = new IntCode.Emulator();
+                thrusters[i] = new IntCode.Emulator(thrusterCode);
             }
 
             int[] phaseSettings = new int[] { 5, 6, 7, 8, 9 };
@@ -82,7 +82,7 @@ namespace Advent2019
             (IntCode.ExitCode, long) response = (IntCode.ExitCode.Null, 0);
             for (int i = 0; i < thrusters.Length; i++)
             {
-                thrusters[i].Boot(thrusterCode);
+                thrusters[i].Reboot();
                 thrusters[i].ExpandMem(20_000_000); // yup
                 thrusters[i].QueueInput(settings[i], response.Item2);
                 response = thrusters[i].Run();

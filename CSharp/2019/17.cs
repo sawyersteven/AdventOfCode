@@ -13,8 +13,8 @@ namespace Advent2019
         private List<List<char>> grid;
         public override object Task1()
         {
-            IntCode.Emulator ICE = new IntCode.Emulator();
-            var response = ICE.Boot(IntCode.Tools.ParseCode(input[0]));
+            IntCode.Emulator ICE = new IntCode.Emulator(input[0]);
+            var response = IntCode.Emulator.ResultTemplate;
             ICE.ExpandMem(1800);
 
             grid = new List<List<char>>();
@@ -49,10 +49,11 @@ namespace Advent2019
 
         public override object Task2()
         {
-            IntCode.Emulator ICE = new IntCode.Emulator();
             long[] code = IntCode.Tools.ParseCode(input[0]);
             code[0] = 2;
-            var response = ICE.Boot(code);
+
+            IntCode.Emulator ICE = new IntCode.Emulator(code);
+            var response = IntCode.Emulator.ResultTemplate;
             ICE.ExpandMem(1800);
 
             // Complete program:

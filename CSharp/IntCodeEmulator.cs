@@ -20,13 +20,7 @@ namespace Advent2019
 
         public static class Tools
         {
-            public static long[] ParseCode(string code)
-            {
-                string[] parts = code.Split(',');
-                long[] intCode = new long[parts.Length];
-                for (long i = 0; i < intCode.Length; i++) intCode[i] = long.Parse(parts[i]);
-                return intCode;
-            }
+            public static long[] ParseCode(string code) => Array.ConvertAll(code.Split(','), long.Parse);
         }
 
         /// <summary>
@@ -34,9 +28,6 @@ namespace Advent2019
         /// Emulator is initialized with an array of ints (intcode) that gets
         ///  copied as `program`. Any changes to the code will be made in this
         ///  property while the original code array remains untouched.
-        /// 
-        /// To load a new intcode program pass it through Reboot(). This will
-        ///  start the new program at the beginning and clear all input and output.
         /// 
         /// Start execution of code with Run()
         /// 
@@ -63,9 +54,15 @@ namespace Advent2019
         /// </summary>
         public class Emulator
         {
+            public static Result ResultTemplate = (ExitCode.Null, 0);
+
+            public bool Verbose { get; set; } = true;
+
             private const int memExpandLen = 200;
             private long position = 0;
             private long relativeBase = 0;
+
+            private long[] OrigProgram;
 
             private long[] _Memory;
             public long[] Memory
@@ -102,10 +99,24 @@ namespace Advent2019
                 _Memory = m;
             }
 
-            public Result Boot(long[] program)
+            public Emulator(long[] program)
+            {
+                Memory = program;
+                OrigProgram = Memory.Clone() as long[];
+            }
+
+            public Emulator(string program)
+            {
+                Memory = Tools.ParseCode(program);
+                OrigProgram = Memory.Clone() as long[];
+            }
+
+            public Result Reboot()
             {
                 position = 0;
-                this.Memory = program;
+                inpQueue.Clear();
+                relativeBase = 0;
+                Memory = OrigProgram.Clone() as long[];
                 return (ExitCode.Null, 0);
             }
 
@@ -127,9 +138,12 @@ namespace Advent2019
                 long[] m = new long[reqAddress + memExpandLen];
                 Array.Copy(_Memory, m, _Memory.Length);
                 _Memory = m;
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("* Expanding Memory");
-                Console.ResetColor();
+                if (Verbose)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("* Expanding Memory");
+                    Console.ResetColor();
+                }
             }
 
             private void Write(long val, long address)

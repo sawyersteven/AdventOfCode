@@ -13,8 +13,8 @@ namespace Advent2019
         char[,] display = new char[DISPLAY_H, DISPLAY_W];
         public override object Task1()
         {
-            IntCode.Emulator ICE = new IntCode.Emulator();
-            var response = ICE.Boot(IntCode.Tools.ParseCode(input[0]));
+            IntCode.Emulator ICE = new IntCode.Emulator(input[0]);
+            var response = IntCode.Emulator.ResultTemplate;
 
             int blockTiles = 0;
 
@@ -33,10 +33,10 @@ namespace Advent2019
 
         public override object Task2()
         {
-            IntCode.Emulator ICE = new IntCode.Emulator();
             long[] code = IntCode.Tools.ParseCode(input[0]);
             code[0] = 2;
-            var response = ICE.Boot(code);
+            IntCode.Emulator ICE = new IntCode.Emulator(code);
+            var response = IntCode.Emulator.ResultTemplate;
 
             long ballX = 0;
             long paddleX = 0;

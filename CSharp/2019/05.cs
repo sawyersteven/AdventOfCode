@@ -8,8 +8,7 @@ namespace Advent2019
         {
             long[] program = IntCode.Tools.ParseCode(input[0]);
 
-            Emulator ICE = new Emulator();
-            ICE.Boot(program);
+            Emulator ICE = new Emulator(program);
 
             (ExitCode, long) result = (0, 0);
             while (true)
@@ -26,8 +25,7 @@ namespace Advent2019
         public override object Task2()
         {
             long[] program = IntCode.Tools.ParseCode(input[0]);
-            Emulator ICE = new Emulator();
-            ICE.Boot(program);
+            Emulator ICE = new Emulator(program);
 
             (ExitCode, long) result = (0, 0);
             while (true)
