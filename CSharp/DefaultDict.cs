@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Advent2019
+namespace AdventOfCode
 {
     public class DefaultDict<Tk, Tv> : Dictionary<Tk, Tv> where Tv : struct
     {
