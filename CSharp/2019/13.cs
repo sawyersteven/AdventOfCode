@@ -21,7 +21,7 @@ namespace Advent2019
             while (true)
             {
                 response = ICE.Run();
-                if (response.Item1 == IntCode.ExitCode.Complete) break;
+                if (response.Item1 == IntCode.StatusCode.Complete) break;
                 long x = response.Item2;
                 long y = ICE.Run().Item2;
                 long tile = ICE.Run().Item2;
@@ -55,8 +55,8 @@ namespace Advent2019
             while (true)
             {
                 response = ICE.Run();
-                if (response.Item1 == IntCode.ExitCode.Complete) return response.Item2;
-                if (response.Item1 == IntCode.ExitCode.InputRequest)
+                if (response.Item1 == IntCode.StatusCode.Complete) return response.Item2;
+                if (response.Item1 == IntCode.StatusCode.InputRequest)
                 {
                     ICE.QueueInput(comp(ballX, paddleX));
                     ICE.Run();

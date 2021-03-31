@@ -46,7 +46,7 @@ namespace Advent2019
             while (true)
             {
                 var resp = ICE.Run();
-                if (resp.Item1 == IntCode.ExitCode.OutputDelivery)
+                if (resp.Item1 == IntCode.StatusCode.OutputDelivery)
                 {
                     outBuffer.Add((char)resp.Item2);
                 }
@@ -62,7 +62,7 @@ namespace Advent2019
             while (true)
             {
                 var resp = ICE.Run();
-                if (resp.Item1 == IntCode.ExitCode.OutputDelivery)
+                if (resp.Item1 == IntCode.StatusCode.OutputDelivery)
                 {
                     outBuffer.Add(resp.Item2);
                 }

@@ -79,7 +79,7 @@ namespace Advent2019
 
         private long RunFeedbackLoop(int[] settings)
         {
-            (IntCode.ExitCode, long) response = (IntCode.ExitCode.Null, 0);
+            (IntCode.StatusCode, long) response = (IntCode.StatusCode.Null, 0);
             for (int i = 0; i < thrusters.Length; i++)
             {
                 thrusters[i].Reboot();
@@ -95,7 +95,7 @@ namespace Advent2019
                 thruster.QueueInput(response.Item2);
                 response = thruster.Run();
 
-                if (response.Item1 == IntCode.ExitCode.Complete && currentThruster == thrusters.Length - 1) return response.Item2;
+                if (response.Item1 == IntCode.StatusCode.Complete && currentThruster == thrusters.Length - 1) return response.Item2;
 
                 currentThruster++;
                 currentThruster %= thrusters.Length;

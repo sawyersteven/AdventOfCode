@@ -6,9 +6,9 @@ namespace Advent2019
 {
     namespace IntCode
     {
-        using Result = ValueTuple<ExitCode, long>;
+        using Result = ValueTuple<StatusCode, long>;
 
-        public enum ExitCode
+        public enum StatusCode
         {
             InputRequest = 74,
             EOF = 38,
@@ -54,7 +54,7 @@ namespace Advent2019
         /// </summary>
         public class Emulator
         {
-            public static Result ResultTemplate = (ExitCode.Null, 0);
+            public static Result ResultTemplate = (StatusCode.Null, 0);
 
             public bool Verbose { get; set; } = true;
 
@@ -117,7 +117,7 @@ namespace Advent2019
                 inpQueue.Clear();
                 relativeBase = 0;
                 Memory = OrigProgram.Clone() as long[];
-                return (ExitCode.Null, 0);
+                return (StatusCode.Null, 0);
             }
 
             private static readonly long[] divisors = new long[] { 0, 100, 1000, 10000 };
@@ -164,7 +164,7 @@ namespace Advent2019
                 return _Memory[address];
             }
 
-            private Result r = (ExitCode.Null, 0);
+            private Result r = (StatusCode.Null, 0);
             public Result Run()
             {
                 while (position < _Memory.Length)
@@ -183,7 +183,7 @@ namespace Advent2019
                         case OP.INP:
                             if (inpQueue.Count == 0)
                             {
-                                return (ExitCode.InputRequest, 0);
+                                return (StatusCode.InputRequest, 0);
                             }
                             Write(inpQueue.Dequeue(), Addr(1));
                             position += 2;
@@ -191,7 +191,7 @@ namespace Advent2019
                         case OP.OUT:
                             long ret = Read(Addr(1));
                             position += 2;
-                            r.Item1 = ExitCode.OutputDelivery;
+                            r.Item1 = StatusCode.OutputDelivery;
                             r.Item2 = ret;
                             return r;
                         case OP.TRU:
@@ -215,13 +215,13 @@ namespace Advent2019
                             position += 2;
                             break;
                         case 99:
-                            r.Item1 = ExitCode.Complete;
+                            r.Item1 = StatusCode.Complete;
                             return r;
                         default:
-                            return (ExitCode.InvalidCommand, Read(position) % 100);
+                            return (StatusCode.InvalidCommand, Read(position) % 100);
                     }
                 }
-                return (ExitCode.EOF, 0);
+                return (StatusCode.EOF, 0);
             }
 
             private static class OP

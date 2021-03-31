@@ -53,15 +53,7 @@ namespace Advent2020
 
         private long LCM(long a, long b)
         {
-            long big, small;
-            if (a > b)
-            {
-                big = a; small = b;
-            }
-            else
-            {
-                big = b; small = a;
-            }
+            (long big, long small) = a > b ? (a, b) : (b, a);
 
             for (long i = 1; i <= small; i++)
             {

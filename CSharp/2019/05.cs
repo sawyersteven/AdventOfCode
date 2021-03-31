@@ -10,12 +10,12 @@ namespace Advent2019
 
             Emulator ICE = new Emulator(program);
 
-            (ExitCode, long) result = (0, 0);
+            (StatusCode, long) result = (0, 0);
             while (true)
             {
                 ICE.QueueInput(1);
-                (ExitCode, long) r = ICE.Run();
-                if (r.Item1 == ExitCode.Complete) break;
+                (StatusCode, long) r = ICE.Run();
+                if (r.Item1 == StatusCode.Complete) break;
                 result = r;
             }
 
@@ -27,12 +27,12 @@ namespace Advent2019
             long[] program = IntCode.Tools.ParseCode(input[0]);
             Emulator ICE = new Emulator(program);
 
-            (ExitCode, long) result = (0, 0);
+            (StatusCode, long) result = (0, 0);
             while (true)
             {
                 ICE.QueueInput(5);
                 result = ICE.Run();
-                if (result.Item1 == ExitCode.Complete) break;
+                if (result.Item1 == StatusCode.Complete) break;
             }
 
             return result.Item2;

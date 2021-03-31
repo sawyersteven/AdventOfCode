@@ -87,7 +87,7 @@ namespace Advent2019
             while (true)
             {
                 response = ICE.Run();
-                if (response.Item1 == IntCode.ExitCode.Complete) return response.Item2;
+                if (response.Item1 == IntCode.StatusCode.Complete) return response.Item2;
             }
         }
 

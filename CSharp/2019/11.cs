@@ -45,7 +45,7 @@ namespace Advent2019
             {
                 ICE.QueueInput((long)char.GetNumericValue(grid[loc.y, loc.x]));
                 response = ICE.Run();
-                if (response.Item1 != IntCode.ExitCode.OutputDelivery) break;
+                if (response.Item1 != IntCode.StatusCode.OutputDelivery) break;
 
                 grid[loc.y, loc.x] = response.Item2.ToString()[0];
                 paintedTiles.Add(loc);
