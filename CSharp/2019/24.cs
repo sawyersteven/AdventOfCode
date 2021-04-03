@@ -98,8 +98,6 @@ namespace Advent2019
                 if (bioRatings.Contains(br)) return br;
                 bioRatings.Add(br);
             }
-
-            return null;
         }
 
         private HashSet<Vector3Int> ParseInput2()
