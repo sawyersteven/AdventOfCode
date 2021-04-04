@@ -25,40 +25,7 @@ namespace Advent2017
             {
                 end += d3[s];
             }
-            return AStar(Vector3Int.Zero, end);
-        }
-
-        //A* is probably overkill but whatever
-        private int AStar(Vector3Int start, Vector3Int end)
-        {
-            List<Vector3Int[]> open = new List<Vector3Int[]>();
-            HashSet<Vector3Int> closed = new HashSet<Vector3Int>();
-            open.Add(new Vector3Int[] { Vector3Int.Zero });
-
-            while (open.Count > 0)
-            {
-                open.Sort((a, b) => b[^1].ManhattanDistance(end) - (a[^1].ManhattanDistance(end)));
-
-                Vector3Int[] path = open[^1];
-                open.RemoveAt(open.Count - 1);
-                closed.Add(path[^1]);
-
-                foreach (Vector3Int v in d3.Values)
-                {
-                    Vector3Int next = path[^1] + v;
-
-                    if (closed.Contains(next)) continue;
-                    if (next == end) return path.Length;
-
-                    Vector3Int[] np = new Vector3Int[path.Length + 1];
-                    Array.Copy(path, np, path.Length);
-                    np[^1] = next;
-
-                    open.Add(np);
-                    closed.Add(next);
-                }
-            }
-            return -1;
+            return end.ManhattanDistance(Vector3Int.Zero) / 2;
         }
 
         public override object Task2()
@@ -76,7 +43,7 @@ namespace Advent2017
                     farthest = current;
                 }
             }
-            return AStar(Vector3Int.Zero, farthest);
+            return farthest.ManhattanDistance(Vector3Int.Zero) / 2;
         }
     }
 }
