@@ -6,12 +6,65 @@ namespace Advent2017
     {
         public override object Task1()
         {
-            return null;
+            long score = 0;
+            int depth = 0;
+
+            bool inGarbage = false;
+            for (int i = 0; i < rawInput.Length; i++)
+            {
+                char c = rawInput[i];
+                if (c == '!')
+                {
+                    i++;
+                    continue;
+                }
+
+                if (inGarbage)
+                {
+                    if (c == '>') inGarbage = false;
+                    continue;
+                }
+
+                if (c == '<') inGarbage = true;
+
+                if (c == '{') depth++;
+                if (c == '}')
+                {
+
+                    score += depth;
+                    depth--;
+                }
+
+            }
+
+            return score;
         }
 
         public override object Task2()
         {
-            return null;
+            int garbCount = 0;
+
+            bool inGarbage = false;
+            for (int i = 0; i < rawInput.Length; i++)
+            {
+                char c = rawInput[i];
+                if (c == '!')
+                {
+                    i++;
+                    continue;
+                }
+
+                if (inGarbage)
+                {
+                    if (c == '>') inGarbage = false;
+                    else garbCount++;
+                    continue;
+                }
+                if (c == '<') inGarbage = true;
+            }
+
+
+            return garbCount;
         }
     }
 }

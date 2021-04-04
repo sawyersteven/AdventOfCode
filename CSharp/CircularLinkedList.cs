@@ -14,6 +14,11 @@ namespace AdventOfCode
         {
             Value = value;
         }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 
     /// <summary>
@@ -67,6 +72,22 @@ namespace AdventOfCode
             InsertBefore(origin.Next, node);
         }
 
+        public void MoveHeadRight(int steps)
+        {
+            for (; steps > 0; steps--)
+            {
+                head = First.Next;
+            }
+        }
+
+        public void MoveHeadLeft(int steps)
+        {
+            for (; steps > 0; steps--)
+            {
+                head = First.Previous;
+            }
+        }
+
         private void InsertFirstNode(CircularLinkedListNode<T> node)
         {
             node.Next = node;
@@ -102,6 +123,18 @@ namespace AdventOfCode
                 yield return current.Value;
                 current = current.Next;
             } while (current != head);
+        }
+
+        public T[] ToArray()
+        {
+            T[] arr = new T[_Count];
+            CircularLinkedListNode<T> current = head;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = current.Value;
+                current = current.Next;
+            }
+            return arr;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
