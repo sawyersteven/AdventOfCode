@@ -74,6 +74,7 @@ namespace AdventOfCode
 
         public void MoveHeadRight(int steps)
         {
+            steps %= _Count;
             for (; steps > 0; steps--)
             {
                 head = First.Next;
@@ -82,6 +83,7 @@ namespace AdventOfCode
 
         public void MoveHeadLeft(int steps)
         {
+            steps %= _Count;
             for (; steps > 0; steps--)
             {
                 head = First.Previous;
@@ -123,6 +125,28 @@ namespace AdventOfCode
                 yield return current.Value;
                 current = current.Next;
             } while (current != head);
+        }
+
+        public CircularLinkedListNode<T> ElementAt(int index)
+        {
+            index %= _Count;
+            CircularLinkedListNode<T> current = head;
+            for (int _ = 0; _ < index; _++)
+            {
+                current = current.Next;
+            }
+            return current;
+        }
+
+        public CircularLinkedListNode<T> FindElementByValue(T itemValue)
+        {
+            CircularLinkedListNode<T> current = head;
+            do
+            {
+                if (current.Value.Equals(itemValue)) return current;
+                current = current.Next;
+            } while (current != head);
+            return null;
         }
 
         public T[] ToArray()
