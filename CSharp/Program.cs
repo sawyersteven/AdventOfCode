@@ -46,6 +46,20 @@ namespace AdventOfCode
             }
         }
 
+        public static void Fill2DArray<T>(T[,] arr, T fill)
+        {
+            int h = arr.GetLength(0);
+            int w = arr.GetLength(1);
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    arr[y, x] = fill;
+                }
+            }
+
+        }
+
         public static T MaxVal<T>(T[] arr) where T : IComparable
         {
             T max = arr[0];
@@ -66,19 +80,13 @@ namespace AdventOfCode
             return min;
         }
 
-        public static bool ContentsEqual<T>(IList<T> a, IList<T> b)
-        {
-            if (a.Count != b.Count) return false;
-            for (int i = 0; i < a.Count; i++)
-            {
-                if (!a[i].Equals(b[i])) return false;
-            }
-            return true;
-        }
-
-        public static char[,] InputToCharArray(string[] input, bool addBorder)
+        public static char[,] InputToCharArray(string[] input, bool addBorder = false, char defaultChar = (char)0)
         {
             char[,] grid = new char[input.Length + (addBorder ? 2 : 0), input[0].Length + (addBorder ? 2 : 0)];
+            if (defaultChar != 0)
+            {
+                Utils.Fill2DArray(grid, defaultChar);
+            }
             int y = (addBorder ? 1 : 0);
             int yEnd = input.Length + (addBorder ? 1 : 0);
             int x = (addBorder ? 1 : 0);

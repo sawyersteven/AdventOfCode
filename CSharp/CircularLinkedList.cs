@@ -72,6 +72,12 @@ namespace AdventOfCode
             InsertBefore(origin.Next, node);
         }
 
+        public void AddAfter(CircularLinkedListNode<T> origin, T value)
+        {
+            CircularLinkedListNode<T> node = new CircularLinkedListNode<T>(value);
+            InsertBefore(origin.Next, node);
+        }
+
         public void MoveHeadRight(int steps)
         {
             steps %= _Count;
