@@ -79,7 +79,7 @@ namespace Grids
 
             return Equals((Vector3Int)other);
         }
-        public int ManhattanDistance(Vector3Int other)
+        public long ManhattanDistance(Vector3Int other)
         {
             return Math.Abs(x - other.x) + Math.Abs(y - other.y) + Math.Abs(z - other.z);
         }

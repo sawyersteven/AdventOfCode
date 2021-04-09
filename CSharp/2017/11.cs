@@ -32,11 +32,11 @@ namespace Advent2017
         {
             Vector3Int current = Vector3Int.Zero;
             Vector3Int farthest = Vector3Int.Zero;
-            int farthestDist = 0;
+            long farthestDist = 0;
             foreach (string s in rawInput.Split(','))
             {
                 current += d3[s];
-                int d = current.ManhattanDistance(Vector3Int.Zero);
+                long d = current.ManhattanDistance(Vector3Int.Zero);
                 if (d > farthestDist)
                 {
                     farthestDist = d;
