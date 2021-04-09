@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using ExtensionMethods;
 
 namespace AdventOfCode
 {
@@ -33,59 +33,12 @@ namespace AdventOfCode
 
     public class Utils
     {
-        public static void Print2DArray<T>(T[,] grid)
-        {
-            for (int i = 0; i < grid.GetLength(0); i++)
-            {
-                T[] line = new T[grid.GetLength(1)];
-                for (int j = 0; j < grid.GetLength(1); j++)
-                {
-                    line[j] = grid[i, j];
-                }
-                Console.WriteLine(string.Join("", line));
-            }
-        }
-
-        public static void Fill2DArray<T>(T[,] arr, T fill)
-        {
-            int h = arr.GetLength(0);
-            int w = arr.GetLength(1);
-            for (int y = 0; y < h; y++)
-            {
-                for (int x = 0; x < w; x++)
-                {
-                    arr[y, x] = fill;
-                }
-            }
-
-        }
-
-        public static T MaxVal<T>(T[] arr) where T : IComparable
-        {
-            T max = arr[0];
-            foreach (T t in arr)
-            {
-                if (t.CompareTo(max) == 1) max = t;
-            }
-            return max;
-        }
-
-        public static T MinVal<T>(T[] arr) where T : IComparable
-        {
-            T min = arr[0];
-            foreach (T t in arr)
-            {
-                if (t.CompareTo(min) == -1) min = t;
-            }
-            return min;
-        }
-
         public static char[,] InputToCharArray(string[] input, bool addBorder = false, char defaultChar = (char)0)
         {
             char[,] grid = new char[input.Length + (addBorder ? 2 : 0), input[0].Length + (addBorder ? 2 : 0)];
             if (defaultChar != 0)
             {
-                Utils.Fill2DArray(grid, defaultChar);
+                grid.Fill(defaultChar);
             }
             int y = (addBorder ? 1 : 0);
             int yEnd = input.Length + (addBorder ? 1 : 0);
@@ -101,17 +54,6 @@ namespace AdventOfCode
                 }
             }
             return grid;
-        }
-
-        public static T[] GetRow<T>(T[,] source, int rowIndex)
-        {
-            T[] row = new T[source.GetLength(1)];
-
-            for (int i = 0; i < row.Length; i++)
-            {
-                row[i] = source[rowIndex, i];
-            }
-            return row;
         }
     }
 }

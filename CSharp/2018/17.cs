@@ -2,6 +2,7 @@ using AdventOfCode;
 using System;
 using System.Collections.Generic;
 using Grids;
+using ExtensionMethods;
 
 namespace Advent2018
 {
@@ -54,7 +55,7 @@ namespace Advent2018
             int y = 0;
             for (y = 0; y < grid.GetLength(0); y++)
             {
-                if (Array.IndexOf(Utils.GetRow(grid, y), clay) != -1) break;
+                if (Array.IndexOf(grid.GetRow(y), clay) != -1) break;
             }
 
             long waterCounter = 0;
@@ -74,7 +75,7 @@ namespace Advent2018
             int y = 0;
             for (y = 0; y < grid.GetLength(0); y++)
             {
-                if (Array.IndexOf(Utils.GetRow(grid, y), clay) != -1) break;
+                if (Array.IndexOf(grid.GetRow(y), clay) != -1) break;
             }
 
             long waterCounter = 0;

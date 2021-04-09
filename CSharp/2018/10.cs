@@ -1,4 +1,5 @@
 using AdventOfCode;
+using ExtensionMethods;
 using System.Text.RegularExpressions;
 
 namespace Advent2018
@@ -62,7 +63,7 @@ namespace Advent2018
                     {
                         grid[s.PosY - minY, s.PosX - minX] = '#';
                     }
-                    Utils.Print2DArray(grid);
+                    grid.Print();
 
                     return seconds;
                 }

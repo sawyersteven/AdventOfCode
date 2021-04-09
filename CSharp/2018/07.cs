@@ -1,4 +1,5 @@
 using AdventOfCode;
+using ExtensionMethods;
 using System;
 using System.Collections.Generic;
 
@@ -94,7 +95,7 @@ namespace Advent2018
                 }
                 else
                 {
-                    timeReduction = Utils.MinVal(workers).Time;
+                    timeReduction = workers.MinVal().Time;
                     if (timeReduction < 0) timeReduction = 0;
                 }
 

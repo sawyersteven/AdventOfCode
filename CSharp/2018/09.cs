@@ -1,4 +1,5 @@
 using AdventOfCode;
+using ExtensionMethods;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +18,7 @@ namespace Advent2018
         {
             (int playerCount, int lastScore) = ParseInput();
 
-            return Utils.MaxVal(PlayGame(playerCount, lastScore));
+            return PlayGame(playerCount, lastScore).MaxVal();
         }
 
         private long[] PlayGame(int playerCount, int lastMarble)
@@ -56,7 +57,7 @@ namespace Advent2018
         {
             (int playerCount, int lastScore) = ParseInput();
 
-            return Utils.MaxVal(PlayGame(playerCount, lastScore * 100));
+            return PlayGame(playerCount, lastScore * 100).MaxVal();
         }
     }
 }

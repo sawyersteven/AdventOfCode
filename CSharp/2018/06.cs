@@ -1,4 +1,5 @@
 using AdventOfCode;
+using ExtensionMethods;
 using System;
 
 namespace Advent2018
@@ -55,7 +56,7 @@ namespace Advent2018
                     }
                 }
             }
-            return Utils.MaxVal(coverage);
+            return coverage.MaxVal();
         }
 
         public override object Task2()
