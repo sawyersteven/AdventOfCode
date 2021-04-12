@@ -5,11 +5,11 @@ namespace ExtensionMethods
 
     public static class ArrayExtensions
     {
-        public static string Join(this char[,] arr, char sep)
+        public static string Join<T>(this T[,] arr, char sep)
         {
             int h = arr.GetLength(0);
             int w = arr.GetLength(1);
-            char[] chars = new char[h * w];
+            T[] chars = new T[h * w];
             for (int y = 0; y < h; y++)
             {
                 for (int x = 0; x < w; x++)
