@@ -7,34 +7,47 @@ namespace Advent2016
     {
         public override object Task1()
         {
-            return null;
-            return rawInput.Length + DecompressedLen(rawInput);
-        }
-        public long DecompressedLen(string data, bool pt1 = true)
-        {
-            long addedChars = 0;
-            for (int i = 0; i < data.Length; i++)
+            int totalLen = rawInput.Length;
+            for (int i = 0; i < input.Length; i++)
             {
-                if (data[i] == '(')
-                {
-                    int markerLen = data.Substring(i).IndexOf(')') + 1;
-                    int[] marker = Array.ConvertAll(data.Substring(i + 1, markerLen - 2).Split('x'), int.Parse);
-                    addedChars -= markerLen;
-                    if (pt1) i += marker[0];
-                    else
-                    {
-                        string decompressedChunk = string.Join(data.Substring(i + markerLen, marker[0]), new string[marker[1] + 1]);
-                        addedChars += DecompressedLen(decompressedChunk, false);
-                        i += marker[0];
-                    }
-                    addedChars += marker[0] * (marker[1] - 1);
-                }
+                if (rawInput[i] != '(') continue;
+
+                int markerLen = rawInput.IndexOf(')', i) - i + 1;
+                int[] markerParts = Array.ConvertAll(rawInput.Substring(i + 1, markerLen - 2).Split('x'), int.Parse);
+
+                totalLen -= markerLen;
+                i += markerParts[0];
+                totalLen += markerParts[0] * (markerParts[1] - 1);
+
             }
-            return addedChars;
+            return totalLen;
         }
+
         public override object Task2()
         {
-            return rawInput.Length + DecompressedLen(rawInput, false);
+            return RecurseDecompress(rawInput);
+        }
+
+        private long RecurseDecompress(string input)
+        {
+            long len = input.Length;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] != '(') continue;
+                int markerLen = input.IndexOf(')', i) - i + 1;
+
+                int[] markerParts = Array.ConvertAll(input.Substring(i + 1, markerLen - 2).Split('x'), int.Parse);
+
+                string chunk = input.Substring(i + markerLen, markerParts[0]);
+
+                long decompressedLen = RecurseDecompress(chunk);
+
+                len += (decompressedLen * markerParts[1]) - markerParts[0] - markerLen;
+                i += markerLen + markerParts[0] - 1;
+            }
+
+            return len;
         }
     }
 }
