@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace ExtensionMethods
 {
@@ -22,15 +23,25 @@ namespace ExtensionMethods
 
         public static void Print<T>(this T[,] grid)
         {
-            for (int i = 0; i < grid.GetLength(0); i++)
+            Console.WriteLine(grid.Render());
+        }
+
+        public static string Render<T>(this T[,] grid)
+        {
+            int w = grid.GetLength(1);
+            int h = grid.GetLength(0);
+
+            string[] lines = new string[h];
+            for (int i = 0; i < h; i++)
             {
-                T[] line = new T[grid.GetLength(1)];
-                for (int j = 0; j < grid.GetLength(1); j++)
+                string[] line = new string[w];
+                for (int j = 0; j < w; j++)
                 {
-                    line[j] = grid[i, j];
+                    line[j] = grid[i, j].ToString();
                 }
-                Console.WriteLine(string.Join("", line));
+                lines[i] = string.Join(null, line);
             }
+            return string.Join('\n', lines);
         }
 
         public static T[] GetRow<T>(this T[,] source, int rowIndex)
