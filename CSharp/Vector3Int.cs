@@ -16,6 +16,8 @@ namespace Grids
             this.z = z;
         }
 
+        public static implicit operator Vector2Int(Vector3Int v) => new Vector2Int(v.x, v.y);
+
         public static Vector3Int operator -(Vector3Int v)
         {
             return new Vector3Int(-v.x, -v.y, -v.z);
@@ -24,6 +26,11 @@ namespace Grids
         public static Vector3Int operator +(Vector3Int a, Vector3Int b)
         {
             return new Vector3Int(a.x + b.x, a.y + b.y, a.z + b.z);
+        }
+
+        public static Vector3Int operator +(Vector3Int a, Vector2Int b)
+        {
+            return new Vector3Int(a.x + b.x, a.y + b.y, a.z);
         }
 
         public static Vector3Int operator -(Vector3Int a, Vector3Int b)
