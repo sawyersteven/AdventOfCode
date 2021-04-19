@@ -68,17 +68,31 @@ namespace Advent2016
 
         private string CreateMD5(string input, int iters = 1)
         {
-
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(input);
             for (int _ = 0; _ < iters; _++)
             {
-                byte[] bytes = System.Text.Encoding.ASCII.GetBytes(input);
-                bytes = md5.ComputeHash(bytes);
-                input = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+
+                bytes = ToLowercaseHexBytes(md5.ComputeHash(bytes));
             }
-            return input;
+            return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
-        // This is painfully slow, but I blame C#'s slow MD5 implementation
+        private byte[] ToLowercaseHexBytes(byte[] hash)
+        {
+            byte[] ret = new byte[32];
+            for (int i = 0, j = 0; i < hash.Length; i++, j += 2)
+            {
+                ret[j] = (byte)((hash[i] / 16) + 48);
+                // some bit-fiddling to see if the value is over 57 so it can have
+                // 39 added to it in order to get a lower-case ascii letter value
+                // This only works on unsigned values.
+                ret[j] += (byte)((57 + (~ret[j] + 1) >> 31 & 1) * 39);
+                ret[j + 1] = (byte)((hash[i] % 16) + 48);
+                ret[j + 1] += (byte)((57 + (~ret[j + 1] + 1) >> 31 & 1) * 39);
+            }
+            return ret;
+        }
+
         public override object Task2()
         {
             Queue<string> hashQ = new Queue<string>(1000);
