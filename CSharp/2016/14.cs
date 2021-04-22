@@ -71,7 +71,6 @@ namespace Advent2016
             byte[] bytes = System.Text.Encoding.ASCII.GetBytes(input);
             for (int _ = 0; _ < iters; _++)
             {
-
                 bytes = ToLowercaseHexBytes(md5.ComputeHash(bytes));
             }
             return System.Text.Encoding.ASCII.GetString(bytes);

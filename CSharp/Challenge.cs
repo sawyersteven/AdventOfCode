@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -6,13 +5,10 @@ namespace AdventOfCode
 {
     public abstract class Challenge
     {
-        public ChallengeResult result1;
-        public ChallengeResult result2;
-
         protected string[] input;
         protected string rawInput;
 
-        public void Go(string rawInput)
+        public IEnumerable<object> Go(string rawInput)
         {
             this.rawInput = rawInput;
             this.input = rawInput.Split("\r\n");
@@ -21,12 +17,12 @@ namespace AdventOfCode
             sw.Start();
             object r = Task1();
             sw.Stop();
-            result1 = new ChallengeResult(r, sw.Elapsed.TotalMilliseconds);
+            yield return new ChallengeResult(r, sw.Elapsed.TotalMilliseconds);
 
             sw.Restart();
             r = Task2();
             sw.Stop();
-            result2 = new ChallengeResult(r, sw.Elapsed.TotalMilliseconds);
+            yield return new ChallengeResult(r, sw.Elapsed.TotalMilliseconds);
 
         }
 

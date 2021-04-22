@@ -20,14 +20,16 @@ namespace AdventOfCode
             string clsName = $"Advent{args[0]}.Challenge{challengeId.ToString("00")}";
 
             Challenge c = (Challenge)Activator.CreateInstance(Type.GetType(clsName));
-            c.Go(System.IO.File.ReadAllText($"../Input/{args[0]}/{challengeId.ToString("00")}.txt"));
+            string input = System.IO.File.ReadAllText($"../Input/{args[0]}/{challengeId.ToString("00")}.txt");
 
-            Console.WriteLine("Task1 -");
-            Console.WriteLine($"    Time: {c.result1.Time}ms");
-            Console.WriteLine($"    Result: {c.result1.Answer}");
-            Console.WriteLine("Task2 -");
-            Console.WriteLine($"    Time: {c.result2.Time}ms");
-            Console.WriteLine($"    Result: {c.result2.Answer}");
+            int i = 1;
+            foreach (ChallengeResult cr in c.Go(input))
+            {
+                Console.WriteLine($"Task{i} -");
+                Console.WriteLine($"    Time: {cr.Time}ms");
+                Console.WriteLine($"    Result: {cr.Answer}");
+                i++;
+            }
         }
     }
 

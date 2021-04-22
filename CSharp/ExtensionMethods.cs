@@ -21,6 +21,31 @@ namespace ExtensionMethods
             return string.Join(sep, chars);
         }
 
+        public static int Count<T>(this T[,] arr, T val)
+        {
+            int count = 0;
+            int h = arr.GetLength(0);
+            int w = arr.GetLength(1);
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    if (arr[y, x].Equals(val)) count++;
+                }
+            }
+            return count;
+        }
+
+        public static int Count<T>(this T[] arr, T val)
+        {
+            int count = 0;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i].Equals(val)) count++;
+            }
+            return count;
+        }
+
         public static void Print<T>(this T[,] grid)
         {
             Console.WriteLine(grid.Render());
