@@ -193,8 +193,7 @@ namespace Advent2019
 
         public override object Task2()
         {
-
-            return null;
+            return '*';
         }
     }
 }

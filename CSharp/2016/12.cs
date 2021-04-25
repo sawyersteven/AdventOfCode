@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AdventOfCode;
 
 namespace Advent2016
@@ -14,30 +15,49 @@ namespace Advent2016
         }
 
         // These things typically get reused, so some early optimization might help
-        private void RunCode((char, int, bool, int, bool)[] code, int[] registers)
+        public static IEnumerable<int> RunCode((char, int, bool, int, bool)[] code, int[] registers)
         {
             for (int i = 0; i < code.Length; i++)
             {
                 switch (code[i].Item1)
                 {
-                    case 'c':
+                    case 'c': // cpy
                         registers[code[i].Item4] = code[i].Item3 ? registers[code[i].Item2] : code[i].Item2;
                         break;
-                    case 'i':
+                    case 'i': // inc
                         registers[code[i].Item2]++;
                         break;
-                    case 'd':
+                    case 'd': // dec
                         registers[code[i].Item2]--;
                         break;
-                    case 'j':
+                    case 'j': // jnz
                         int nz = code[i].Item3 ? registers[code[i].Item2] : code[i].Item2;
-                        if (nz != 0) i += code[i].Item4 - 1;
+                        if (nz != 0) i += (code[i].Item5 ? registers[code[i].Item4] : code[i].Item4) - 1;
                         break;
+                    case 't':
+                        int offset = code[i].Item3 ? registers[code[i].Item2] : code[i].Item2;
+                        if (i + offset > code.Length - 1) continue;
+                        char ogCmd = code[i + offset].Item1;
+                        code[i + offset].Item1 = ToggleTable[ogCmd];
+                        break;
+                    case 'o': // out
+                        yield return code[i].Item3 ? registers[code[i].Item2] : code[i].Item2;
+                        break;
+
                 }
             }
         }
 
-        private (char, int, bool, int, bool)[] ConvertCode(string[] code)
+        private static Dictionary<char, char> ToggleTable = new Dictionary<char, char>()
+        {
+            {'i', 'd'},
+            {'t', 'i'},
+            {'d', 'i'},
+            {'c', 'j'},
+            {'j', 'c'}
+        };
+
+        public static (char, int, bool, int, bool)[] ConvertCode(string[] code)
         {
             // cmd, out, isReg, in, isReg
             (char, int, bool, int, bool)[] converted = new (char, int, bool, int, bool)[code.Length];

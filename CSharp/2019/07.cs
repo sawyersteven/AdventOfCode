@@ -1,6 +1,6 @@
-using AdventOfCode;
 using System;
 using System.Collections.Generic;
+using AdventOfCode;
 
 namespace Advent2019
 {
@@ -28,20 +28,20 @@ namespace Advent2019
             return maxSignal;
         }
 
-        private static IEnumerable<T[]> Permutate<T>(T[] sequence)
+        public static IEnumerable<IList<T>> Permutate<T>(IList<T> sequence)
         {
-            foreach (T[] i in _Permutate(sequence, sequence.Length))
+            foreach (IList<T> i in _Permutate(sequence, sequence.Count))
             {
                 yield return i;
             }
 
-            IEnumerable<T[]> _Permutate(T[] sequence, int count)
+            IEnumerable<IList<T>> _Permutate(IList<T> sequence, int count)
             {
                 if (count == 1) yield return sequence;
 
                 for (int i = 0; i < count; i++)
                 {
-                    foreach (T[] perm in _Permutate(sequence, count - 1))
+                    foreach (IList<T> perm in _Permutate(sequence, count - 1))
                     {
                         yield return perm;
                     }
