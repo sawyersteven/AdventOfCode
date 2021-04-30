@@ -68,7 +68,7 @@ namespace Advent2016
             targets.Remove(start);
 
             int minDist = int.MaxValue;
-            foreach (IList<Vector2Int> path in Advent2019.Challenge07.Permutate<Vector2Int>(targets))
+            foreach (IList<Vector2Int> path in Permutator.Permutate<Vector2Int>(targets))
             {
                 int dist = 0;
 
@@ -89,7 +89,7 @@ namespace Advent2016
         public override object Task2()
         {
             int minDist = int.MaxValue;
-            foreach (IList<Vector2Int> path in Advent2019.Challenge07.Permutate<Vector2Int>(targets))
+            foreach (IList<Vector2Int> path in Permutator.Permutate<Vector2Int>(targets))
             {
                 int dist = 0;
 

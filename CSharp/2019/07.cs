@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using AdventOfCode;
 
 namespace Advent2019
@@ -14,7 +12,7 @@ namespace Advent2019
             long maxSignal = 0;
 
             var response = IntCode.Emulator.ResultTemplate;
-            foreach (int[] arr in Permutate(new int[] { 0, 1, 2, 3, 4 }))
+            foreach (int[] arr in Permutator.Permutate(new int[] { 0, 1, 2, 3, 4 }))
             {
                 response.Item2 = 0;
                 foreach (int s in arr)
@@ -28,33 +26,6 @@ namespace Advent2019
             return maxSignal;
         }
 
-        public static IEnumerable<IList<T>> Permutate<T>(IList<T> sequence)
-        {
-            foreach (IList<T> i in _Permutate(sequence, sequence.Count))
-            {
-                yield return i;
-            }
-
-            IEnumerable<IList<T>> _Permutate(IList<T> sequence, int count)
-            {
-                if (count == 1) yield return sequence;
-
-                for (int i = 0; i < count; i++)
-                {
-                    foreach (IList<T> perm in _Permutate(sequence, count - 1))
-                    {
-                        yield return perm;
-                    }
-                    T tmp = sequence[count - 1];
-                    for (int j = count - 1; j > 0; j--)
-                    {
-                        sequence[j] = sequence[j - 1];
-                    }
-                    sequence[0] = tmp;
-                }
-            }
-        }
-
         IntCode.Emulator[] thrusters;
         public override object Task2()
         {
@@ -66,7 +37,7 @@ namespace Advent2019
 
             int[] phaseSettings = new int[] { 5, 6, 7, 8, 9 };
             long maxSignal = 0;
-            foreach (int[] arr in Permutate(phaseSettings))
+            foreach (int[] arr in Permutator.Permutate(phaseSettings))
             {
                 long sig = RunFeedbackLoop(arr);
                 if (sig > maxSignal)
