@@ -32,7 +32,7 @@ namespace Advent2016
                     {
                         b <<= 1;
                         if (x + z > rawInput.Length - 1 || x + z < 0) continue;
-                        b |= prev[x + z] == trap ? 1 : 0;
+                        b |= (byte)(prev[x + z] == trap ? 1 : 0);
                     }
                     if (b == 0b110 || b == 0b011 || b == 0b100 || b == 0b001)
                     {
