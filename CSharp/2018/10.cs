@@ -1,6 +1,6 @@
+using System.Text.RegularExpressions;
 using AdventOfCode;
 using ExtensionMethods;
-using System.Text.RegularExpressions;
 
 namespace Advent2018
 {
@@ -16,7 +16,7 @@ namespace Advent2018
             public int VelY;
         }
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             Regex rx = new Regex(@"[.*]?-?(\d+)", RegexOptions.Compiled);
 
@@ -37,7 +37,6 @@ namespace Advent2018
         private Star[] stars;
         public override object Task1()
         {
-            ParseInput();
             for (int seconds = 1; ; seconds++)
             {
                 int minY = int.MaxValue;

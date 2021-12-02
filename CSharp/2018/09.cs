@@ -1,22 +1,22 @@
-using AdventOfCode;
-using ExtensionMethods;
 using System;
 using System.Collections.Generic;
+using AdventOfCode;
+using ExtensionMethods;
 
 namespace Advent2018
 {
     public class Challenge09 : Challenge
     {
-
-        private (int, int) ParseInput()
+        private (int, int) gameData;
+        public override void ParseInput()
         {
             string[] parts = input[0].Split(' ');
-            return (int.Parse(parts[0]), int.Parse(parts[parts.Length - 2]));
+            gameData = (int.Parse(parts[0]), int.Parse(parts[parts.Length - 2]));
         }
 
         public override object Task1()
         {
-            (int playerCount, int lastScore) = ParseInput();
+            (int playerCount, int lastScore) = gameData;
 
             return PlayGame(playerCount, lastScore).MaxVal();
         }
@@ -55,7 +55,7 @@ namespace Advent2018
 
         public override object Task2()
         {
-            (int playerCount, int lastScore) = ParseInput();
+            (int playerCount, int lastScore) = gameData;
 
             return PlayGame(playerCount, lastScore * 100).MaxVal();
         }

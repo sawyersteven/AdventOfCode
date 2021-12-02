@@ -34,7 +34,7 @@ namespace Advent2015
         private int bossArmor;
         private int bossDMG;
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             bossStartHP = int.Parse(input[0].Split(' ')[^1]);
             bossDMG = int.Parse(input[1].Split(' ')[^1]);
@@ -43,8 +43,6 @@ namespace Advent2015
 
         public override object Task1()
         {
-            ParseInput();
-
             int lowestCost = int.MaxValue;
 
             foreach ((int wcost, int damage, int _) in Weapons)

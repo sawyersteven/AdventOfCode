@@ -12,7 +12,7 @@ namespace Advent2017
                                                    '#','#','#'};
 
         private Dictionary<string, char[]> lookupTable = new Dictionary<string, char[]>();
-        private void ParseInput()
+        public override void ParseInput()
         {
             foreach (string line in input)
             {
@@ -121,7 +121,6 @@ namespace Advent2017
         */
         public override object Task1()
         {
-            ParseInput();
             char[] image = initialState.Clone() as char[];
 
             for (int turn = 0; turn < 5; turn++)

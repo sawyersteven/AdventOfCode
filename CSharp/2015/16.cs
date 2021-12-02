@@ -5,7 +5,7 @@ namespace Advent2015
 {
     public class Challenge16 : Challenge
     {
-        private IEnumerable<Dictionary<string, int>> ParseInput()
+        private new IEnumerable<Dictionary<string, int>> ParseInput()
         {
             char[] splt = new char[] { ':', ' ', ',' };
             foreach (string line in input)

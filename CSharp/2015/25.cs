@@ -10,7 +10,7 @@ namespace Advent2015
         int col;
         const ulong seed = 20151125;
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             string[] parts = rawInput.Split(new char[] { ' ', '.', ',' }, StringSplitOptions.RemoveEmptyEntries);
             col = int.Parse(parts[^1]);
@@ -19,8 +19,6 @@ namespace Advent2015
 
         public override object Task1()
         {
-            ParseInput();
-
             int d = Distance(row, col);
             Console.WriteLine(d);
 

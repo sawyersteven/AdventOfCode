@@ -5,9 +5,23 @@ namespace Advent2016
 {
     public class Challenge15 : Challenge
     {
+
+        private (int, int)[] discs;
+        // size, turns from init to zero
+        public override void ParseInput()
+        {
+            discs = new (int, int)[input.Length];
+            for (int i = 0; i < input.Length; i++)
+            {
+                string[] parts = input[i].Split(' ');
+                int p = int.Parse(parts[3]);
+                int c = int.Parse(parts[^1].Substring(0, parts[^1].Length - 1));
+                discs[i] = (p, c - p);
+            }
+        }
+
         public override object Task1()
         {
-            (int, int)[] discs = ParseInput();
             return Run(discs);
         }
 
@@ -34,27 +48,13 @@ namespace Advent2016
             return answer;
         }
 
-        // size, turns from init to zero
-        private (int, int)[] ParseInput()
-        {
-            (int, int)[] discs = new (int, int)[input.Length];
-            for (int i = 0; i < input.Length; i++)
-            {
-                string[] parts = input[i].Split(' ');
-                int p = int.Parse(parts[3]);
-                int c = int.Parse(parts[^1].Substring(0, parts[^1].Length - 1));
-                discs[i] = (p, c - p);
-            }
-            return discs;
-        }
 
         public override object Task2()
         {
-            (int, int)[] discs = new (int, int)[input.Length + 1];
-            (int, int)[] og = ParseInput();
-            Array.Copy(og, discs, og.Length);
-            discs[^1] = (11, 0);
-            return Run(discs);
+            (int, int)[] discs2 = new (int, int)[input.Length + 1];
+            Array.Copy(discs, discs2, discs.Length);
+            discs2[^1] = (11, 0);
+            return Run(discs2);
         }
 
         private long LCM(long a, long b)

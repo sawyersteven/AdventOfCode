@@ -1,6 +1,6 @@
-using AdventOfCode;
 using System;
 using System.Collections.Generic;
+using AdventOfCode;
 
 namespace Advent2020
 {
@@ -114,7 +114,7 @@ namespace Advent2020
             }
         }
 
-        private List<Tile> Tiles;
+        private Tile[] tiles;
 
         private static Dictionary<string, string> reversedEdges = new Dictionary<string, string>();
         private static string Reverse(string s)
@@ -127,7 +127,7 @@ namespace Advent2020
             return reversedEdges[s];
         }
 
-        private List<Tile> ParseInput()
+        public override void ParseInput()
         {
             List<Tile> tiles = new List<Tile>();
             char[] east = new char[TileSize];
@@ -154,35 +154,33 @@ namespace Advent2020
                 t.edges[West] = string.Join("", west);
                 tiles.Add(t);
             }
-            return tiles;
+            this.tiles = tiles.ToArray();
         }
 
         public override object Task1()
         {
             ulong answer = 1;
-            Tiles = ParseInput();
-
-            for (int i = 0; i < Tiles.Count; i++)
+            for (int i = 0; i < tiles.Length; i++)
             {
-                for (int j = i + 1; j < Tiles.Count; j++)
+                for (int j = i + 1; j < tiles.Length; j++)
                 {
-                    foreach (string edge in Tiles[i].edges)
+                    foreach (string edge in tiles[i].edges)
                     {
-                        foreach (string edge2 in Tiles[j].edges)
+                        foreach (string edge2 in tiles[j].edges)
                         {
                             if (edge == edge2 || edge == Reverse(edge2))
                             {
-                                Tiles[i].EdgeMatches++;
-                                Tiles[j].EdgeMatches++;
+                                tiles[i].EdgeMatches++;
+                                tiles[j].EdgeMatches++;
                             }
                         }
                     }
                 }
             }
 
-            for (int i = 0; i < Tiles.Count; i++)
+            for (int i = 0; i < tiles.Length; i++)
             {
-                if (Tiles[i].EdgeMatches == 2) answer *= Tiles[i].id;
+                if (tiles[i].EdgeMatches == 2) answer *= tiles[i].id;
             }
 
             return answer;
@@ -190,7 +188,7 @@ namespace Advent2020
 
         private string[] AssembleMap()
         {
-            int mapEdgeLen = (int)Math.Sqrt(Tiles.Count);
+            int mapEdgeLen = (int)Math.Sqrt(tiles.Length);
 
             List<List<string>> map = new List<List<string>>(mapEdgeLen * mapEdgeLen);
             for (int i = 0; i < mapEdgeLen * mapEdgeLen; i++)
@@ -201,7 +199,7 @@ namespace Advent2020
             List<Tile> corners = new List<Tile>(4);
             List<Tile> fills = new List<Tile>((mapEdgeLen * mapEdgeLen) - 4);
 
-            foreach (Tile t in Tiles)
+            foreach (Tile t in tiles)
             {
                 if (t.EdgeMatches == 2) corners.Add(t);
                 else fills.Add(t);

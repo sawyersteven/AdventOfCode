@@ -8,10 +8,17 @@ namespace AdventOfCode
         protected string[] input;
         protected string rawInput;
 
+        public virtual void ParseInput()
+        {
+            return;
+        }
+
         public IEnumerable<object> Go(string rawInput)
         {
             this.rawInput = rawInput;
-            this.input = rawInput.Split("\r\n");
+            this.input = rawInput.Split(new char[] { '\r', '\n' });
+
+            ParseInput();
 
             Stopwatch sw = new Stopwatch();
             sw.Start();

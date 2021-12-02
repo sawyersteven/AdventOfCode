@@ -11,17 +11,17 @@ namespace Advent2019
         private const bool Empty = false;
         private const int GridSize = 5;
 
-        private bool[,] ParseInput()
+        private bool[,] ogGrid;
+        public override void ParseInput()
         {
-            bool[,] grid = new bool[GridSize, GridSize];
+            ogGrid = new bool[GridSize, GridSize];
             for (int y = 0; y < GridSize; y++)
             {
                 for (int x = 0; x < GridSize; x++)
                 {
-                    grid[y, x] = input[y][x] == '#';
+                    ogGrid[y, x] = input[y][x] == '#';
                 }
             }
-            return grid;
         }
 
         private Dictionary<Vector2Int, Vector2Int[]> adjacentTable = new Dictionary<Vector2Int, Vector2Int[]>();
@@ -62,7 +62,7 @@ namespace Advent2019
 
         public override object Task1()
         {
-            bool[,] grid = ParseInput();
+            bool[,] grid = (bool[,])ogGrid.Clone();
 
             HashSet<long> bioRatings = new HashSet<long>();
 

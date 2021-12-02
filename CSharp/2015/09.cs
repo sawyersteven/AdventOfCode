@@ -8,7 +8,7 @@ namespace Advent2015
         Dictionary<string, List<(string, int)>> Map = new Dictionary<string, List<(string, int)>>();
         HashSet<string> cities = new HashSet<string>();
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             foreach (string line in input)
             {
@@ -25,8 +25,6 @@ namespace Advent2015
         int longest = 0;
         public override object Task1()
         {
-            ParseInput();
-
             int shortest = int.MaxValue;
             foreach (IList<string> path in Permutator.Permutate(new List<string>(cities)))
             {

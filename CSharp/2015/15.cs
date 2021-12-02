@@ -6,7 +6,7 @@ namespace Advent2015
     public class Challenge15 : Challenge
     {
         int[][] ingredients;
-        private void ParseInput()
+        public override void ParseInput()
         {
             char[] splt = new char[] { ' ', ',' };
             ingredients = new int[input.Length][];
@@ -20,7 +20,6 @@ namespace Advent2015
         // I wanted to do this with a generator, but it seemed like a giant pain
         public override object Task1()
         {
-            ParseInput();
             const int total = 100;
 
             int ingredientCount = ingredients[0].Length - 1;

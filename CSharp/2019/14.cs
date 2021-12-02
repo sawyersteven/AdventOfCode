@@ -1,5 +1,5 @@
-using AdventOfCode;
 using System.Collections.Generic;
+using AdventOfCode;
 
 namespace Advent2019
 {
@@ -71,7 +71,7 @@ namespace Advent2019
             return requiredOre;
         }
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             foreach (string line in input)
             {

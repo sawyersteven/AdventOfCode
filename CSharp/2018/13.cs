@@ -1,12 +1,36 @@
-using AdventOfCode;
 using System;
 using System.Collections.Generic;
+using AdventOfCode;
 using Grids;
 
 namespace Advent2018
 {
     public class Challenge13 : Challenge
     {
+        private HashSet<Vector2Int> cartPositions;
+        public override void ParseInput()
+        {
+            cartPositions = new HashSet<Vector2Int>();
+            carts = new List<Cart>();
+            grid = new char[input.Length, input[0].Length];
+            for (int y = 0; y < input.Length; y++)
+            {
+                for (int x = 0; x < input[0].Length; x++)
+                {
+                    grid[y, x] = input[y][x];
+                    int cartType = Array.IndexOf(cartChars, grid[y, x]);
+                    if (cartType != -1)
+                    {
+                        grid[y, x] = cartType % 2 == 1 ? '-' : '|';
+                        Cart c = new Cart(new Vector2Int(x, y), cartType);
+                        c.Position = new Vector2Int(x, y);
+                        carts.Add(c);
+                        cartPositions.Add(c.Position);
+                    }
+                }
+            }
+        }
+
         private class Cart
         {
             private static int[] turns = new int[] { -1, 0, 1 };
@@ -55,33 +79,9 @@ namespace Advent2018
         private char[] cartChars = new char[] { '^', '>', 'v', '<' };
         private char[,] grid;
         private List<Cart> carts;
-        private HashSet<Vector2Int> cartPositions;
-        private void ParseInput()
-        {
-            cartPositions = new HashSet<Vector2Int>();
-            carts = new List<Cart>();
-            grid = new char[input.Length, input[0].Length];
-            for (int y = 0; y < input.Length; y++)
-            {
-                for (int x = 0; x < input[0].Length; x++)
-                {
-                    grid[y, x] = input[y][x];
-                    int cartType = Array.IndexOf(cartChars, grid[y, x]);
-                    if (cartType != -1)
-                    {
-                        grid[y, x] = cartType % 2 == 1 ? '-' : '|';
-                        Cart c = new Cart(new Vector2Int(x, y), cartType);
-                        c.Position = new Vector2Int(x, y);
-                        carts.Add(c);
-                        cartPositions.Add(c.Position);
-                    }
-                }
-            }
-        }
 
         public override object Task1()
         {
-            ParseInput();
             for (int i = 0; ; i++)
             {
                 carts.Sort(CartSort);
@@ -108,7 +108,6 @@ namespace Advent2018
 
         public override object Task2()
         {
-            ParseInput();
             while (true)
             {
                 carts = carts.FindAll((x) => x.HasCrashed == false);

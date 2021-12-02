@@ -8,7 +8,7 @@ namespace Advent2015
         private string baseMolecule;
         private List<(string, string)> Replacements;
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             Replacements = new List<(string, string)>();
             foreach (string line in input)
@@ -22,7 +22,6 @@ namespace Advent2015
 
         public override object Task1()
         {
-            ParseInput();
             HashSet<string> combos = new HashSet<string>();
 
             foreach ((string a, string b) in Replacements)

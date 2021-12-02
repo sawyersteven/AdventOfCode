@@ -54,7 +54,9 @@ namespace AdventOfCode
                 Uri u = new Uri(src);
                 client.Cookies.Add(new Cookie("session", sessionCookie, null, u.Host));
 
-                client.DownloadFile(u, dst);
+                //client.DownloadFile(u, dst);
+                string txt = client.DownloadString(u);
+                File.WriteAllText(dst, txt.TrimEnd());
             }
         }
     }
@@ -62,19 +64,15 @@ namespace AdventOfCode
     public class WebClientC : WebClient
     {
         CookieContainer cookies = new CookieContainer();
-
         public CookieContainer Cookies { get { return cookies; } }
 
         protected override WebRequest GetWebRequest(Uri address)
         {
-
             WebRequest request = base.GetWebRequest(address);
-
             if (request.GetType() == typeof(HttpWebRequest))
                 ((HttpWebRequest)request).CookieContainer = cookies;
 
             return request;
-
         }
     }
 

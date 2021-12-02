@@ -1,5 +1,5 @@
-using AdventOfCode;
 using System.Collections.Generic;
+using AdventOfCode;
 
 namespace Advent2020
 {
@@ -7,7 +7,7 @@ namespace Advent2020
     {
         private Dictionary<string, (string, int)[]> parsedInput;
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             Dictionary<string, (string, int)[]> bagTypes = new Dictionary<string, (string, int)[]>();
 

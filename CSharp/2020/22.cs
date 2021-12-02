@@ -1,13 +1,13 @@
-using AdventOfCode;
 using System;
 using System.Collections.Generic;
+using AdventOfCode;
 
 namespace Advent2020
 {
     public class Challenge22 : Challenge
     {
-
-        private (Queue<int>, Queue<int>) ParseInput()
+        private (Queue<int>, Queue<int>) queues;
+        public override void ParseInput()
         {
             Queue<int> P1 = new Queue<int>();
             Queue<int> P2 = new Queue<int>();
@@ -20,7 +20,7 @@ namespace Advent2020
             {
                 P2.Enqueue(int.Parse(input[line]));
             }
-            return (P1, P2);
+            queues = (P1, P2);
         }
 
         private int TallyScore(Queue<int> hand)
@@ -41,7 +41,7 @@ namespace Advent2020
 
         public override object Task1()
         {
-            (Queue<int> P1, Queue<int> P2) = ParseInput();
+            (Queue<int> P1, Queue<int> P2) = queues;
 
             while (P1.Count != 0 && P2.Count != 0)
             {
@@ -65,7 +65,8 @@ namespace Advent2020
 
         public override object Task2()
         {
-            (Queue<int> P1, Queue<int> P2) = ParseInput();
+            ParseInput();
+            (Queue<int> P1, Queue<int> P2) = queues;
             T2PlayGame(P1, P2);
             return TallyScore(P1.Count == 0 ? P2 : P1);
             // 33469

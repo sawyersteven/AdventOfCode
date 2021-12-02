@@ -1,6 +1,7 @@
-using AdventOfCode;
 using System;
 using System.Collections.Generic;
+using AdventOfCode;
+using ExtensionMethods;
 
 namespace Advent2018
 {
@@ -13,19 +14,19 @@ namespace Advent2018
             return Math.Abs(a[0] - b[0]) + Math.Abs(a[1] - b[1]) + Math.Abs(a[2] - b[2]) + Math.Abs(a[3] - b[3]);
         }
 
-        private List<int[]> ParseInput()
+        List<int[]> ogPoints;
+        public override void ParseInput()
         {
-            List<int[]> points = new List<int[]>(input.Length);
+            ogPoints = new List<int[]>(input.Length);
             for (int i = 0; i < input.Length; i++)
             {
-                points.Add(Array.ConvertAll(input[i].Split(','), int.Parse));
+                ogPoints.Add(Array.ConvertAll(input[i].Split(','), int.Parse));
             }
-            return points;
         }
 
         public override object Task1()
         {
-            List<int[]> points = ParseInput();
+            List<int[]> points = ogPoints.Duplicate();
 
             int total = 0;
             while (true)
@@ -61,7 +62,7 @@ namespace Advent2018
 
         public override object Task2()
         {
-            return null;
+            return "*";
         }
     }
 }

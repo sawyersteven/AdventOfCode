@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AdventOfCode;
+using ExtensionMethods;
 
 namespace Advent2016
 {
@@ -9,9 +10,19 @@ namespace Advent2016
         private const int diskLen1 = 272;
         private const int diskLen2 = 35651584;
 
+        private bool[] buffer;
+        public override void ParseInput()
+        {
+            buffer = new bool[rawInput.Length];
+            for (int i = 0; i < rawInput.Length; i++)
+            {
+                buffer[i] = (rawInput[i] == '0' ? false : true);
+            }
+        }
+
         public override object Task1()
         {
-            bool[] src = ParseInput();
+            bool[] src = buffer.Duplicate();
             src = FillDisk(src, diskLen1);
             src = Reduce(src);
 
@@ -59,19 +70,9 @@ namespace Advent2016
             return src;
         }
 
-        private bool[] ParseInput()
-        {
-            bool[] buffer = new bool[rawInput.Length];
-            for (int i = 0; i < rawInput.Length; i++)
-            {
-                buffer[i] = (rawInput[i] == '0' ? false : true);
-            }
-            return buffer;
-        }
-
         public override object Task2()
         {
-            bool[] src = ParseInput();
+            bool[] src = buffer.Duplicate();
             src = FillDisk(src, diskLen2);
             src = Reduce(src);
 

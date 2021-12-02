@@ -8,7 +8,7 @@ namespace Advent2015
         Dictionary<string, Dictionary<string, int>> Map = new Dictionary<string, Dictionary<string, int>>();
         HashSet<string> people = new HashSet<string>();
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             foreach (string line in input)
             {
@@ -21,9 +21,7 @@ namespace Advent2015
 
         public override object Task1()
         {
-            ParseInput();
             return FindBest();
-
         }
 
         private int FindBest()

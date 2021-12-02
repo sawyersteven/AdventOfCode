@@ -1,20 +1,20 @@
-using AdventOfCode;
 using System;
 using System.Collections.Generic;
+using AdventOfCode;
 
 namespace Advent2020
 {
 
     public class Challenge23 : Challenge
     {
-        private int[] ParseInput()
+        private int[] inputNums;
+        public override void ParseInput()
         {
-            int[] parsed = new int[input[0].Length];
-            for (int i = 0; i < parsed.Length; i++)
+            inputNums = new int[input[0].Length];
+            for (int i = 0; i < inputNums.Length; i++)
             {
-                parsed[i] = (int)char.GetNumericValue(input[0][i]);
+                inputNums[i] = (int)char.GetNumericValue(input[0][i]);
             }
-            return parsed;
         }
 
         #region T1
@@ -32,7 +32,7 @@ namespace Advent2020
         {
             const int turns = 100;
 
-            Queue<int> cups = new Queue<int>(ParseInput());
+            Queue<int> cups = new Queue<int>(inputNums);
             for (int _ = 0; _ < turns; _++)
             {
                 int current = cups.Peek();
@@ -85,7 +85,7 @@ namespace Advent2020
             Dictionary<int, CircularLinkedListNode<int>> lookupTable = new Dictionary<int, CircularLinkedListNode<int>>();
 
             CircularLinkedList<int> cups = new CircularLinkedList<int>();
-            foreach (int i in ParseInput())
+            foreach (int i in inputNums)
             {
                 cups.AddLast(i);
                 lookupTable[cups.Last.Value] = cups.Last;

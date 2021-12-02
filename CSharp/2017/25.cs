@@ -7,10 +7,11 @@ namespace Advent2017
     public class Challenge25 : Challenge
     {
         Dictionary<int, int[][]> Rules = new Dictionary<int, int[][]>();
+        private (int, int) start_iters;
 
-        private (int, int) ParseInput()
+        public override void ParseInput()
         {
-            (int, int) start_iters = (0, 0);
+            start_iters = (0, 0);
             start_iters.Item1 = input[0][^2] - 'A';
             start_iters.Item2 = int.Parse(input[1].Split(' ')[^2]);
 
@@ -32,12 +33,11 @@ namespace Advent2017
                 }
                 Rules[state] = commands;
             }
-            return start_iters;
         }
 
         public override object Task1()
         {
-            (int state, int steps) = ParseInput();
+            (int state, int steps) = start_iters;
 
             LinkedList<int> tape = new LinkedList<int>();
             tape.AddFirst(0);

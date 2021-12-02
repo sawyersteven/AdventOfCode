@@ -51,7 +51,7 @@ namespace Advent2019
             return Array.IndexOf(deck, 2019);
         }
 
-        private void ParseInput()
+        public override void ParseInput()
         {
             parsedInput = new (Technique, int)[input.Length];
             for (int i = 0; i < input.Length; i++)

@@ -9,7 +9,7 @@ namespace Advent2015
 
         // speed, runtime, resttime
         (int, int, int)[] rates;
-        private void ParseInput()
+        public override void ParseInput()
         {
             rates = new (int, int, int)[input.Length];
 
@@ -22,8 +22,6 @@ namespace Advent2015
 
         public override object Task1()
         {
-            ParseInput();
-
             int best = 0;
             foreach ((int spd, int runtime, int resttime) in rates)
             {

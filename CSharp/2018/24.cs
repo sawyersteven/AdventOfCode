@@ -1,5 +1,6 @@
-using AdventOfCode;
 using System.Collections.Generic;
+using AdventOfCode;
+using ExtensionMethods;
 
 namespace Advent2018
 {
@@ -52,9 +53,10 @@ namespace Advent2018
             }
         }
 
-        private List<Group> ParseInput()
+        List<Group> ogGroups;
+        public override void ParseInput()
         {
-            List<Group> groups = new List<Group>();
+            ogGroups = new List<Group>();
             bool system = Immune;
             for (int line = 1; line < input.Length; line++)
             {
@@ -64,9 +66,8 @@ namespace Advent2018
                     system = Infection;
                     continue;
                 }
-                groups.Add(new Group(system, input[line]));
+                ogGroups.Add(new Group(system, input[line]));
             }
-            return groups;
         }
 
         private void RemoveDead(List<Group> armies)
@@ -144,7 +145,7 @@ namespace Advent2018
 
         private List<Group> SimulateBattle(int immuneBoost = 0)
         {
-            List<Group> groups = ParseInput();
+            List<Group> groups = ogGroups.Duplicate();
 
             foreach (Group g in groups)
             {

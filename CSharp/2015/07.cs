@@ -7,7 +7,7 @@ namespace Advent2015
     public class Challenge07 : Challenge
     {
         Dictionary<string, string> WireMap;
-        private void ParseInput()
+        public override void ParseInput()
         {
             Dictionary<string, string> map = new Dictionary<string, string>();
             foreach (string line in input)
@@ -21,7 +21,6 @@ namespace Advent2015
         private int T1;
         public override object Task1()
         {
-            ParseInput();
             return T1 = Find("a");
         }
 

@@ -27,7 +27,7 @@ namespace Advent2017
         }
 
         List<Node> nodes = new List<Node>();
-        private void ParseInput()
+        public override void ParseInput()
         {
             foreach (string line in input)
             {
@@ -42,8 +42,6 @@ namespace Advent2017
         */
         public override object Task1()
         {
-            ParseInput();
-
             int bestStr = 0;
 
             int longest = 0;

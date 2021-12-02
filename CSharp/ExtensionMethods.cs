@@ -1,10 +1,40 @@
 using System;
+using System.Collections.Generic;
 
 namespace ExtensionMethods
 {
+    public static class ListExtensions
+    {
+        public static List<T> Duplicate<T>(this List<T> l)
+        {
+            List<T> dup = new List<T>(l.Count);
+            for (int i = 0; i < l.Count; i++)
+            {
+                dup[i] = l[i];
+            }
+            return dup;
+        }
+    }
 
     public static class ArrayExtensions
     {
+        public static int[] ToInts(this string[] arr)
+        {
+            int[] ints = new int[arr.Length];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                ints[i] = int.Parse(arr[i]);
+            }
+            return ints;
+        }
+
+        public static T[] Duplicate<T>(this T[] arr)
+        {
+            T[] dup = new T[arr.Length];
+            arr.CopyTo(dup, 0);
+            return dup;
+        }
+
         public static string Join<T>(this T[,] arr, char sep)
         {
             int h = arr.GetLength(0);
