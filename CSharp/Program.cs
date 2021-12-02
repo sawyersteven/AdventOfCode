@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using ExtensionMethods;
 
 namespace AdventOfCode
@@ -8,19 +10,26 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length < 2)
             {
                 Console.WriteLine("Usage:");
-                Console.WriteLine("\tdotnet run [year] [day]");
+                Console.WriteLine("\tdotnet run [year] [day] [--getInput]");
+            }
+
+            string year = args[0];
+            string day = int.Parse(args[1]).ToString("00");
+            string inputFile = $"../Input/{year}/{day}.txt";
+
+            if (!File.Exists(inputFile))
+            {
+                GetInput(year, day);
             }
 
             Console.WriteLine($":: Running challenge {args[0]}.{args[1]} ::");
-
-            int challengeId = int.Parse(args[1]);
-            string clsName = $"Advent{args[0]}.Challenge{challengeId.ToString("00")}";
+            string clsName = $"Advent{args[0]}.Challenge{day}";
 
             Challenge c = (Challenge)Activator.CreateInstance(Type.GetType(clsName));
-            string input = System.IO.File.ReadAllText($"../Input/{args[0]}/{challengeId.ToString("00")}.txt");
+            string input = System.IO.File.ReadAllText(inputFile);
 
             int i = 1;
             foreach (ChallengeResult cr in c.Go(input))
@@ -30,6 +39,42 @@ namespace AdventOfCode
                 Console.WriteLine($"    Result: {cr.Answer}");
                 i++;
             }
+        }
+
+        static private void GetInput(string year, string day)
+        {
+            string src = $"https://adventofcode.com/{year}/day/{int.Parse(day)}/input";
+            string dst = $"../Input/{year}/{day}.txt";
+            Console.WriteLine($"Getting input for {year}.{day} from {src}");
+
+            string sessionCookie = File.ReadAllText("../session-cookie.txt");
+
+            using (var client = new WebClientC())
+            {
+                Uri u = new Uri(src);
+                client.Cookies.Add(new Cookie("session", sessionCookie, null, u.Host));
+
+                client.DownloadFile(u, dst);
+            }
+        }
+    }
+
+    public class WebClientC : WebClient
+    {
+        CookieContainer cookies = new CookieContainer();
+
+        public CookieContainer Cookies { get { return cookies; } }
+
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+
+            WebRequest request = base.GetWebRequest(address);
+
+            if (request.GetType() == typeof(HttpWebRequest))
+                ((HttpWebRequest)request).CookieContainer = cookies;
+
+            return request;
+
         }
     }
 
