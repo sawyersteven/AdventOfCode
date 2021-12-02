@@ -18,7 +18,7 @@ namespace Advent2018
         private Claim[] claims;
         public override void ParseInput()
         {
-            Claim[] claims = new Claim[input.Length];
+            claims = new Claim[input.Length];
             for (int i = 0; i < input.Length; i++)
             {
                 Claim claim = new Claim();
