@@ -44,19 +44,18 @@ namespace Advent2021
             {
                 foreach (int[,] board in t1Boards)
                 {
-                    if (MarkBoard(board, n) && CheckBoardWin(board))
+                    (bool marked, int r, int c) = MarkBoard(board, n);
+                    if (marked && CheckBoardWin(board, r, c))
                     {
                         return SumBoard(board) * n;
                     }
                 }
             }
-
             return null;
         }
 
-        private bool MarkBoard(int[,] board, int callNum)
+        private (bool, int, int) MarkBoard(int[,] board, int callNum)
         {
-            bool modified = false;
             for (int i = 0; i < board.Length; i++)
             {
                 int r = i / boardSize;
@@ -64,28 +63,26 @@ namespace Advent2021
                 if (board[r, c] == callNum)
                 {
                     board[r, c] = -1;
-                    modified = true;
+                    return (true, r, c);
                 }
             }
-            return modified;
+            return (false, 0, 0);
         }
 
-        private bool CheckBoardWin(int[,] board)
+        private bool CheckBoardWin(int[,] board, int row, int col)
         {
-            for (int i = 0; i < boardSize; i++)
+            int rowSum = 0;
+            int colSum = 0;
+            foreach (int cell in board.GetRow(row))
             {
-                int rowSum = 0;
-                int colSum = 0;
-                foreach (int cell in board.GetRow(i))
-                {
-                    rowSum += cell;
-                }
-                foreach (int cell in board.GetColumn(i))
-                {
-                    colSum += cell;
-                }
-                if (rowSum == -5 || colSum == -5) return true;
+                rowSum += cell;
             }
+            foreach (int cell in board.GetColumn(col))
+            {
+                colSum += cell;
+            }
+            if (rowSum == -5 || colSum == -5) return true;
+
 
             return false;
         }
@@ -100,7 +97,6 @@ namespace Advent2021
             return sum;
         }
 
-
         public override object Task2()
         {
             List<int[,]> t2Boards = new List<int[,]>(boards);
@@ -109,7 +105,8 @@ namespace Advent2021
                 for (int boardIndex = 0; boardIndex < t2Boards.Count; boardIndex++)
                 {
                     int[,] board = t2Boards[boardIndex];
-                    if (MarkBoard(board, n) && CheckBoardWin(board))
+                    (bool marked, int r, int c) = MarkBoard(board, n);
+                    if (marked && CheckBoardWin(board, r, c))
                     {
                         if (t2Boards.Count == 1)
                         {
