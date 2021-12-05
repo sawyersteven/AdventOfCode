@@ -18,6 +18,17 @@ namespace ExtensionMethods
 
     public static class ArrayExtensions
     {
+        public static T[] GetColumn<T>(this T[,] arr, int columnIndex)
+        {
+            T[] col = new T[arr.GetLength(1)];
+
+            for (int i = 0; i < arr.GetLength(0); i++)
+            {
+                col[i] = arr.GetRow(i)[columnIndex];
+            }
+            return col;
+        }
+
         public static int[] ToInts(this string[] arr)
         {
             int[] ints = new int[arr.Length];
@@ -102,7 +113,7 @@ namespace ExtensionMethods
         {
             T[] row = new T[source.GetLength(1)];
 
-            for (int i = 0; i < row.Length; i++)
+            for (int i = 0; i < source.GetLength(1); i++)
             {
                 row[i] = source[rowIndex, i];
             }

@@ -53,8 +53,6 @@ namespace AdventOfCode
             {
                 Uri u = new Uri(src);
                 client.Cookies.Add(new Cookie("session", sessionCookie, null, u.Host));
-
-                //client.DownloadFile(u, dst);
                 string txt = client.DownloadString(u);
                 File.WriteAllText(dst, txt.TrimEnd());
             }
