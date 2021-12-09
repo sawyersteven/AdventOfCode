@@ -54,10 +54,7 @@ namespace Advent2021
                     count += (N * (N + 1)) / 2; // Gauss
                     if (count > least) break;
                 }
-                if (count < least)
-                {
-                    least = count;
-                }
+                if (count < least) least = count;
             }
 
             return least;
