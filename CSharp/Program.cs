@@ -98,5 +98,28 @@ namespace AdventOfCode
             }
             return grid;
         }
+
+        public static int[,] InputToIntArray(string[] input, bool addBorder = false, int defaultVal = 0)
+        {
+            int[,] grid = new int[input.Length + (addBorder ? 2 : 0), input[0].Length + (addBorder ? 2 : 0)];
+            if (defaultVal != 0)
+            {
+                grid.Fill(defaultVal);
+            }
+            int y = (addBorder ? 1 : 0);
+            int yEnd = input.Length + (addBorder ? 1 : 0);
+            int x = (addBorder ? 1 : 0);
+            int xEnd = input[0].Length + (addBorder ? 1 : 0);
+
+            for (int gy = 0; y < yEnd; y++, gy++)
+            {
+                int gx = 0;
+                for (gx = 0, x = (addBorder ? 1 : 0); x < xEnd; x++, gx++)
+                {
+                    grid[y, x] = (int)char.GetNumericValue(input[gy][gx]);
+                }
+            }
+            return grid;
+        }
     }
 }

@@ -92,8 +92,13 @@ namespace Grids
         public static readonly Vector2Int Down = new Vector2Int(0, -1);
         public static readonly Vector2Int Left = new Vector2Int(-1, 0);
         public static readonly Vector2Int Right = new Vector2Int(1, 0);
+        public static readonly Vector2Int UR = new Vector2Int(1, 1);
+        public static readonly Vector2Int DR = new Vector2Int(1, -1);
+        public static readonly Vector2Int DL = new Vector2Int(-1, -1);
+        public static readonly Vector2Int UL = new Vector2Int(-1, 1);
 
         public static readonly Vector2Int[] CardinalDirections = new Vector2Int[] { Up, Right, Down, Left };
+        public static readonly Vector2Int[] AllDirections = new Vector2Int[] { Up, UR, Right, DR, Down, DL, Left, UL };
 
     }
 }

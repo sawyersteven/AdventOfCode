@@ -13,23 +13,7 @@ namespace Advent2021
 
         public override void ParseInput()
         {
-            map = new int[input.Length + 2, input[0].Length + 2];
-
-            map.Fill(9);
-
-            int y = 1;
-            int yEnd = input.Length + 1;
-            int x = 1;
-            int xEnd = input[0].Length + 1;
-
-            for (int gy = 0; y < yEnd; y++, gy++)
-            {
-                int gx = 0;
-                for (gx = 0, x = 1; x < xEnd; x++, gx++)
-                {
-                    map[y, x] = (int)char.GetNumericValue(input[gy][gx]);
-                }
-            }
+            map = Utils.InputToIntArray(input, true, 9);
         }
 
         public override object Task1()

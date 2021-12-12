@@ -46,6 +46,22 @@ namespace ExtensionMethods
             return dup;
         }
 
+        public static T[,] Duplicate<T>(this T[,] arr)
+        {
+            int yLen = arr.GetLength(0);
+            int xLen = arr.GetLength(1);
+
+            T[,] dup = new T[yLen, xLen];
+            for (int x = 0; x < yLen; x++)
+            {
+                for (int y = 0; y < xLen; y++)
+                {
+                    dup[y, x] = arr[y, x];
+                }
+            }
+            return dup;
+        }
+
         public static string Join<T>(this T[,] arr, char sep)
         {
             int h = arr.GetLength(0);
