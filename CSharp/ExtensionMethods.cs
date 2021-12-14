@@ -52,9 +52,9 @@ namespace ExtensionMethods
             int xLen = arr.GetLength(1);
 
             T[,] dup = new T[yLen, xLen];
-            for (int x = 0; x < yLen; x++)
+            for (int x = 0; x < xLen; x++)
             {
-                for (int y = 0; y < xLen; y++)
+                for (int y = 0; y < yLen; y++)
                 {
                     dup[y, x] = arr[y, x];
                 }
