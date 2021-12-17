@@ -23,47 +23,36 @@ namespace Advent2021
 
         private int FindPath(int[,] map)
         {
-            List<node> open = new List<node>(map.GetLength(0) * map.GetLength(1));
-            HashSet<Vector2Int> closed = new HashSet<Vector2Int>();
-            open.Add((new Vector2Int(1, 1), 0));
+            Vector2Int start = new Vector2Int(1, 1);
             Vector2Int end = new Vector2Int(map.GetLength(0) - 2, map.GetLength(1) - 2);
 
-            while (open.Count > 0)
-            {
-                open.Sort((a, b) => (a.Item2 <= b.Item2) ? 1 : -1);
-                node current = open[^1];
-                open.RemoveAt(open.Count - 1);
-                closed.Add(current.Item1);
+            PriorityQueue<Vector2Int, int> pq = new PriorityQueue<Vector2Int, int>();
+            Dictionary<Vector2Int, int> scores = new Dictionary<Vector2Int, int>();
+            pq.Enqueue(start, 0);
+            scores[start] = 0;
 
-                if (current.Item1 == end) return current.Item2;
+            while (pq.Count > 0)
+            {
+                Vector2Int currentPos = pq.Dequeue();
+                int currentScore = scores[currentPos];
+
+                if (currentPos == end) return currentScore;
 
                 foreach (Vector2Int v in Vector2Int.CardinalDirections)
                 {
-                    Vector2Int nextPos = current.Item1 + v;
-                    if (closed.Contains(nextPos) || map[nextPos.y, nextPos.x] == 0) continue;
-                    int nextScore = current.Item2 + map[nextPos.y, nextPos.x];
+                    Vector2Int nextPos = currentPos + v;
+                    if (map[nextPos.y, nextPos.x] == 0) continue;
+                    int nextScore = currentScore + map[nextPos.y, nextPos.x];
 
-                    int matchInd = findMatch(nextPos);
-                    if (matchInd == -1)
+                    if (!scores.TryGetValue(nextPos, out int existingScore) || existingScore > nextScore)
                     {
-                        open.Add((nextPos, nextScore));
-                    }
-                    else if (open[matchInd].Item2 > nextScore)
-                    {
-                        open[matchInd] = (nextPos, nextScore);
+                        scores[nextPos] = nextScore;
+                        pq.Enqueue(nextPos, nextScore);
+
                     }
                 }
             }
             return -1;
-
-            int findMatch(Vector2Int p)
-            {
-                for (int i = 0; i < open.Count; i++)
-                {
-                    if (open[i].Item1 == p) return i;
-                }
-                return -1;
-            }
         }
 
 
