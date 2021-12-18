@@ -6,18 +6,6 @@ namespace Advent2021
 {
     public class Challenge16 : Challenge
     {
-        private enum packetID
-        {
-            sum = 0,
-            prod = 1,
-            min = 2,
-            max = 3,
-            literal = 4,
-            gt = 5,
-            lt = 6,
-            eq = 7,
-        }
-
         BitArrayReader br;
         public override void ParseInput()
         {
