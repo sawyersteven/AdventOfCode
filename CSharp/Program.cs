@@ -59,6 +59,7 @@ namespace AdventOfCode
         }
     }
 
+#pragma warning disable SYSLIB0014
     public class WebClientC : WebClient
     {
         CookieContainer cookies = new CookieContainer();
