@@ -136,17 +136,17 @@ namespace Advent2021
         }
 
 
-        private List<Scanner> scanners;
+        private List<Scanner> lostScanners;
         public override void ParseInput()
         {
-            scanners = new List<Scanner>();
+            lostScanners = new List<Scanner>();
             Scanner current = null;
             int id = 0;
             foreach (string line in input)
             {
                 if (string.IsNullOrWhiteSpace(line))
                 {
-                    scanners.Add(current);
+                    lostScanners.Add(current);
                 }
                 else if (line[1] == '-')
                 {
@@ -159,15 +159,13 @@ namespace Advent2021
                     current.AddBeacon(new Vector3Int(nums[0], nums[1], nums[2]));
                 }
             }
-            scanners.Add(current);
+            lostScanners.Add(current);
         }
 
-
+        List<Scanner> foundScanners;
         public override object Task1()
         {
-            List<Scanner> lostScanners = new List<Scanner>(scanners);
-            List<Scanner> foundScanners = new List<Scanner>(scanners.Count);
-
+            foundScanners = new List<Scanner>(lostScanners.Count);
             foundScanners.Add(lostScanners[0]);
             lostScanners.RemoveAt(0);
 
@@ -241,7 +239,17 @@ namespace Advent2021
 
         public override object Task2()
         {
-            return null;
+            long longest = 0;
+            for (int i = 0; i < foundScanners.Count - 1; i++)
+            {
+                for (int j = i + 1; j < foundScanners.Count; j++)
+                {
+                    long d = foundScanners[i].Location.ManhattanDistance(foundScanners[j].Location);
+                    if (d > longest) longest = d;
+                }
+            }
+            return longest;
+
         }
     }
 }
