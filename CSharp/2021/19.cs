@@ -137,6 +137,8 @@ namespace Advent2021
 
 
         private List<Scanner> lostScanners;
+        private List<Scanner> foundScanners;
+        private HashSet<Vector3Int> foundBeacons;
         public override void ParseInput()
         {
             lostScanners = new List<Scanner>();
@@ -162,46 +164,40 @@ namespace Advent2021
             lostScanners.Add(current);
         }
 
-        List<Scanner> foundScanners;
+
         public override object Task1()
         {
+            foundBeacons = new HashSet<Vector3Int>();
             foundScanners = new List<Scanner>(lostScanners.Count);
+
+            foreach (Vector3Int v in lostScanners[0].ProperOrientation) foundBeacons.Add(v);
             foundScanners.Add(lostScanners[0]);
             lostScanners.RemoveAt(0);
 
             while (lostScanners.Count != 0)
             {
-                for (int i = 0; i < foundScanners.Count; i++)
+                for (int i = 0; i < lostScanners.Count; i++)
                 {
-                    Scanner anchor = foundScanners[i];
-                    foreach (Scanner lost in lostScanners)
+                    if (LocateScanner(foundBeacons, lostScanners[i]))
                     {
-                        if (FindMatch(anchor, lost))
-                        {
-                            lostScanners.Remove(lost);
-                            foundScanners.Add(lost);
-                            break;
-                        }
+                        foreach (Vector3Int v in lostScanners[i].ProperOrientation) foundBeacons.Add(v);
+                        foundScanners.Add(lostScanners[i]);
+                        lostScanners.RemoveAt(i);
+                        i--;
                     }
                 }
             }
-
-            HashSet<Vector3Int> masterBeaconSet = new HashSet<Vector3Int>();
-            foreach (Scanner s in foundScanners)
-            {
-                foreach (Vector3Int b in s.ProperOrientation) masterBeaconSet.Add(b);
-            }
-            return masterBeaconSet.Count;
+            return foundBeacons.Count;
         }
 
-        private bool FindMatch(Scanner anchorScanner, Scanner lostScanner)
+        private bool LocateScanner(HashSet<Vector3Int> anchorBeacons, Scanner lostScanner)
         {
             for (int rotation = 0; rotation < lostScanner.Beacons.Length; rotation++)
             {
-                (bool match, Vector3Int scannerLoc) = FindScannerLocation(anchorScanner.ProperOrientation, lostScanner.Beacons[rotation]);
+                (bool match, Vector3Int scannerLoc) = FindScannerLocation(anchorBeacons, lostScanner.Beacons[rotation]);
                 if (match)
                 {
-                    Console.WriteLine($"Match {lostScanner.ID} to {anchorScanner.ID}");
+                    Console.WriteLine($"Found {lostScanner.ID}");
                     lostScanner.SetLocation(scannerLoc, rotation);
                     return true;
                 }
