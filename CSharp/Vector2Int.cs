@@ -66,7 +66,8 @@ namespace Grids
 
         public override int GetHashCode()
         {
-            return x.GetHashCode() ^ (y.GetHashCode() << 2);
+            uint rol5 = ((uint)x << 5) | ((uint)x >> 27);
+            return ((int)rol5 + x) ^ y;
         }
 
         public override bool Equals(object other)
