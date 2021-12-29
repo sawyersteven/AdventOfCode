@@ -20,9 +20,11 @@ namespace AdventOfCode
         {
             get
             {
-                if (base.ContainsKey(key)) return base[key];
-                Tv v = useDv ? dv : new Tv();
-                this[key] = v;
+                Tv v;
+                if (!base.TryGetValue(key, out v))
+                {
+                    v = useDv ? dv : new Tv();
+                }
                 return v;
             }
             set

@@ -73,11 +73,15 @@ namespace Grids
             return x == other.x && y == other.y && z == other.z;
         }
 
+        private int ComboHash(int a, int b)
+        {
+            uint rol5 = ((uint)a << 5) | ((uint)a >> 27);
+            return ((int)rol5 + a) ^ b;
+        }
+
         public override int GetHashCode()
         {
-            int yHash = y.GetHashCode();
-            int zHash = z.GetHashCode();
-            return x.GetHashCode() ^ (yHash << 4) ^ (yHash >> 28) ^ (zHash >> 4) ^ (zHash << 28);
+            return ComboHash(ComboHash(x, y), z);
         }
 
         public override bool Equals(object other)

@@ -17,7 +17,7 @@ namespace Advent2021
             litPixels = new HashSet<Vector2Int>();
             enhanceAlgo = input[0];
 
-            Vector2Int pixel = Vector3Int.Zero;
+            Vector2Int pixel = Vector2Int.Zero;
             for (pixel.y = 0; pixel.y < input.Length - 2; pixel.y++)
             {
                 for (pixel.x = 0; pixel.x < input[3].Length; pixel.x++)
