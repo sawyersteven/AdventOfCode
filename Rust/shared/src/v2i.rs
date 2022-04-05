@@ -3,8 +3,8 @@ use std::marker::Copy;
 use std::ops;
 
 pub struct Vector2Int {
-    x: isize,
-    y: isize,
+    pub x: isize,
+    pub y: isize,
 }
 
 pub const UP: Vector2Int = new_v2(0, 1);

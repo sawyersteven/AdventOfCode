@@ -38,3 +38,6 @@ msbuild.wrn
 
 # Personal
 session-cookie.txt
+
+# Rust
+.rustc_info.json
