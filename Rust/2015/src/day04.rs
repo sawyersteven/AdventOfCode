@@ -21,7 +21,7 @@ impl Base for Day04 {
         self.input = raw_input;
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let key = self.input.as_bytes();
 
         let mut hasher = Md5::new();
@@ -42,7 +42,7 @@ impl Base for Day04 {
         return Box::new("-");
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let key = self.input.as_bytes();
 
         let mut hasher = Md5::new();

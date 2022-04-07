@@ -24,14 +24,14 @@ impl Base for Day02 {
         }
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut sqft = 0;
         for b in &self.input {
             sqft += (b[0] * b[1] * 3) + (b[1] * b[2] * 2) + (b[0] * b[2] * 2);
         }
         return Box::new(sqft);
     }
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut ribbon = 0;
         for b in &self.input {
             ribbon += (b[0] * 2) + (b[1] * 2) + (b[0] * b[1] * b[2]);

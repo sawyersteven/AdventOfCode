@@ -26,19 +26,19 @@ pub fn run_day(day: usize, part: Part) {
 
     match part {
         Part::One => {
-            run_part1(&problem);
+            run_part1(&mut problem);
         }
         Part::Two => {
-            run_part2(&problem);
+            run_part2(&mut problem);
         }
         Part::Both => {
-            run_part1(&problem);
-            run_part2(&problem);
+            run_part1(&mut problem);
+            run_part2(&mut problem);
         }
     }
 }
 
-fn run_part1(problem: &Box<dyn Base>) {
+fn run_part1(problem: &mut Box<dyn Base>) {
     let now = std::time::Instant::now();
     let answer = problem.part1();
     let elapsed = now.elapsed();
@@ -50,7 +50,7 @@ fn run_part1(problem: &Box<dyn Base>) {
     );
 }
 
-fn run_part2(problem: &Box<dyn Base>) {
+fn run_part2(problem: &mut Box<dyn Base>) {
     let now = std::time::Instant::now();
     let answer = problem.part2();
     let elapsed = now.elapsed();

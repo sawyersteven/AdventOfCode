@@ -62,7 +62,7 @@ impl Base for Day06 {
         }
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut grid = [[false; 1000]; 1000];
 
         let mut _cmd: fn(bool) -> bool;
@@ -84,7 +84,7 @@ impl Base for Day06 {
         return Box::new(grid.iter().flatten().filter(|x| x == &&true).count());
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut grid: [[i8; 1000]; 1000] = [[0; 1000]; 1000];
 
         let mut _diff = 0;

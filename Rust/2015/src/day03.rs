@@ -18,7 +18,7 @@ impl Base for Day03 {
         self.input = raw_input.chars().collect();
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut visited: HashSet<Vector2Int> = HashSet::new();
         let mut current = Vector2Int::new(0, 0);
 
@@ -36,7 +36,7 @@ impl Base for Day03 {
         return Box::new(visited.len());
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut visited = HashSet::<Vector2Int>::new();
         let mut santa = Vector2Int::new(0, 0);
         let mut robo_santa = Vector2Int::new(0, 0);

@@ -70,7 +70,7 @@ impl Base for Day05 {
         self.input = raw_input.split("\n").map(|x| String::from(x)).collect();
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut count = 0;
         for line in &self.input {
             if self.forbidden_test(line) && self.vowel_and_double_test(line) {
@@ -80,7 +80,7 @@ impl Base for Day05 {
         return Box::new(count);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut count = 0;
         for line in &self.input {
             let chars = line.chars().collect();

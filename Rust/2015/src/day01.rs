@@ -16,7 +16,7 @@ impl Base for Day01 {
         self.input = raw_input.chars().collect();
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut floor = 0;
         for c in &self.input {
             floor += if c == &'(' { 1 } else { -1 };
@@ -24,7 +24,7 @@ impl Base for Day01 {
 
         return Box::new(floor);
     }
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut floor = 0;
         for i in 0..self.input.len() {
             floor += if self.input[i] == '(' { 1 } else { -1 };
