@@ -31,13 +31,11 @@ namespace AdventOfCode
             Challenge c = (Challenge)Activator.CreateInstance(Type.GetType(clsName));
             string input = System.IO.File.ReadAllText(inputFile);
 
-            int i = 1;
             foreach (ChallengeResult cr in c.Go(input))
             {
-                Console.WriteLine($"Task{i} -");
+                Console.WriteLine($"{cr.Name}:");
                 Console.WriteLine($"    Time: {cr.Time}ms");
-                Console.WriteLine($"    Result: {cr.Answer}");
-                i++;
+                if (cr.Answer != null) Console.WriteLine($"    Result: {cr.Answer}");
             }
         }
 

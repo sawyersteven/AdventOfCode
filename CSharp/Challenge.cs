@@ -18,18 +18,21 @@ namespace AdventOfCode
             this.rawInput = rawInput;
             this.input = rawInput.Split(new char[] { '\r', '\n' });
 
-            ParseInput();
-
             Stopwatch sw = new Stopwatch();
             sw.Start();
+            ParseInput();
+            sw.Stop();
+            yield return new ChallengeResult("Parse Input", null, sw.Elapsed.Milliseconds);
+
+            sw.Restart();
             object r = Task1();
             sw.Stop();
-            yield return new ChallengeResult(r, sw.Elapsed.TotalMilliseconds);
+            yield return new ChallengeResult("Task 1", r, sw.Elapsed.TotalMilliseconds);
 
             sw.Restart();
             r = Task2();
             sw.Stop();
-            yield return new ChallengeResult(r, sw.Elapsed.TotalMilliseconds);
+            yield return new ChallengeResult("Task 2", r, sw.Elapsed.TotalMilliseconds);
 
         }
 
@@ -39,11 +42,13 @@ namespace AdventOfCode
 
     public class ChallengeResult
     {
-        public double Time { get; private set; }
-        public string Answer { get; private set; }
+        public readonly double Time;
+        public readonly string Answer;
+        public readonly string Name;
 
-        public ChallengeResult(object answer, double time)
+        public ChallengeResult(string name, object answer, double time)
         {
+            Name = name;
             Time = time;
             Answer = answer?.ToString();
         }
