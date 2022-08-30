@@ -14,26 +14,19 @@ impl Day24 {
 
     fn find_best_combo(&self, target_weight: usize) -> usize {
         let mut lowest = usize::MAX;
-
-        let mut combos = Vec::<Vec<&usize>>::new();
+        let mut found = false;
         for perm_len in 2..self.input.len() {
             for perm in self.input.iter().combinations(perm_len) {
                 if sum(&perm) == target_weight {
-                    combos.push(perm);
+                    found = true;
+                    let prod = perm.iter().map(|x| *x).product();
+                    if prod < lowest {
+                        lowest = prod;
+                    }
                 }
             }
-            if combos.len() != 0 {
+            if found {
                 break;
-            }
-        }
-
-        for combo in combos {
-            let mut prod = 1;
-            for i in combo {
-                prod *= i;
-            }
-            if prod < lowest {
-                lowest = prod;
             }
         }
 

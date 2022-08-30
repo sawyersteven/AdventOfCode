@@ -9,21 +9,7 @@ where
     return copy;
 }
 
-pub fn new_2d_vec<T>(rows: usize, columns: usize, default: T) -> Vec<Vec<T>>
-where
-    T: Clone,
-{
-    let mut outer = Vec::<Vec<T>>::with_capacity(rows);
-    for _ in 0..rows {
-        let mut inner = Vec::<T>::with_capacity(columns);
-        for _ in 0..columns {
-            inner.push(default.clone());
-        }
-        outer.push(inner);
-    }
-    return outer;
-}
-
+#[allow(unused)]
 pub fn print_2d_vec<T>(v: &Vec<Vec<T>>)
 where
     T: ToString,
@@ -37,6 +23,7 @@ where
     }
 }
 
+#[allow(unused)]
 pub fn print_2d_vec_bool(v: &Vec<Vec<bool>>, t: char, f: char) {
     for line in v {
         let mut st = String::new();

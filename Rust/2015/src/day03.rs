@@ -1,5 +1,4 @@
 use crate::Base;
-use shared::v2i;
 use shared::v2i::Vector2Int;
 use std::{collections::HashSet, fmt::Display};
 
@@ -24,10 +23,10 @@ impl Base for Day03 {
 
         for c in &self.input {
             current += match c {
-                '^' => v2i::UP,
-                'v' => v2i::DOWN,
-                '<' => v2i::LEFT,
-                '>' => v2i::RIGHT,
+                '^' => Vector2Int::up(),
+                'v' => Vector2Int::down(),
+                '<' => Vector2Int::left(),
+                '>' => Vector2Int::right(),
                 _ => panic!(),
             };
             visited.insert(current);
@@ -49,10 +48,10 @@ impl Base for Day03 {
                 actor = &mut robo_santa;
             }
             *actor += match c {
-                '^' => v2i::UP,
-                'v' => v2i::DOWN,
-                '<' => v2i::LEFT,
-                '>' => v2i::RIGHT,
+                '^' => Vector2Int::up(),
+                'v' => Vector2Int::down(),
+                '<' => Vector2Int::left(),
+                '>' => Vector2Int::right(),
                 _ => panic!(),
             };
 

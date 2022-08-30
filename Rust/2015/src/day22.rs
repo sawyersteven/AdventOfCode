@@ -10,6 +10,7 @@ enum SpellName {
     Recharge,
 }
 
+#[allow(unused)]
 struct Spell {
     id: SpellName,
     cost: isize,
