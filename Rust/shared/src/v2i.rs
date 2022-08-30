@@ -1,104 +1,154 @@
-use std::hash::Hash;
-use std::marker::Copy;
-use std::ops;
+use std::{fmt::Display, hash::Hash, ops};
 
+#[derive(PartialEq, Eq, Clone, Hash)]
 pub struct Vector2Int {
     pub x: isize,
     pub y: isize,
 }
 
-pub const UP: Vector2Int = new_v2(0, 1);
-pub const DOWN: Vector2Int = new_v2(0, -1);
-pub const LEFT: Vector2Int = new_v2(-1, 0);
-pub const RIGHT: Vector2Int = new_v2(1, 0);
+impl Copy for Vector2Int {}
 
-pub const fn new_v2(x: isize, y: isize) -> Vector2Int {
-    return Vector2Int { x, y };
-}
-
+#[allow(unused)]
 impl Vector2Int {
     pub fn new(x: isize, y: isize) -> Self {
-        return Vector2Int { x, y };
+        return Vector2Int { x: x, y: y };
+    }
+
+    /// Check if in range inclusive
+    pub fn in_range(&self, min: &Vector2Int, max: &Vector2Int) -> bool {
+        return self.x >= min.x && self.x <= max.x && self.y >= min.y && self.y <= max.y;
+    }
+
+    pub fn cardinal_directions() -> [Vector2Int; 4] {
+        return [
+            Vector2Int::up(),
+            Vector2Int::right(),
+            Vector2Int::down(),
+            Vector2Int::left(),
+        ];
+    }
+
+    /// All 8 basic vector2 directions starting with UP going clockwise
+    pub fn all_directions() -> [Vector2Int; 8] {
+        return [
+            Vector2Int::up(),
+            Vector2Int::ur(),
+            Vector2Int::right(),
+            Vector2Int::dr(),
+            Vector2Int::down(),
+            Vector2Int::dl(),
+            Vector2Int::left(),
+            Vector2Int::ul(),
+        ];
+    }
+
+    pub fn zero() -> Self {
+        return Vector2Int { x: 0, y: 0 };
+    }
+
+    pub fn up() -> Self {
+        return Vector2Int { x: 0, y: 1 };
+    }
+
+    pub fn down() -> Self {
+        return Vector2Int { x: 0, y: -1 };
+    }
+
+    pub fn left() -> Self {
+        return Vector2Int { x: -1, y: 0 };
+    }
+
+    pub fn right() -> Self {
+        return Vector2Int { x: 1, y: 0 };
+    }
+
+    pub fn ur() -> Self {
+        return Vector2Int { x: 1, y: 1 };
+    }
+
+    pub fn ul() -> Self {
+        return Vector2Int { x: -1, y: 1 };
+    }
+
+    pub fn dl() -> Self {
+        return Vector2Int { x: -1, y: -1 };
+    }
+
+    pub fn dr() -> Self {
+        return Vector2Int { x: 1, y: -1 };
+    }
+
+    pub fn manhattan(&self, rhs: Vector2Int) -> isize {
+        return (self.x - rhs.x).abs() + (self.y - rhs.y).abs();
     }
 }
 
-impl Copy for Vector2Int {}
-impl Clone for Vector2Int {
-    fn clone(&self) -> Self {
-        Self {
-            x: self.x.clone(),
-            y: self.y.clone(),
-        }
+impl Display for Vector2Int {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<{}, {}>", self.x, self.y)
     }
 }
 
-impl Hash for Vector2Int {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.x.hash(state);
-        self.y.hash(state);
-    }
-}
-
-// a + b -> c
+// +
 impl ops::Add<Vector2Int> for Vector2Int {
-    type Output = Self;
-    fn add(self, other: Self) -> Self {
-        Self {
-            x: self.x + other.x,
-            y: self.y + other.y,
-        }
+    type Output = Vector2Int;
+    fn add(self, rhs: Vector2Int) -> Self::Output {
+        return Vector2Int::new(self.x + rhs.x, self.y + rhs.y);
     }
 }
 
-// a += b
+// +=
 impl ops::AddAssign<Vector2Int> for Vector2Int {
-    fn add_assign(&mut self, other: Self) {
-        self.x += other.x;
-        self.y += other.y;
+    fn add_assign(&mut self, rhs: Vector2Int) {
+        self.x += rhs.x;
+        self.y += rhs.y;
     }
 }
 
-// a - b -> c
+// -
 impl ops::Sub<Vector2Int> for Vector2Int {
-    type Output = Self;
-    fn sub(self, other: Self) -> Self {
-        Self {
-            x: self.x - other.x,
-            y: self.y - other.y,
-        }
+    type Output = Vector2Int;
+    fn sub(self, rhs: Vector2Int) -> Self::Output {
+        return Vector2Int::new(self.x - rhs.x, self.y - rhs.y);
     }
 }
 
-// a -= b
+// -=
 impl ops::SubAssign<Vector2Int> for Vector2Int {
-    fn sub_assign(&mut self, other: Self) {
-        self.x -= other.x;
-        self.y -= other.y;
+    fn sub_assign(&mut self, rhs: Vector2Int) {
+        self.x -= rhs.x;
+        self.y -= rhs.y;
     }
 }
 
-// a * b
+// *
 impl ops::Mul<Vector2Int> for Vector2Int {
-    type Output = Self;
-    fn mul(self, other: Self) -> Self {
-        Self {
-            x: self.x * other.x,
-            y: self.y * other.y,
-        }
+    type Output = Vector2Int;
+    fn mul(self, rhs: Vector2Int) -> Self::Output {
+        return Vector2Int::new(self.x * rhs.x, self.y * rhs.y);
     }
 }
 
-// a *= b
+// *=
 impl ops::MulAssign<Vector2Int> for Vector2Int {
-    fn mul_assign(&mut self, other: Self) {
-        self.x *= other.x;
-        self.y *= other.y;
+    fn mul_assign(&mut self, rhs: Vector2Int) {
+        self.x *= rhs.x;
+        self.y *= rhs.y;
     }
 }
 
-impl std::cmp::Eq for Vector2Int {}
-impl std::cmp::PartialEq for Vector2Int {
-    fn eq(&self, other: &Self) -> bool {
-        self.x == other.x && self.y == other.y
+// /
+impl ops::Div<Vector2Int> for Vector2Int {
+    type Output = Vector2Int;
+    fn div(self, rhs: Vector2Int) -> Self::Output {
+        return Vector2Int::new(self.x / rhs.x, self.y / rhs.y);
+    }
+}
+
+// /=
+impl ops::DivAssign<Vector2Int> for Vector2Int {
+    fn div_assign(&mut self, rhs: Vector2Int) {
+        self.x /= rhs.x;
+        self.y /= rhs.y;
     }
 }

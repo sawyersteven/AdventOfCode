@@ -71,11 +71,6 @@ namespace Advent2021
 
             for (int i = 0; i < input.Length; i++)
             {
-                if (input[i].StartsWith("//"))
-                {
-                    cubes = cubes.SubArray(0, i);
-                    return;
-                }
                 string line = input[i];
                 string[] xyz = line.Split(' ')[1].Split(',');
 

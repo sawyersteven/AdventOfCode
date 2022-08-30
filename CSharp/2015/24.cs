@@ -33,6 +33,7 @@ namespace Advent2015
                         weightCombos.Add(wc);
                     }
                 }
+                Console.WriteLine(i);
                 if (weightCombos.Count != 0) break;
             }
             return weightCombos;

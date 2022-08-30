@@ -18,6 +18,16 @@ namespace ExtensionMethods
 
     public static class ArrayExtensions
     {
+        public static bool EqualContents(this char[] arr, char[] other)
+        {
+            if (arr.Length != other.Length) return false;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (arr[i] != other[i]) return false;
+            }
+            return true;
+        }
+
         public static T[] GetColumn<T>(this T[,] arr, int columnIndex)
         {
             T[] col = new T[arr.GetLength(1)];

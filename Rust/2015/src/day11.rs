@@ -32,13 +32,11 @@ impl Day11 {
         }
 
         let mut has_seq = false;
-        let mut i = 0;
-        while i < pw.len() - 3 {
+        for i in 0..(pw.len() - 3) {
             if pw[i + 1] == pw[i] + 1 && pw[i + 2] == pw[i] + 2 {
                 has_seq = true;
                 break;
             }
-            i += 1;
         }
 
         if !has_seq {
@@ -46,7 +44,7 @@ impl Day11 {
         }
 
         let mut pairs = 0;
-        i = 0;
+        let mut i = 0;
         while i < pw.len() - 1 {
             if pw[i] == pw[i + 1] {
                 pairs += 1;

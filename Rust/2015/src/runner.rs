@@ -18,11 +18,7 @@ pub fn run_day(day: usize, part: Part) {
     let now = std::time::Instant::now();
     problem.parse_input(input);
     let elapsed = now.elapsed();
-    println!(
-        "│ Parse Input [{}ms | {}us]",
-        elapsed.as_millis(),
-        elapsed.as_micros()
-    );
+    println!("│ Parse Input [{}ms | {}us]", elapsed.as_millis(), elapsed.as_micros());
 
     match part {
         Part::One => {
@@ -89,6 +85,7 @@ fn get_day(day: usize) -> Option<Box<dyn Base>> {
         22 => d = Box::new(crate::day22::Day22::new()),
         23 => d = Box::new(crate::day23::Day23::new()),
         24 => d = Box::new(crate::day24::Day24::new()),
+        25 => d = Box::new(crate::day25::Day25::new()),
         _ => {
             println!("Invalid day {}", day);
             return None;
