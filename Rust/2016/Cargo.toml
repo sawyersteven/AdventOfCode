@@ -1,5 +1,5 @@
 [package]
-name = "advent_of_code_####"
+name = "advent_of_code_2016"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,3 +9,4 @@ edition = "2021"
 shared = { path = "../shared/" }
 rust-crypto = "*"
 itertools = "0.10.3"
+cdll = "0.3.0"

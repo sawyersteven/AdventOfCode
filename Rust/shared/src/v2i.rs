@@ -1,15 +1,20 @@
 use std::{fmt::Display, hash::Hash, ops};
 
-#[derive(PartialEq, Eq, Clone, Hash)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash)]
 pub struct Vector2Int {
     pub x: isize,
     pub y: isize,
 }
 
-impl Copy for Vector2Int {}
-
 #[allow(unused)]
 impl Vector2Int {
+    pub const CARDINALS: [Vector2Int; 4] = [
+        Vector2Int { x: 0, y: 1 },
+        Vector2Int { x: 1, y: 0 },
+        Vector2Int { x: 0, y: -1 },
+        Vector2Int { x: -1, y: 0 },
+    ];
+
     pub fn new(x: isize, y: isize) -> Self {
         return Vector2Int { x: x, y: y };
     }
@@ -17,15 +22,6 @@ impl Vector2Int {
     /// Check if in range inclusive
     pub fn in_range(&self, min: &Vector2Int, max: &Vector2Int) -> bool {
         return self.x >= min.x && self.x <= max.x && self.y >= min.y && self.y <= max.y;
-    }
-
-    pub fn cardinal_directions() -> [Vector2Int; 4] {
-        return [
-            Vector2Int::up(),
-            Vector2Int::right(),
-            Vector2Int::down(),
-            Vector2Int::left(),
-        ];
     }
 
     /// All 8 basic vector2 directions starting with UP going clockwise
@@ -126,6 +122,14 @@ impl ops::Mul<Vector2Int> for Vector2Int {
     type Output = Vector2Int;
     fn mul(self, rhs: Vector2Int) -> Self::Output {
         return Vector2Int::new(self.x * rhs.x, self.y * rhs.y);
+    }
+}
+
+// * <isize>
+impl ops::Mul<isize> for Vector2Int {
+    type Output = Vector2Int;
+    fn mul(self, rhs: isize) -> Self::Output {
+        return Vector2Int::new(self.x * rhs, self.y * rhs);
     }
 }
 

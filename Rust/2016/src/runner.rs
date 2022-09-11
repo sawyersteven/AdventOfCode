@@ -1,7 +1,7 @@
 use crate::Base;
 use std::fs;
 
-pub const YEAR: usize = ####;
+pub const YEAR: usize = 2016;
 
 pub enum Part {
     One,
@@ -18,11 +18,7 @@ pub fn run_day(day: usize, part: Part) {
     let now = std::time::Instant::now();
     problem.parse_input(input);
     let elapsed = now.elapsed();
-    println!(
-        "│ Parse Input [{}ms | {}us]",
-        elapsed.as_millis(),
-        elapsed.as_micros()
-    );
+    println!("│ Parse Input [{}ms | {}us]", elapsed.as_millis(), elapsed.as_micros());
 
     match part {
         Part::One => {
