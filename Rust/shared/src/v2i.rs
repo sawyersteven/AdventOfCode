@@ -8,12 +8,7 @@ pub struct Vector2Int {
 
 #[allow(unused)]
 impl Vector2Int {
-    pub const CARDINALS: [Vector2Int; 4] = [
-        Vector2Int { x: 0, y: 1 },
-        Vector2Int { x: 1, y: 0 },
-        Vector2Int { x: 0, y: -1 },
-        Vector2Int { x: -1, y: 0 },
-    ];
+    pub const CARDINALS: [Vector2Int; 4] = [Vector2Int::UP, Vector2Int::RIGHT, Vector2Int::DOWN, Vector2Int::LEFT];
 
     pub fn new(x: isize, y: isize) -> Self {
         return Vector2Int { x: x, y: y };
@@ -27,52 +22,28 @@ impl Vector2Int {
     /// All 8 basic vector2 directions starting with UP going clockwise
     pub fn all_directions() -> [Vector2Int; 8] {
         return [
-            Vector2Int::up(),
-            Vector2Int::ur(),
-            Vector2Int::right(),
-            Vector2Int::dr(),
-            Vector2Int::down(),
-            Vector2Int::dl(),
-            Vector2Int::left(),
-            Vector2Int::ul(),
+            Vector2Int::UP,
+            Vector2Int::UR,
+            Vector2Int::RIGHT,
+            Vector2Int::DR,
+            Vector2Int::DOWN,
+            Vector2Int::DL,
+            Vector2Int::LEFT,
+            Vector2Int::UL,
         ];
     }
 
-    pub fn zero() -> Self {
-        return Vector2Int { x: 0, y: 0 };
-    }
+    pub const ZERO: Vector2Int = Vector2Int { x: 0, y: 0 };
 
-    pub fn up() -> Self {
-        return Vector2Int { x: 0, y: 1 };
-    }
+    pub const UP: Vector2Int = Vector2Int { x: 0, y: 1 };
+    pub const DOWN: Vector2Int = Vector2Int { x: 0, y: -1 };
+    pub const LEFT: Vector2Int = Vector2Int { x: -1, y: 0 };
+    pub const RIGHT: Vector2Int = Vector2Int { x: 1, y: 0 };
 
-    pub fn down() -> Self {
-        return Vector2Int { x: 0, y: -1 };
-    }
-
-    pub fn left() -> Self {
-        return Vector2Int { x: -1, y: 0 };
-    }
-
-    pub fn right() -> Self {
-        return Vector2Int { x: 1, y: 0 };
-    }
-
-    pub fn ur() -> Self {
-        return Vector2Int { x: 1, y: 1 };
-    }
-
-    pub fn ul() -> Self {
-        return Vector2Int { x: -1, y: 1 };
-    }
-
-    pub fn dl() -> Self {
-        return Vector2Int { x: -1, y: -1 };
-    }
-
-    pub fn dr() -> Self {
-        return Vector2Int { x: 1, y: -1 };
-    }
+    pub const UR: Vector2Int = Vector2Int { x: 1, y: 1 };
+    pub const UL: Vector2Int = Vector2Int { x: -1, y: 1 };
+    pub const DL: Vector2Int = Vector2Int { x: -1, y: -1 };
+    pub const DR: Vector2Int = Vector2Int { x: 1, y: -1 };
 
     pub fn manhattan(&self, rhs: Vector2Int) -> isize {
         return (self.x - rhs.x).abs() + (self.y - rhs.y).abs();

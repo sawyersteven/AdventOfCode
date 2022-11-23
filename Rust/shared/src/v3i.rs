@@ -29,7 +29,7 @@ impl Vector3Int {
             && self.z <= max.z;
     }
 
-    pub fn zero() -> Self {
+    pub const fn zero() -> Self {
         return Vector3Int { x: 0, y: 0, z: 0 };
     }
 
@@ -57,8 +57,10 @@ impl Vector3Int {
         return Vector3Int { x: 0, y: 0, z: -1 };
     }
 
-    pub fn manhattan(&self, rhs: Vector3Int) -> isize {
-        return (self.x - rhs.x).abs() + (self.y - rhs.y).abs() + (self.z - rhs.z).abs();
+    pub fn manhattan(&self, rhs: Vector3Int) -> usize {
+        return (self.x - rhs.x).abs() as usize
+            + (self.y - rhs.y).abs() as usize
+            + (self.z - rhs.z).abs() as usize;
     }
 }
 

@@ -20,6 +20,7 @@ impl Base for Day25 {
     }
 
     fn part1(&self) -> Box<dyn Display> {
+        // Without yield (at least in stable rust) this is a giant pain. I'll come back later...
         return Box::new("-");
     }
 
