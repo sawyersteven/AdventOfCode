@@ -31,16 +31,16 @@ impl Base for Day07 {
         for line in &self.input {
             let parts: Vec<&str> = line.split(' ').collect();
             if parts[1] == "cd" {
-                match parts.last().unwrap() {
-                    &".." => {
+                match parts[2] {
+                    ".." => {
                         cwd.pop_back();
                     }
-                    &"/" => {
+                    "/" => {
                         cwd.clear();
                         cwd.push_back("/");
                     }
                     d => {
-                        cwd.push_back(*d);
+                        cwd.push_back(d);
                     }
                 }
             } else {
