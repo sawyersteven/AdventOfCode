@@ -7,7 +7,9 @@ pub struct Day10 {
 
 impl Day10 {
     pub fn new() -> Day10 {
-        return Day10 { input: String::from("") };
+        return Day10 {
+            input: String::from(""),
+        };
     }
 }
 
@@ -16,11 +18,11 @@ impl Base for Day10 {
         self.input = raw_input;
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         return Box::new("-");
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         return Box::new("-");
     }
 }

@@ -60,6 +60,6 @@ fn print_usage() {
 
 pub trait Base {
     fn parse_input(&mut self, raw_input: String);
-    fn part1(&self) -> Box<dyn Display>;
-    fn part2(&self) -> Box<dyn Display>;
+    fn part1(&mut self) -> Box<dyn Display>;
+    fn part2(&mut self) -> Box<dyn Display>;
 }
