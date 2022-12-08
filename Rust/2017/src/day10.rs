@@ -36,7 +36,7 @@ impl Base for Day10 {
         let mut total_skips = 0;
         let mut skip_size = 0;
         for len in lengths {
-            circle.reverse_segment(len as isize);
+            circle.reverse_segment(len);
             circle.move_head_right(skip_size + len);
             total_skips += skip_size + len;
             skip_size += 1;
@@ -134,7 +134,7 @@ impl KnotHash {
 
         for _ in 0..iters {
             for len in &lengths {
-                circle.reverse_segment(*len as isize);
+                circle.reverse_segment(*len as usize);
                 circle.move_head_right(skip_size + *len as usize);
                 total_skips += skip_size + *len as usize;
                 skip_size += 1;

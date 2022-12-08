@@ -43,7 +43,7 @@ impl Base for Day19 {
         }
 
         let mut collected = Vec::<char>::new();
-        let mut current_dir = Vector2Int::up();
+        let mut current_dir = Vector2Int::UP;
         let mut steps = 0;
 
         loop {

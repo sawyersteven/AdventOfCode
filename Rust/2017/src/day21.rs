@@ -17,7 +17,8 @@ impl Day21 {
     fn ENHANCE(&self, image: Vec<char>) -> Vec<char> {
         let mut cells = self.divide(image);
         for i in 0..cells.len() {
-            cells[i] = self.lookup_table[&String::from_iter(cells[i].iter().map(|x| x.to_string() + "/"))];
+            cells[i] =
+                self.lookup_table[&String::from_iter(cells[i].iter().map(|x| x.to_string() + "/"))].to_owned();
         }
         return self.join(cells);
     }
@@ -49,7 +50,7 @@ impl Day21 {
     fn divide(&self, image: Vec<char>) -> Vec<Vec<char>> {
         let chunk_size = 2 + image.len() % 2;
         let chunks_per_edge = f32::sqrt(image.len() as f32) as usize / chunk_size;
-        let chunks = vec2d(' ', chunks_per_edge * chunks_per_edge, chunk_size * chunk_size);
+        let mut chunks = vec2d(' ', chunks_per_edge * chunks_per_edge, chunk_size * chunk_size);
 
         let mut start = 0;
         for i in 0..chunks.len() {
@@ -82,7 +83,10 @@ impl Day21 {
     }
 }
 
-fn rotate_cw<T>(arr: &mut Vec<Vec<T>>) {
+fn rotate_cw<T>(arr: &mut Vec<Vec<T>>)
+where
+    T: Copy,
+{
     let sz = arr.len();
     if sz != arr[0].len() {
         panic!("Must be square");
@@ -90,16 +94,43 @@ fn rotate_cw<T>(arr: &mut Vec<Vec<T>>) {
 
     let mut tmp_map = Vec::<Vec<T>>::new();
     for row in 0..sz {
-        let mut col = sz - 1;
+        let col = sz - 1;
         let mut ncol = 0;
         tmp_map.push(Vec::<T>::new());
-        while col >= 0 {
-            tmp_map[row].push(arr[col][row]);
+        for col in col..0 {
+            tmp_map[ncol][row] = arr[col][row];
 
-            col -= 1;
             ncol += 1;
         }
     }
+}
+
+fn flip_horiz<T>(arr: &mut Vec<Vec<T>>)
+where
+    T: Copy,
+{
+    let h = arr.len();
+    let w = arr[0].len();
+
+    let mut tmp: T;
+
+    for y in 0..h {
+        for x in 0..(w / 2) {
+            tmp = arr[y][x];
+            arr[y][x] = arr[y][w - x - 1];
+            arr[y][w - x - 1] = tmp;
+        }
+    }
+}
+
+fn join_2d<T>(arr: &Vec<Vec<T>>, sep: &str) -> String
+where
+    T: ToString,
+{
+    return String::from_iter(
+        arr.iter()
+            .map(|row| String::from_iter(row.iter().map(|c| c.to_string() + sep)) + sep),
+    );
 }
 
 impl Base for Day21 {
@@ -108,17 +139,23 @@ impl Base for Day21 {
             let parts: Vec<&str> = line.split(" => ").collect();
 
             let v: Vec<char> = parts[1].replace("/", "").chars().collect();
-            let k = Self::line_to_grid(parts[0]);
+            let mut k = Self::line_to_grid(parts[0]);
 
             for _ in 0..4 {
                 rotate_cw(&mut k);
+                self.lookup_table.insert(join_2d(&k, "/"), v.clone());
+            }
+            flip_horiz(&mut k);
+            for _ in 0..4 {
+                rotate_cw(&mut k);
+                self.lookup_table.insert(join_2d(&k, "/"), v.clone());
             }
         }
     }
 
     fn part1(&self) -> Box<dyn Display> {
         let mut image = INIT_STATE.clone().to_vec();
-        for turn in 0..5 {
+        for _turn in 0..5 {
             image = self.ENHANCE(image);
         }
 
