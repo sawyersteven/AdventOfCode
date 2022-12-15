@@ -1,6 +1,6 @@
 use std::{fmt::Display, hash::Hash, ops};
 
-#[derive(PartialEq, Eq, Clone, Copy, Hash)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 pub struct Vector2Int {
     pub x: isize,
     pub y: isize,
