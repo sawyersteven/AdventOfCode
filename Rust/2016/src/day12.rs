@@ -49,67 +49,92 @@ impl Base for Day12 {
     }
 
     fn part1(&self) -> Box<dyn Display> {
-        let mut registers: [isize; 4] = [0, 0, 0, 0];
-        run_code(self.input.clone(), &mut registers);
-        return Box::new(registers[0]);
+        let mut rnnr = CodeRunner::new(self.input.clone());
+        rnnr.next();
+        return Box::new(rnnr.registers[0]);
     }
 
     fn part2(&self) -> Box<dyn Display> {
-        let mut registers: [isize; 4] = [0, 0, 1, 0];
-        run_code(self.input.clone(), &mut registers);
-        return Box::new(registers[0]);
+        let mut rnnr = CodeRunner::new(self.input.clone());
+        rnnr.registers[2] = 1;
+        rnnr.next();
+        return Box::new(rnnr.registers[0]);
     }
 }
 
-pub fn run_code(mut code: Vec<Command>, registers: &mut [isize; 4]) {
-    let mut ind: isize = 0;
-    while ind < code.len() as isize {
-        let cmd = &code[ind as usize];
+pub struct CodeRunner {
+    code: Vec<Command>,
+    pub registers: [isize; 4],
+    index: isize,
+}
 
-        match cmd.word {
-            Word::CPY => {
-                registers[cmd.out_val as usize] = if cmd.in_is_reg {
-                    registers[cmd.in_val as usize]
-                } else {
-                    cmd.in_val
-                };
-            }
-            Word::INC => {
-                registers[cmd.in_val as usize] += 1;
-            }
-            Word::DEC => {
-                registers[cmd.in_val as usize] -= 1;
-            }
-            Word::JNZ => {
-                let nz = if cmd.in_is_reg {
-                    registers[cmd.in_val as usize]
-                } else {
-                    cmd.in_val
-                } != 0;
+impl CodeRunner {
+    pub fn new(code: Vec<Command>) -> CodeRunner {
+        return CodeRunner {
+            code: code,
+            registers: [0, 0, 0, 0],
+            index: 0,
+        };
+    }
 
-                if nz {
-                    let jmp = if cmd.out_is_reg {
-                        registers[cmd.out_val as usize]
+    // Runs code until next output command is handled
+    pub fn next(&mut self) -> Option<isize> {
+        while self.index < self.code.len() as isize {
+            let cmd = &self.code[self.index as usize];
+            match cmd.word {
+                Word::CPY => {
+                    self.registers[cmd.out_val as usize] = if cmd.in_is_reg {
+                        self.registers[cmd.in_val as usize]
                     } else {
-                        cmd.out_val
+                        cmd.in_val
                     };
-                    ind += jmp - 1;
                 }
-            }
-            Word::TGL => {
-                let offset = if cmd.in_is_reg {
-                    (registers[cmd.in_val as usize] + ind) as usize
-                } else {
-                    (cmd.in_val + ind) as usize
-                };
+                Word::INC => {
+                    self.registers[cmd.in_val as usize] += 1;
+                }
+                Word::DEC => {
+                    self.registers[cmd.in_val as usize] -= 1;
+                }
+                Word::JNZ => {
+                    let nz = if cmd.in_is_reg {
+                        self.registers[cmd.in_val as usize]
+                    } else {
+                        cmd.in_val
+                    } != 0;
 
-                if offset < code.len() {
-                    code[offset].word = code[offset].word.toggle();
+                    if nz {
+                        let jmp = if cmd.out_is_reg {
+                            self.registers[cmd.out_val as usize]
+                        } else {
+                            cmd.out_val
+                        };
+                        self.index += jmp - 1;
+                    }
+                }
+                Word::TGL => {
+                    let offset = if cmd.in_is_reg {
+                        (self.registers[cmd.in_val as usize] + self.index) as usize
+                    } else {
+                        (cmd.in_val + self.index) as usize
+                    };
+                    if offset < self.code.len() {
+                        self.code[offset].word = self.code[offset].word.toggle();
+                    }
+                }
+                Word::OUT => {
+                    let ret: Option<isize>;
+                    if self.code[self.index as usize].in_is_reg {
+                        ret = Some(self.registers[self.code[self.index as usize].in_val as usize]);
+                    } else {
+                        ret = Some(self.code[self.index as usize].in_val);
+                    }
+                    self.index += 1;
+                    return ret;
                 }
             }
-            Word::OUT => panic!(),
+            self.index += 1;
         }
-        ind += 1;
+        return None;
     }
 }
 
