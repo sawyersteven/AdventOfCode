@@ -20,7 +20,7 @@ impl Day24 {
             input: Vec::new(),
             dist_cache: HashMap::new(),
             targets: Vec::new(),
-            start: Vector2Int::zero(),
+            start: Vector2Int::ZERO,
         };
     }
 }
@@ -31,7 +31,7 @@ impl Base for Day24 {
             self.input.push(line.bytes().collect());
         }
 
-        self.start = Vector2Int::zero();
+        self.start = Vector2Int::ZERO;
         let mut walls: HashSet<Vector2Int> = HashSet::new();
         for y in 0..self.input.len() {
             for x in 0..self.input[0].len() {
