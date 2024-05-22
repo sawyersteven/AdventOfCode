@@ -49,7 +49,7 @@ impl Base for Day10 {
 
     fn part2(&self) -> Box<dyn Display> {
         let bytestring = self.input.as_bytes();
-        let mut lengths = bytestring.clone().to_vec();
+        let mut lengths = bytestring.to_vec();
         for suffix in [17, 31, 73, 47, 23] {
             lengths.push(suffix);
         }
@@ -68,7 +68,7 @@ pub struct KnotHash {
 impl KnotHash {
     pub fn new(input: &String) -> Self {
         let bytestring = input.as_bytes();
-        let mut lengths = bytestring.clone().to_vec();
+        let mut lengths = bytestring.to_vec();
         for suffix in [17, 31, 73, 47, 23] {
             lengths.push(suffix);
         }

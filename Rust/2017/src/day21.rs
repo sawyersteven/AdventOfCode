@@ -14,7 +14,7 @@ impl Day21 {
         };
     }
 
-    fn ENHANCE(&self, image: Vec<char>) -> Vec<char> {
+    fn enhance(&self, image: Vec<char>) -> Vec<char> {
         let mut cells = self.divide(image);
         for i in 0..cells.len() {
             cells[i] =
@@ -156,7 +156,7 @@ impl Base for Day21 {
     fn part1(&self) -> Box<dyn Display> {
         let mut image = INIT_STATE.clone().to_vec();
         for _turn in 0..5 {
-            image = self.ENHANCE(image);
+            image = self.enhance(image);
         }
 
         let count = image.iter().filter(|&x| x == &'#').count();

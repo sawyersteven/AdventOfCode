@@ -52,7 +52,7 @@ impl Duet {
             sent_vals: VecDeque::new(),
         };
     }
-
+    #[allow(unused)]
     pub fn recv(&mut self, val: isize) {
         self.input_queue.push_back(val);
     }
