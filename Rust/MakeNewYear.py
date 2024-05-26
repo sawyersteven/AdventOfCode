@@ -22,7 +22,7 @@ impl Base for Day__ {
         self.input = raw_input;
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         return Box::new("-");
     }
 
