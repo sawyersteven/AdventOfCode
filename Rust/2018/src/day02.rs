@@ -39,7 +39,7 @@ impl Base for Day02 {
         return Box::new(twos * threes);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         for a in 0..(self.input.len() - 1) {
             for b in (a + 1)..self.input.len() {
                 if compare(&self.input[a], &self.input[b]) {

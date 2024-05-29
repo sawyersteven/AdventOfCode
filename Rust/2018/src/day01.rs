@@ -26,7 +26,7 @@ impl Base for Day01 {
         return Box::new(sum);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut h = HashSet::new();
         let mut sum = 0;
         let mut ind = 0;

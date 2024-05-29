@@ -74,7 +74,7 @@ impl Base for Day04 {
         return Box::new(sleepy_guard * best_min);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut gid = 0;
         let mut best_min = 0;
         let mut min_val = 0;

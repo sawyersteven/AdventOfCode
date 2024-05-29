@@ -58,7 +58,7 @@ impl Base for Day03 {
         return Box::new(self.collisions.len());
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut sqin = (0, 0);
         for c in &self.claims {
             let mut collision = false;

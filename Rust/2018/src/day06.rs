@@ -64,7 +64,7 @@ impl Base for Day06 {
         return Box::new(coverage.iter().max().unwrap().clone());
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         const MAX_DIST: isize = 10000;
         let mut counter = 0;
 

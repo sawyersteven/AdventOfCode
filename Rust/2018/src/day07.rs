@@ -60,7 +60,7 @@ impl Base for Day07 {
         return Box::new(complete);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut reqs = self.requirements.clone();
         let mut on_deck = HashSet::<isize>::new();
 

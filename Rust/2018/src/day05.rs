@@ -21,7 +21,7 @@ impl Base for Day05 {
         return Box::new(poly.len());
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut shortest = usize::MAX;
 
         for i in 65..91 {
