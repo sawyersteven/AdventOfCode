@@ -1,5 +1,3 @@
-use shared::utils::read_user_input;
-
 use crate::Base;
 use std::fmt::Display;
 
@@ -74,7 +72,6 @@ impl Base for Day14 {
             }
             last_len = rp.recipe_scores.len();
         }
-        panic!();
     }
 }
 
