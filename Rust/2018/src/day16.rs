@@ -131,7 +131,7 @@ impl Day16 {
     }
 }
 
-struct Computer {}
+pub struct Computer {}
 
 impl Computer {
     const A: usize = 1;
@@ -153,43 +153,59 @@ impl Computer {
         return code;
     }
 
-    const OPS: [fn(&mut Vec<usize>, &[usize; 4]); 16] = [
+    pub const OPS: [fn(&mut Vec<usize>, &[usize; 4]); 16] = [
+        // addr
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] + mem[inst[Self::B]],
+        // addi
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] + inst[Self::B],
+        // mulr
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] * mem[inst[Self::B]],
+        // muli
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] * inst[Self::B],
+        // banr
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] & mem[inst[Self::B]],
+        // bani
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] & inst[Self::B],
+        // borr
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] | mem[inst[Self::B]],
+        // bori
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]] | inst[Self::B],
+        // setr
         |mem, inst| mem[inst[Self::C]] = mem[inst[Self::A]],
+        // seti
         |mem, inst| mem[inst[Self::C]] = inst[Self::A],
+        // gtir
         |mem, inst| mem[inst[Self::C]] = if inst[Self::A] > mem[inst[Self::B]] { 1 } else { 0 },
+        // gtri
         |mem, inst| mem[inst[Self::C]] = if mem[inst[Self::A]] > inst[Self::B] { 1 } else { 0 },
+        // gtrr
         |mem, inst| mem[inst[Self::C]] = if mem[inst[Self::A]] > mem[inst[Self::B]] { 1 } else { 0 },
+        // eqir
         |mem, inst| mem[inst[Self::C]] = if inst[Self::A] == mem[inst[Self::B]] { 1 } else { 0 },
+        // eqri
         |mem, inst| mem[inst[Self::C]] = if mem[inst[Self::A]] == inst[Self::B] { 1 } else { 0 },
+        // eqrr
         |mem, inst| mem[inst[Self::C]] = if mem[inst[Self::A]] == mem[inst[Self::B]] { 1 } else { 0 },
     ];
 
     fn op_num(name: &str) -> usize {
         match name {
-            "addr" => 1,
-            "addi" => 2,
-            "mulr" => 3,
-            "muli" => 4,
-            "banr" => 5,
-            "bani" => 6,
-            "borr" => 7,
-            "bori" => 8,
-            "setr" => 9,
-            "seti" => 10,
-            "gtir" => 11,
-            "gtri" => 12,
-            "gtrr" => 13,
-            "eqir" => 14,
-            "eqri" => 15,
-            "eqrr" => 16,
+            "addr" => 0,
+            "addi" => 1,
+            "mulr" => 2,
+            "muli" => 3,
+            "banr" => 4,
+            "bani" => 5,
+            "borr" => 6,
+            "bori" => 7,
+            "setr" => 8,
+            "seti" => 9,
+            "gtir" => 10,
+            "gtri" => 11,
+            "gtrr" => 12,
+            "eqir" => 13,
+            "eqri" => 14,
+            "eqrr" => 15,
             _ => panic!(),
         }
     }
