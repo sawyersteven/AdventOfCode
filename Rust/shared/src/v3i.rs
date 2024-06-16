@@ -1,4 +1,8 @@
-use std::{fmt::Display, hash::Hash, ops};
+use std::{
+    fmt::Display,
+    hash::Hash,
+    ops::{self},
+};
 
 use crate::v2i::Vector2Int;
 
@@ -11,7 +15,15 @@ pub struct Vector3Int {
 
 #[allow(unused)]
 impl Vector3Int {
-    pub fn new(x: isize, y: isize, z: isize) -> Self {
+    pub const ZERO: Vector3Int = Vector3Int { x: 0, y: 0, z: 0 };
+    pub const ONE: Vector3Int = Vector3Int { x: 1, y: 1, z: 1 };
+    pub const MAX: Vector3Int = Vector3Int {
+        x: isize::MAX,
+        y: isize::MAX,
+        z: isize::MAX,
+    };
+
+    pub const fn new(x: isize, y: isize, z: isize) -> Self {
         return Vector3Int { x: x, y: y, z: z };
     }
 
@@ -27,6 +39,22 @@ impl Vector3Int {
             && self.y <= max.y
             && self.z >= min.z
             && self.z <= max.z;
+    }
+
+    pub fn min(&self, other: &Vector3Int) -> Vector3Int {
+        return Vector3Int {
+            x: self.x.min(other.x),
+            y: self.y.min(other.y),
+            z: self.z.min(other.z),
+        };
+    }
+
+    pub fn max(&self, other: &Vector3Int) -> Vector3Int {
+        return Vector3Int {
+            x: self.x.max(other.x),
+            y: self.y.max(other.y),
+            z: self.z.max(other.z),
+        };
     }
 
     pub const fn zero() -> Self {

@@ -1,4 +1,4 @@
-use std::{fmt::Display, hash::Hash, ops};
+use std::{f64::consts::PI, fmt::Display, hash::Hash, ops};
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 pub struct Vector2Int {
@@ -47,6 +47,16 @@ impl Vector2Int {
 
     pub fn manhattan(&self, rhs: Vector2Int) -> isize {
         return (self.x - rhs.x).abs() + (self.y - rhs.y).abs();
+    }
+
+    pub fn angle_to(&self, other: &Vector2Int) -> f64 {
+        let ang = -((180f64 / PI)
+            * f64::atan2(
+                ((self.x * other.x) + (self.y * other.y)) as f64,
+                ((self.x * other.y) + (self.y * other.x)) as f64,
+            ))
+            + 90f64;
+        return if ang < 0f64 { ang + 360f64 } else { ang };
     }
 }
 
@@ -117,6 +127,14 @@ impl ops::Div<Vector2Int> for Vector2Int {
     type Output = Vector2Int;
     fn div(self, rhs: Vector2Int) -> Self::Output {
         return Vector2Int::new(self.x / rhs.x, self.y / rhs.y);
+    }
+}
+
+// / <isize>
+impl ops::Div<isize> for Vector2Int {
+    type Output = Vector2Int;
+    fn div(self, rhs: isize) -> Self::Output {
+        return Vector2Int::new(self.x / rhs, self.y / rhs);
     }
 }
 
