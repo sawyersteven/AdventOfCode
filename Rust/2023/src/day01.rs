@@ -104,7 +104,7 @@ impl Base for Day01 {
         self.lines = raw_input.split("\n").map(|x| x.to_string()).collect();
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut sum = 0;
 
         for line in &self.lines {
@@ -114,7 +114,7 @@ impl Base for Day01 {
         return Box::new(sum);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut sum = 0;
 
         for line in &self.lines {

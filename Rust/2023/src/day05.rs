@@ -58,7 +58,7 @@ impl Base for Day05 {
         }
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut low = isize::MAX;
 
         for seed_num in &self.seeds {
@@ -74,7 +74,7 @@ impl Base for Day05 {
     same Light number, so any calculations past that would be redundant.
     I might implement that eventually.
     */
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut low = isize::MAX;
 
         for (i, range_start) in self.seeds.iter().enumerate().step_by(2) {

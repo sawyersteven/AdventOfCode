@@ -22,7 +22,7 @@ impl Base for Day04 {
         }
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut sum = 0;
         for card in &self.input {
             let matches = card.0.intersection(&card.1).count();
@@ -33,7 +33,7 @@ impl Base for Day04 {
         return Box::new(sum);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut card_counts = vec![1; self.input.len()];
 
         for (i, card) in self.input.iter().enumerate() {

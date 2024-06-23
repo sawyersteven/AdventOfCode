@@ -52,7 +52,7 @@ impl Base for Day06 {
         //.parse().unwrap();
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut prod = 1;
 
         for (time, record) in &self.races {
@@ -68,7 +68,7 @@ impl Base for Day06 {
         return Box::new(prod);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut wins = 0;
         let (time, record) = self.race2;
         for hold in 1..time {

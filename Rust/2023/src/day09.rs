@@ -19,7 +19,7 @@ impl Base for Day09 {
         }
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut sum = 0;
         for line in &self.input {
             let mut stack: Vec<Vec<isize>> = Vec::new();
@@ -36,7 +36,7 @@ impl Base for Day09 {
         return Box::new(sum);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut sum = 0;
         for line in &self.input {
             let mut stack: Vec<Vec<isize>> = Vec::new();

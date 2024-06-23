@@ -16,7 +16,7 @@ impl Base for Day15 {
         self.words = raw_input.split(',').map(|x| x.to_string()).collect();
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let mut total = 0;
         for word in &self.words {
             let mut value = 0;
@@ -30,7 +30,7 @@ impl Base for Day15 {
         return Box::new(total);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut boxes = vec![Vec::<Lens>::new(); 256];
 
         for word in &self.words {

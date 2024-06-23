@@ -17,7 +17,7 @@ impl Base for Day02 {
         self.input = raw_input.split("\n").map(|x| x.to_string()).collect();
     }
 
-    fn part1(&self) -> Box<dyn Display> {
+    fn part1(&mut self) -> Box<dyn Display> {
         let maximums = HashMap::from([
             ("red".to_string(), 12),
             ("green".to_string(), 13),
@@ -39,7 +39,7 @@ impl Base for Day02 {
         return Box::new(sum);
     }
 
-    fn part2(&self) -> Box<dyn Display> {
+    fn part2(&mut self) -> Box<dyn Display> {
         let mut sum = 0;
         for game in &self.input {
             let mut color_mins = [0, 0, 0];
