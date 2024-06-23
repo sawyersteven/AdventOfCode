@@ -11,8 +11,56 @@ pub struct Size2D {
 }
 
 pub struct Grid2D<T> {
-    pub inner: Vec<T>,
+    inner: Vec<T>,
     size: Size2D,
+}
+
+impl Grid2D<char> {
+    /*
+    Creates Grid2D from chars in input string
+    Rows must be separated by newline chars, which will not be included in the grid
+     */
+    pub fn from_string(input: &String) -> Self {
+        let lines: Vec<&str> = input.lines().collect();
+
+        let mut g: Grid2D<char> = Grid2D {
+            inner: Vec::<char>::with_capacity(lines[0].len() * lines.len()),
+            size: Size2D {
+                x: lines[0].len(),
+                y: lines.len(),
+            },
+        };
+
+        for line in lines {
+            g.inner.extend(line.chars());
+        }
+
+        return g;
+    }
+}
+
+impl Grid2D<u8> {
+    /*
+    Creates Grid2D from bytes in input string
+    Rows must be separated by newline chars, which will not be included in the grid
+     */
+    pub fn from_string(input: &String) -> Self {
+        let lines: Vec<&str> = input.lines().collect();
+
+        let mut g: Grid2D<u8> = Grid2D {
+            inner: Vec::<u8>::with_capacity(lines[0].len() * lines.len()),
+            size: Size2D {
+                x: lines[0].len(),
+                y: lines.len(),
+            },
+        };
+
+        for line in lines {
+            g.inner.extend(line.bytes());
+        }
+
+        return g;
+    }
 }
 
 impl<T> Grid2D<T> {
@@ -54,12 +102,12 @@ impl<T> Grid2D<T> {
     }
 
     /// Returns iterator over selected Y column in grid
-    fn iter_col(&self, column: usize) -> StepBy<Iter<T>> {
+    pub fn iter_col(&self, column: usize) -> StepBy<Iter<T>> {
         return self.inner[column..].iter().step_by(self.size.x);
     }
 
     /// Returns iterator over selected X row in grid
-    fn iter_row(&self, row: usize) -> Iter<T> {
+    pub fn iter_row(&self, row: usize) -> Iter<T> {
         let start = (row * self.size.x);
         return self.inner[start..(start + self.size.x)].iter();
     }

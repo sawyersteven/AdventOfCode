@@ -10,7 +10,19 @@ pub struct Vector2Int {
 impl Vector2Int {
     pub const CARDINALS: [Vector2Int; 4] = [Vector2Int::UP, Vector2Int::RIGHT, Vector2Int::DOWN, Vector2Int::LEFT];
 
-    pub fn new(x: isize, y: isize) -> Self {
+    /// All 8 basic vector2 directions starting with UP going clockwise
+    pub const ALL_DIRS: [Vector2Int; 8] = [
+        Vector2Int::UP,
+        Vector2Int::UR,
+        Vector2Int::RIGHT,
+        Vector2Int::DR,
+        Vector2Int::DOWN,
+        Vector2Int::DL,
+        Vector2Int::LEFT,
+        Vector2Int::UL,
+    ];
+
+    pub const fn new(x: isize, y: isize) -> Self {
         return Vector2Int { x: x, y: y };
     }
 
@@ -19,21 +31,8 @@ impl Vector2Int {
         return self.x >= min.x && self.x <= max.x && self.y >= min.y && self.y <= max.y;
     }
 
-    /// All 8 basic vector2 directions starting with UP going clockwise
-    pub fn all_directions() -> [Vector2Int; 8] {
-        return [
-            Vector2Int::UP,
-            Vector2Int::UR,
-            Vector2Int::RIGHT,
-            Vector2Int::DR,
-            Vector2Int::DOWN,
-            Vector2Int::DL,
-            Vector2Int::LEFT,
-            Vector2Int::UL,
-        ];
-    }
-
     pub const ZERO: Vector2Int = Vector2Int { x: 0, y: 0 };
+    pub const ONE: Vector2Int = Vector2Int { x: 1, y: 1 };
 
     pub const UP: Vector2Int = Vector2Int { x: 0, y: 1 };
     pub const DOWN: Vector2Int = Vector2Int { x: 0, y: -1 };
@@ -45,7 +44,7 @@ impl Vector2Int {
     pub const DL: Vector2Int = Vector2Int { x: -1, y: -1 };
     pub const DR: Vector2Int = Vector2Int { x: 1, y: -1 };
 
-    pub fn manhattan(&self, rhs: Vector2Int) -> isize {
+    pub fn manhattan(&self, rhs: &Vector2Int) -> isize {
         return (self.x - rhs.x).abs() + (self.y - rhs.y).abs();
     }
 
@@ -57,6 +56,14 @@ impl Vector2Int {
             ))
             + 90f64;
         return if ang < 0f64 { ang + 360f64 } else { ang };
+    }
+
+    pub fn neighbors(&self) -> [Vector2Int; 4] {
+        let mut a = [*self; 4];
+        for i in 0..4 {
+            a[i] += Vector2Int::CARDINALS[i];
+        }
+        return a;
     }
 }
 
@@ -71,6 +78,14 @@ impl ops::Add<Vector2Int> for Vector2Int {
     type Output = Vector2Int;
     fn add(self, rhs: Vector2Int) -> Self::Output {
         return Vector2Int::new(self.x + rhs.x, self.y + rhs.y);
+    }
+}
+
+// + (isize, isize)
+impl ops::Add<(isize, isize)> for Vector2Int {
+    type Output = Vector2Int;
+    fn add(self, rhs: (isize, isize)) -> Self::Output {
+        return Vector2Int::new(self.x + rhs.0, self.y + rhs.1);
     }
 }
 
@@ -143,5 +158,15 @@ impl ops::DivAssign<Vector2Int> for Vector2Int {
     fn div_assign(&mut self, rhs: Vector2Int) {
         self.x /= rhs.x;
         self.y /= rhs.y;
+    }
+}
+
+// %
+// Returns <self.x % rhs.x, self.y % rhs.y>
+impl ops::Rem<Vector2Int> for Vector2Int {
+    type Output = Vector2Int;
+
+    fn rem(self, rhs: Vector2Int) -> Self::Output {
+        return Vector2Int::new(self.x % rhs.x, self.y % rhs.y);
     }
 }
