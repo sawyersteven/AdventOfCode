@@ -1,3 +1,8 @@
+/*
+Based mostly on Unity's Vector2:
+https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Math/Vector2.cs
+*/
+
 use std::{f64::consts::PI, fmt::Display, hash::Hash, ops};
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]

@@ -1,6 +1,10 @@
 #![allow(unused)]
 
-use std::{iter::StepBy, ops::Index, slice::Iter};
+use std::{
+    iter::StepBy,
+    ops::{Index, IndexMut},
+    slice::Iter,
+};
 
 use crate::v2i::Vector2Int;
 
@@ -10,6 +14,16 @@ pub struct Size2D {
     pub y: usize,
 }
 
+impl Size2D {
+    pub fn to_vector2(&self) -> Vector2Int {
+        return Vector2Int {
+            x: self.x as isize,
+            y: self.y as isize,
+        };
+    }
+}
+
+#[derive(Clone)]
 pub struct Grid2D<T> {
     inner: Vec<T>,
     size: Size2D,
@@ -94,6 +108,11 @@ impl<T> Grid2D<T> {
 
     pub fn get(&self, x: usize, y: usize) -> &T {
         return &self.inner[self.xy_to_ind(x, y)];
+    }
+
+    pub fn set(&mut self, x: usize, y: usize, value: T) {
+        let ind = self.xy_to_ind(x, y);
+        self.inner[ind] = value;
     }
 
     // Converts x,y coords to linear coords
