@@ -13,7 +13,7 @@ impl Day04 {
 
 impl Base for Day04 {
     fn parse_input(&mut self, raw_input: String) {
-        for line in raw_input.split("\n") {
+        for line in raw_input.lines() {
             let line = line.replace("  ", " ");
             let (a, b) = line.split(":").nth(1).unwrap().split_once(" | ").unwrap();
             let a_set = HashSet::from_iter(a.trim().split(" ").map(|x| x.parse().unwrap()));

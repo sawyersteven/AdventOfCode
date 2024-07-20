@@ -101,7 +101,7 @@ impl Day01 {
 
 impl Base for Day01 {
     fn parse_input(&mut self, raw_input: String) {
-        self.lines = raw_input.split("\n").map(|x| x.to_string()).collect();
+        self.lines = raw_input.lines().map(|x| x.to_string()).collect();
     }
 
     fn part1(&mut self) -> Box<dyn Display> {
