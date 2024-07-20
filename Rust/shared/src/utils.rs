@@ -6,8 +6,53 @@ use std::{
     io::{stdin, stdout, Write},
 };
 
-pub fn split_input(raw_input: String) -> Vec<String> {
-    return raw_input.split("\n").map(|x| String::from(x)).collect();
+pub fn lcm_array(nums: &[usize]) -> usize {
+    if nums.len() == 1 {
+        return nums[0];
+    }
+    let mut m = lcm(nums[0], nums[1]);
+    for i in 2..nums.len() {
+        m = lcm(m, nums[i]);
+    }
+    return m;
+}
+
+pub fn lcm(a: usize, b: usize) -> usize {
+    return a * (b / gcd(a, b));
+}
+
+pub fn gcd(mut a: usize, mut b: usize) -> usize {
+    if a == b {
+        return a;
+    }
+    if b > a {
+        let temp = a;
+        a = b;
+        b = temp;
+    }
+    while b > 0 {
+        let temp = a;
+        a = b;
+        b = temp % b;
+    }
+    return a;
+}
+
+pub fn gcd_f64(mut a: f64, mut b: f64) -> f64 {
+    if a == b {
+        return a;
+    }
+    if b > a {
+        let temp = a;
+        a = b;
+        b = temp;
+    }
+    while b > 0.0 {
+        let temp = a;
+        a = b;
+        b = temp % b;
+    }
+    return a;
 }
 
 pub fn read_user_input(prompt: &str) {

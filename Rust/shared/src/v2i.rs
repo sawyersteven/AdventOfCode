@@ -5,7 +5,7 @@ https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Expor
 
 use std::{f64::consts::PI, fmt::Display, hash::Hash, ops};
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash, PartialOrd, Ord)]
 pub struct Vector2Int {
     pub x: isize,
     pub y: isize,

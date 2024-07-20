@@ -75,6 +75,12 @@ impl Grid2D<u8> {
 
         return g;
     }
+
+    pub fn print(&self) {
+        for y in 0..self.size.y {
+            println!("{}", self.iter_row(y).map(|x| *x as char).collect::<String>());
+        }
+    }
 }
 
 impl<T> Grid2D<T> {

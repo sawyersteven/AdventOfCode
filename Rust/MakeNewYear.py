@@ -8,7 +8,7 @@ day_template = """use crate::Base;
 use std::fmt::Display;
 
 pub struct Day__ {
-    pub input: String,
+    input: String,
 }
 
 impl Day__ {

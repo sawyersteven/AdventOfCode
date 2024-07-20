@@ -1,3 +1,4 @@
+#![allow(clippy::needless_return, clippy::redundant_field_names)]
 use std::env;
 use std::fmt::Display;
 mod day01;
