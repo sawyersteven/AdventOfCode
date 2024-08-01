@@ -13,7 +13,7 @@ pub struct Day__ {
 
 impl Day__ {
     pub fn new() -> Day__ {
-        return Day__ { input: String::from("") };
+        return Day__ { input: String::new() };
     }
 }
 

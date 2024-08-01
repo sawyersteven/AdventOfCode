@@ -16,11 +16,14 @@ impl<T> CircularDeque<T> {
         };
     }
 
+    // Adds new value left of head
     pub fn add_last(&mut self, val: T) {
         self.inner.insert(self.head, val);
         self.head += 1;
+        self.head %= self.inner.len();
     }
 
+    // Adds new value at head, pushing current head right
     pub fn add_first(&mut self, val: T) {
         self.inner.insert(self.head, val)
     }
@@ -36,6 +39,14 @@ impl<T> CircularDeque<T> {
         }
 
         self.inner.swap(a as usize, b as usize);
+    }
+
+    pub fn head(&self) -> usize {
+        return self.head;
+    }
+
+    pub fn len(&self) -> usize {
+        return self.inner.len();
     }
 
     pub fn move_head_right(&mut self, steps: usize) {
@@ -61,9 +72,34 @@ impl<T> CircularDeque<T> {
         }
     }
 
+    pub fn first(&self) -> &T {
+        return &self.inner[self.head % self.inner.len()];
+    }
+
     pub fn get(&self, ind: usize) -> &T {
         let i = (self.head + ind) % self.inner.len();
         return &self.inner[i];
+    }
+
+    pub fn remove(&mut self, ind: usize) -> T {
+        let ind = (self.head + ind) % self.inner.len();
+        if ind < self.head {
+            self.head -= 1;
+        }
+        return self.inner.remove(ind).unwrap();
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &T> {
+        let mut indexes = (self.head..self.inner.len()).collect::<Vec<usize>>();
+        indexes.extend(0..self.head);
+        let mut i = 0;
+        std::iter::from_fn(move || {
+            i += 1;
+            if i > indexes.len() {
+                return None;
+            }
+            return Some(&self.inner[indexes[i - 1]]);
+        })
     }
 
     pub fn to_vec(&self) -> Vec<T>
@@ -80,9 +116,15 @@ impl<T> CircularDeque<T> {
         return result;
     }
 
-    pub fn insert_after(&mut self, index: usize, value: T) {
+    /// Inserts new value at index, moving all values with indexes equal to
+    /// or higher to the right
+    pub fn insert(&mut self, index: usize, value: T) {
         let index = (index + self.head) % self.inner.len();
         self.inner.insert(index, value);
+        if index < self.head {
+            self.head += 1;
+            self.head %= self.inner.len();
+        }
     }
 
     pub fn first_index_of(&self, val: T) -> Option<usize>
@@ -91,12 +133,12 @@ impl<T> CircularDeque<T> {
     {
         for i in self.head..self.inner.len() {
             if self.inner[i] == val {
-                return Some(i - self.head);
+                return Some((i - self.head) % self.inner.len());
             }
         }
         for i in 0..self.head {
             if self.inner[i] == val {
-                return Some(i + self.head);
+                return Some((i + self.head) % self.inner.len());
             }
         }
 

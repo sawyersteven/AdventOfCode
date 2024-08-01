@@ -1,6 +1,10 @@
 #![allow(unused)]
 
-use std::{iter::StepBy, ops::Index, slice::Iter};
+use std::{
+    iter::StepBy,
+    ops::{Index, IndexMut},
+    slice::Iter,
+};
 
 use crate::v3i::Vector3Int;
 
@@ -62,6 +66,11 @@ impl<T> Grid3D<T> {
         return &self.inner[self.xyz_to_ind(x, y, z)];
     }
 
+    pub fn set(&mut self, x: usize, y: usize, z: usize, value: T) {
+        let i = self.xyz_to_ind(x, y, z);
+        self.inner[i] = value;
+    }
+
     fn xyz_to_ind(&self, x: usize, y: usize, z: usize) -> usize {
         return x + (y * self.size.x) + (z * self.size.y * self.size.x);
     }
@@ -78,13 +87,33 @@ impl<T> Grid3D<T> {
         let start = (row * self.size.x);
         return self.inner[start..(start + self.size.x)].iter();
     }
+
+    pub fn count<P>(&self, mut predicate: P) -> usize
+    where
+        P: FnMut(&T) -> bool,
+    {
+        let mut c = 0;
+        for elem in &self.inner {
+            if predicate(&elem) {
+                c += 1;
+            }
+        }
+        return c;
+    }
 }
 
-impl<T> Index<Vector3Int> for Grid3D<T> {
+impl<T> Index<&Vector3Int> for Grid3D<T> {
     type Output = T;
 
-    fn index(&self, index: Vector3Int) -> &Self::Output {
+    fn index(&self, index: &Vector3Int) -> &Self::Output {
         return &self.inner[self.xyz_to_ind(index.x as usize, index.y as usize, index.z as usize)];
+    }
+}
+
+impl<T> IndexMut<&Vector3Int> for Grid3D<T> {
+    fn index_mut(&mut self, index: &Vector3Int) -> &mut Self::Output {
+        let i = self.xyz_to_ind(index.x as usize, index.y as usize, index.z as usize);
+        return &mut self.inner[i];
     }
 }
 
@@ -171,7 +200,7 @@ mod tests {
                 ind.y = y as isize;
                 for z in 0..3 {
                     ind.z = z as isize;
-                    assert_eq!(TEST_DATA_5X7X3[z][y][x], grid[ind]);
+                    assert_eq!(TEST_DATA_5X7X3[z][y][x], grid[&ind]);
                 }
             }
         }
