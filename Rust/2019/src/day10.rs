@@ -19,7 +19,7 @@ impl Day10 {
 
 impl Base for Day10 {
     fn parse_input(&mut self, raw_input: String) {
-        let grid = parse_to_u8_grid(raw_input, b' ', 0);
+        let grid = parse_to_u8_grid(&raw_input, b' ', 0);
         for y in 0..grid.len() {
             for x in 0..grid[0].len() {
                 if grid[y][x] == b'#' {

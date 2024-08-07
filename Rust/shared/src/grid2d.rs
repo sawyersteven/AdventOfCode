@@ -285,10 +285,10 @@ where
     }
 }
 
-impl<T> Index<Vector2Int> for Grid2D<T> {
+impl<T> Index<&Vector2Int> for Grid2D<T> {
     type Output = T;
 
-    fn index(&self, index: Vector2Int) -> &Self::Output {
+    fn index(&self, index: &Vector2Int) -> &Self::Output {
         return &self.inner[self.xy_to_ind(index.x as usize, index.y as usize)];
     }
 }
@@ -301,8 +301,8 @@ impl<T> Index<(usize, usize)> for Grid2D<T> {
     }
 }
 
-impl<T> IndexMut<Vector2Int> for Grid2D<T> {
-    fn index_mut(&mut self, index: Vector2Int) -> &mut Self::Output {
+impl<T> IndexMut<&Vector2Int> for Grid2D<T> {
+    fn index_mut(&mut self, index: &Vector2Int) -> &mut Self::Output {
         let i = self.xy_to_ind(index.x as usize, index.y as usize);
         return &mut self.inner[i];
     }

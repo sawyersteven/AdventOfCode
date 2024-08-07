@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use shared::v2i::Vector2Int;
 
 use crate::{
@@ -45,7 +46,6 @@ impl Base for Day15 {
         let mut resp: Response;
 
         let mut current_pos = Vector2Int::new((GRID_SZ / 2) as isize, (GRID_SZ / 2) as isize);
-        let mut start_pos = current_pos;
         let mut current_dir = W;
 
         let mut walls = HashSet::new();

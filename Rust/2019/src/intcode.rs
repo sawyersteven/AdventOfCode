@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-#[derive(PartialEq, Eq, Copy, Clone)]
+#[derive(PartialEq, Eq, Copy, Clone, Debug)]
 pub enum StatusCode {
     InputRequest = 74,
     EOF = 38,
@@ -83,7 +83,10 @@ impl Emulator {
         self.position = 0;
         self.input_queue.clear();
         self.relative_base = 0;
-        self.set_program(self.orig_program.clone());
+
+        let mut op = self.orig_program.clone();
+        op.append(&mut vec![0; Self::MEM_EXPAND_LEN]);
+        self.memory = op;
         return (StatusCode::Null, 0);
     }
 

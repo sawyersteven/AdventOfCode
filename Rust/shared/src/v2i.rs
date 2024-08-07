@@ -27,8 +27,16 @@ impl Vector2Int {
         Vector2Int::UL,
     ];
 
+    /// Converts passed usize to isize without concern for incompatible values
+    pub fn new_from_usize(x: usize, y: usize) -> Self {
+        return Self {
+            x: x as isize,
+            y: y as isize,
+        };
+    }
+
     pub const fn new(x: isize, y: isize) -> Self {
-        return Vector2Int { x: x, y: y };
+        return Vector2Int { x, y };
     }
 
     /// Check if in range inclusive
