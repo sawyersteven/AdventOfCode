@@ -1,61 +1,93 @@
-use crate::Base;
+use crate::{Args, Base, Part};
 use std::fs;
 
 pub const YEAR: usize = 2024;
 
-pub enum Part {
-    One,
-    Two,
-    Both,
-}
+pub fn run_day(args: Args) {
+    let input = read_input_file(args.day);
+    let mut problem = get_day(args.day).unwrap();
 
-pub fn run_day(day: usize, part: Part) {
-    let input = read_input_file(day);
-    let mut problem = get_day(day).unwrap();
-
-    println!("Day {}", day);
+    println!("Day {}", args.day);
 
     let now = std::time::Instant::now();
     problem.parse_input(input);
     let elapsed = now.elapsed();
-    println!("│ Parse Input [{}ms | {}us]", elapsed.as_millis(), elapsed.as_micros());
+    println!("- Parse Input [{}ms | {}us]", elapsed.as_millis(), elapsed.as_micros());
 
-    match part {
+    match args.part {
         Part::One => {
-            run_part1(&mut problem);
+            run_part1(&mut problem, args.benchmark_iters);
         }
         Part::Two => {
-            run_part2(&mut problem);
+            run_part2(&mut problem, args.benchmark_iters);
         }
         Part::Both => {
-            run_part1(&mut problem);
-            run_part2(&mut problem);
+            run_part1(&mut problem, args.benchmark_iters);
+            run_part2(&mut problem, args.benchmark_iters);
         }
     }
 }
 
-fn run_part1(problem: &mut Box<dyn Base>) {
-    let now = std::time::Instant::now();
-    let answer = problem.part1();
-    let elapsed = now.elapsed();
-    println!(
-        "│ Part 1 [{:03}ms | {:03}us]: {}",
-        elapsed.as_millis(),
-        elapsed.as_micros(),
-        answer
-    );
+fn run_part1(problem: &mut Box<dyn Base>, count: usize) {
+    let mut answer: Box<(dyn std::fmt::Display + 'static)> = Box::new("");
+
+    let mut times = Vec::new();
+
+    for _ in 0..count {
+        let now = std::time::Instant::now();
+        answer = problem.part1();
+        times.push(now.elapsed());
+    }
+
+    if count == 1 {
+        println!(
+            "- Part 1 [{:03}ms | {:03}us]: {}",
+            times[0].as_millis(),
+            times[0].as_micros(),
+            answer
+        );
+    } else {
+        let average_m = times.iter().map(|x| x.as_millis() as usize).sum::<usize>() / times.len();
+        let average_u = times.iter().map(|x| x.as_micros() as usize).sum::<usize>() / times.len();
+        let max = times.iter().max().unwrap();
+        let min = times.iter().min().unwrap();
+        println!(
+            "┌ Part 1 ({} iterations)\n├ Avg [{:03}ms | {:03}us] \n├ Min [{:03}ms | {:03}us] \n├ Max [{:03}ms | {:03}us] \n└ Answer: {}",
+            count, average_m, average_u, min.as_millis(), min.as_micros(), max.as_millis(), max.as_micros(),
+            answer
+        );
+    }
 }
 
-fn run_part2(problem: &mut Box<dyn Base>) {
-    let now = std::time::Instant::now();
-    let answer = problem.part2();
-    let elapsed = now.elapsed();
-    println!(
-        "│ Part 2 [{:03}ms | {:03}us]: {}",
-        elapsed.as_millis(),
-        elapsed.as_micros(),
-        answer
-    );
+fn run_part2(problem: &mut Box<dyn Base>, count: usize) {
+    let mut answer: Box<(dyn std::fmt::Display + 'static)> = Box::new("");
+
+    let mut times = Vec::new();
+
+    for _ in 0..count {
+        let now = std::time::Instant::now();
+        answer = problem.part2();
+        times.push(now.elapsed());
+    }
+
+    if count == 1 {
+        println!(
+            "- Part 2 [{:03}ms | {:03}us]: {}",
+            times[0].as_millis(),
+            times[0].as_micros(),
+            answer
+        );
+    } else {
+        let average_m = times.iter().map(|x| x.as_millis() as usize).sum::<usize>() / times.len();
+        let average_u = times.iter().map(|x| x.as_micros() as usize).sum::<usize>() / times.len();
+        let max = times.iter().max().unwrap();
+        let min = times.iter().min().unwrap();
+        println!(
+            "┌ Part 2 ({} iterations)\n├ Avg [{:03}ms | {:03}us] \n├ Min [{:03}ms | {:03}us] \n├ Max [{:03}ms | {:03}us] \n└ Answer: {}",
+            count, average_m, average_u, min.as_millis(), min.as_micros(), max.as_millis(), max.as_micros(),
+            answer
+        );
+    }
 }
 
 fn get_day(day: usize) -> Option<Box<dyn Base>> {

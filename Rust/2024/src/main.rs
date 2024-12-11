@@ -1,4 +1,3 @@
-use std::env;
 use std::fmt::Display;
 mod day01;
 mod day02;
@@ -27,35 +26,30 @@ mod day24;
 mod day25;
 mod runner;
 pub mod utils;
+use clap::{arg, Parser, ValueEnum};
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
-    if args.len() == 1 {
-        print_usage();
-        return;
-    }
-    let day: usize = args[1].parse::<usize>().unwrap();
+#[derive(Parser)]
+struct Args {
+    day: usize,
 
-    let part = match args.len() {
-        2 => runner::Part::Both,
-        p if p >= 3 => {
-            if args[2].parse::<usize>().unwrap() == 1 {
-                runner::Part::One
-            } else {
-                runner::Part::Two
-            }
-        }
-        _ => {
-            print_usage();
-            return;
-        }
-    };
+    #[arg(short, value_enum, default_value_t = Part::Both )]
+    part: Part,
 
-    runner::run_day(day, part);
+    #[arg(short, default_value_t = 1)]
+    benchmark_iters: usize,
 }
 
-fn print_usage() {
-    println!("Usage: \ncargo run [day] <part>");
+#[derive(Clone, ValueEnum)]
+enum Part {
+    One,
+    Two,
+    Both,
+}
+
+fn main() {
+    let args = Args::parse();
+
+    runner::run_day(args);
 }
 
 pub trait Base {
