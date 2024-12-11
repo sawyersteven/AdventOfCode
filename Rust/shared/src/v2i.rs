@@ -3,7 +3,12 @@ Based mostly on Unity's Vector2:
 https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Math/Vector2.cs
 */
 
-use std::{f64::consts::PI, fmt::Display, hash::Hash, ops};
+use std::{
+    f64::consts::PI,
+    fmt::Display,
+    hash::Hash,
+    ops::{self},
+};
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy, Hash, PartialOrd, Ord)]
 pub struct Vector2Int {
@@ -40,6 +45,7 @@ impl Vector2Int {
     }
 
     /// Check if in range inclusive
+    #[inline(always)]
     pub fn in_range(&self, min: &Vector2Int, max: &Vector2Int) -> bool {
         return self.x >= min.x && self.x <= max.x && self.y >= min.y && self.y <= max.y;
     }
@@ -83,6 +89,15 @@ impl Vector2Int {
 impl Display for Vector2Int {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "<{}, {}>", self.x, self.y)
+    }
+}
+
+impl From<(usize, usize)> for Vector2Int {
+    fn from(value: (usize, usize)) -> Self {
+        return Self {
+            x: value.0 as isize,
+            y: value.1 as isize,
+        };
     }
 }
 

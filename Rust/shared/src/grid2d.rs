@@ -128,6 +128,10 @@ impl<T> Grid2D<T> {
         return x + (y * self.size.x);
     }
 
+    fn ind_to_xy(&self, ind: usize) -> (usize, usize) {
+        return (ind % self.size.y, ind / self.size.x);
+    }
+
     /// Returns iterator over selected Y column in grid
     pub fn iter_col(&self, column: usize) -> StepBy<Iter<T>> {
         return self.inner[column..].iter().step_by(self.size.x);
@@ -137,6 +141,18 @@ impl<T> Grid2D<T> {
     pub fn iter_row(&self, row: usize) -> Iter<T> {
         let start = (row * self.size.x);
         return self.inner[start..(start + self.size.x)].iter();
+    }
+
+    pub fn find_all<'a>(&'a self, item: &'a T) -> impl Iterator<Item = (usize, usize)> + use<'a, T>
+    where
+        T: PartialEq,
+    {
+        return self
+            .inner
+            .iter()
+            .enumerate()
+            .filter(move |(_, t)| *t == item)
+            .map(|(i, _)| self.ind_to_xy(i));
     }
 
     pub fn count<P>(&self, mut predicate: P) -> usize
