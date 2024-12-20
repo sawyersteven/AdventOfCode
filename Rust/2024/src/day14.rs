@@ -1,4 +1,4 @@
-use shared::{utils::read_user_input, v2i::Vector2Int};
+use shared::v2i::Vector2Int;
 
 use crate::Base;
 use std::{fmt::Display, usize};
@@ -53,6 +53,14 @@ impl Base for Day14 {
         return Box::new(quads.iter().product::<isize>());
     }
 
+    /// Not super fast, but designed to work using as few assumptions as
+    /// possible. Which is really just the assumption that the tree image
+    /// will be mostly left/right symmetrical.
+    /// After each second, count how many bots have a matching bot mirrored
+    /// on the X axis of the image. Less symmetry means higher entropy, and
+    /// the answer should be the second with the least entropy.
+    /// I did this before I learned about Chinese Remainder Theorem, which
+    /// would be faster but I kind of like my solution.
     fn part2(&mut self) -> Box<dyn Display> {
         let runtime = W * H;
         let mut bots: Vec<Bot> = self.input.lines().map(|l| Bot::from(l)).collect();
@@ -72,7 +80,14 @@ impl Base for Day14 {
                 }
                 let mut pos = bot.pos;
                 pos.x = W - pos.x;
-                if !bots.iter().any(|b| b.pos == pos) {
+                // noticably faster than matching b.pos == pos
+                if bots
+                    .iter()
+                    .filter(|b| b.pos.x == pos.x)
+                    .filter(|b| b.pos.y == pos.y)
+                    .next()
+                    .is_none()
+                {
                     entropy += 1;
                 }
             }

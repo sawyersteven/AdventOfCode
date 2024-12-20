@@ -12,7 +12,7 @@ impl Day13 {
 
     /// Solve for lowest number of A presses possible
     /// return (a, b)
-    fn solve_for_a(&self, c: &Claw, limit: i128) -> (i128, i128) {
+    fn solve_for_a(&self, c: &Claw, limit: i64) -> (i64, i64) {
         /* Simple math but hard to read when written efficiently
 
         Button A: X+94, Y+34
@@ -61,7 +61,7 @@ impl Day13 {
 
     /// Same as solve_for_a, but solves for lowest B presses possible
     /// return (a, b) which is (0,0) if unsolvable
-    fn solve_for_b(&self, c: &Claw, limit: i128) -> (i128, i128) {
+    fn solve_for_b(&self, c: &Claw, limit: i64) -> (i64, i64) {
         let b = ((c.prize.x * c.btn_a.y) - (c.prize.y * c.btn_a.x))
             / ((c.btn_b.x * c.btn_a.y) - (c.btn_b.y * c.btn_a.x));
 
@@ -117,9 +117,9 @@ impl Base for Day13 {
             let adist = c.btn_a.x + c.btn_a.y;
 
             let (a, b) = if (bdist * 3) <= adist {
-                self.solve_for_b(&c, i128::MAX)
+                self.solve_for_b(&c, i64::MAX)
             } else {
-                self.solve_for_a(&c, i128::MAX)
+                self.solve_for_a(&c, i64::MAX)
             };
 
             cost += (a * 3) + b;
@@ -159,6 +159,6 @@ impl From<&str> for Claw {
 }
 
 struct Coord128 {
-    x: i128,
-    y: i128,
+    x: i64,
+    y: i64,
 }
