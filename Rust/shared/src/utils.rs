@@ -4,6 +4,8 @@ use core::fmt::Debug;
 use std::{
     fmt::Display,
     io::{stdin, stdout, Write},
+    ops::{AddAssign, Mul},
+    process::Output,
 };
 
 pub fn lcm_array(nums: &[usize]) -> usize {
@@ -225,6 +227,25 @@ where
         pattern_start_ind += pattern_len;
     }
     return None;
+}
+
+pub fn count_bits<T>(val: &T) -> usize
+where
+    T: Copy
+        + Mul
+        + std::ops::BitAnd<i32, Output = T>
+        + AddAssign<T>
+        + std::cmp::PartialOrd<i32>
+        + std::ops::ShrAssign<i32>
+        + Into<usize>,
+{
+    let mut count = 0;
+    let mut n = *val;
+    while n > 0 {
+        count += (n & 1).into();
+        n >>= 1;
+    }
+    return count;
 }
 
 mod test {

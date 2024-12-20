@@ -39,6 +39,17 @@ impl Vector2Usize {
             + 90f64;
         return if ang < 0f64 { ang + 360f64 } else { ang };
     }
+
+    /// Get neighbors in all 4 cardinal directions.
+    /// Will over-flow or under-flow without warning.
+    pub fn neighbors(&self) -> [Vector2Usize; 4] {
+        return [
+            Vector2Usize::new(self.x + 1, self.y),
+            Vector2Usize::new(self.x - 1, self.y),
+            Vector2Usize::new(self.x, self.y + 1),
+            Vector2Usize::new(self.x, self.y - 1),
+        ];
+    }
 }
 
 impl Display for Vector2Usize {

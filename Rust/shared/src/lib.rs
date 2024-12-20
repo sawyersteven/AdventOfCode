@@ -1,3 +1,4 @@
+pub mod bitset;
 pub mod circular_deque;
 pub mod grid2d;
 pub mod grid3d;

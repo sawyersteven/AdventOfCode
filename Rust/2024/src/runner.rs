@@ -47,13 +47,13 @@ fn run_part1(problem: &mut Box<dyn Base>, count: usize) {
             answer
         );
     } else {
-        let average_m = times.iter().map(|x| x.as_millis() as usize).sum::<usize>() / times.len();
-        let average_u = times.iter().map(|x| x.as_micros() as usize).sum::<usize>() / times.len();
+        let total_u = times.iter().map(|x| x.as_micros() as usize).sum::<usize>();
+        let average_u = total_u / times.len();
         let max = times.iter().max().unwrap();
         let min = times.iter().min().unwrap();
         println!(
-            "┌ Part 1 ({} iterations)\n├ Avg [{:03}ms | {:03}us] \n├ Min [{:03}ms | {:03}us] \n├ Max [{:03}ms | {:03}us] \n└ Answer: {}",
-            count, average_m, average_u, min.as_millis(), min.as_micros(), max.as_millis(), max.as_micros(),
+            "┌ Part 1 ({} iterations)\n├ Tot [{:03}ms | {:03}us] \n├ Avg [{:03}ms | {:03}us] \n├ Min [{:03}ms | {:03}us] \n├ Max [{:03}ms | {:03}us] \n└ Answer: {}",
+            count, total_u / 1000, total_u, average_u / 1000, average_u, min.as_millis(), min.as_micros(), max.as_millis(), max.as_micros(),
             answer
         );
     }
@@ -78,13 +78,13 @@ fn run_part2(problem: &mut Box<dyn Base>, count: usize) {
             answer
         );
     } else {
-        let average_m = times.iter().map(|x| x.as_millis() as usize).sum::<usize>() / times.len();
-        let average_u = times.iter().map(|x| x.as_micros() as usize).sum::<usize>() / times.len();
+        let total_u = times.iter().map(|x| x.as_micros() as usize).sum::<usize>();
+        let average_u = total_u / times.len();
         let max = times.iter().max().unwrap();
         let min = times.iter().min().unwrap();
         println!(
-            "┌ Part 2 ({} iterations)\n├ Avg [{:03}ms | {:03}us] \n├ Min [{:03}ms | {:03}us] \n├ Max [{:03}ms | {:03}us] \n└ Answer: {}",
-            count, average_m, average_u, min.as_millis(), min.as_micros(), max.as_millis(), max.as_micros(),
+            "┌ Part 2 ({} iterations)\n├ Tot [{:03}ms | {:03}us] \n├ Avg [{:03}ms | {:03}us] \n├ Min [{:03}ms | {:03}us] \n├ Max [{:03}ms | {:03}us] \n└ Answer: {}",
+            count, total_u / 1000, total_u, average_u / 1000, average_u, min.as_millis(), min.as_micros(), max.as_millis(), max.as_micros(),
             answer
         );
     }

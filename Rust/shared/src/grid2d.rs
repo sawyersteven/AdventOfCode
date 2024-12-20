@@ -8,7 +8,7 @@ use std::{
     vec::Drain,
 };
 
-use crate::v2i::Vector2Int;
+use crate::{v2i::Vector2Int, v2u::Vector2Usize};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub struct Size2D {
@@ -64,7 +64,7 @@ impl Grid2D<u8> {
         let lines: Vec<&str> = input.lines().collect();
 
         let mut g: Grid2D<u8> = Grid2D {
-            inner: Vec::<u8>::with_capacity(lines[0].len() * lines.len()),
+            inner: Vec::<u8>::with_capacity(input.len()),
             size: Size2D {
                 x: lines[0].len(),
                 y: lines.len(),
@@ -309,6 +309,14 @@ impl<T> Index<&Vector2Int> for Grid2D<T> {
     }
 }
 
+impl<T> Index<&Vector2Usize> for Grid2D<T> {
+    type Output = T;
+
+    fn index(&self, index: &Vector2Usize) -> &Self::Output {
+        return &self.inner[self.xy_to_ind(index.x, index.y)];
+    }
+}
+
 impl<T> Index<(usize, usize)> for Grid2D<T> {
     type Output = T;
 
@@ -378,7 +386,7 @@ mod tests {
             for y in 0..7 {
                 ind.y = y as isize;
 
-                assert_eq!(TEST_DATA_5X7[y][x], grid[ind]);
+                assert_eq!(TEST_DATA_5X7[y][x], grid[&ind]);
             }
         }
     }
@@ -500,8 +508,6 @@ mod tests {
             40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 20, 21, 22, 23, 24,
             25, 26, 27, 28, 29, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
         ];
-
-        println!("{:?}", grid.inner);
 
         for (i, v) in grid.inner.iter().enumerate() {
             assert_eq!(grid.inner[i], flipped_inner[i]);

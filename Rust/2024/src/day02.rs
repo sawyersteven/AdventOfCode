@@ -19,7 +19,7 @@ impl Base for Day02 {
     fn part1(&mut self) -> Box<dyn Display> {
         let mut count = 0;
         for line in self.input.lines() {
-            let rep: Vec<isize> = line.split(' ').map(|x| x.parse().unwrap()).collect();
+            let rep: Vec<i8> = line.split(' ').map(|x| x.parse().unwrap()).collect();
             if is_report_good(&rep) {
                 count += 1;
             };
@@ -30,7 +30,7 @@ impl Base for Day02 {
     fn part2(&mut self) -> Box<dyn Display> {
         let mut count = 0;
         for line in self.input.lines() {
-            let rep: Vec<isize> = line.split(' ').map(|x| x.parse().unwrap()).collect();
+            let rep: Vec<i8> = line.split(' ').map(|x| x.parse().unwrap()).collect();
             let l = rep.len();
             for i in 0..l {
                 if is_report_good(&[&rep[0..i], &rep[(i + 1)..l]].concat()) {
@@ -43,9 +43,11 @@ impl Base for Day02 {
     }
 }
 
-fn is_report_good(rep: &[isize]) -> bool {
-    let ascending = rep[0] < rep[1];
-
-    return (0..(rep.len() - 1))
-        .all(|i| (rep[i] < rep[i + 1]) == ascending && (1..=3).contains(&rep[i].abs_diff(rep[i + 1])));
+fn is_report_good(rep: &[i8]) -> bool {
+    let l = rep.len() - 1;
+    if rep[0] < rep[1] {
+        return (0..l).all(|i| (rep[i] < rep[i + 1])) && (0..l).all(|i| (1..=3).contains(&(rep[i + 1] - rep[i])));
+    } else {
+        return (0..l).all(|i| (rep[i] > rep[i + 1])) && (0..l).all(|i| (1..=3).contains(&(rep[i] - rep[i + 1])));
+    }
 }
