@@ -63,6 +63,7 @@ impl Vector2Int {
     pub const DL: Vector2Int = Vector2Int { x: -1, y: -1 };
     pub const DR: Vector2Int = Vector2Int { x: 1, y: -1 };
 
+    #[inline(always)]
     pub fn manhattan(&self, rhs: &Vector2Int) -> isize {
         return (self.x - rhs.x).abs() + (self.y - rhs.y).abs();
     }

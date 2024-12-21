@@ -60,7 +60,7 @@ impl Base for Day18 {
             }
         }
 
-        return Box::new("-"); // 1544 too high
+        return Box::new("-");
     }
 
     fn part2(&mut self) -> Box<dyn Display> {
