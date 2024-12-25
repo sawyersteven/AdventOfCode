@@ -115,31 +115,29 @@ impl Base for Day24 {
                 continue;
             }
 
-            // XOR ops can only involve inputs (x, y) or outputs (z) as nothing
-            // else must be calculated for their input
-            if gate.op == u8::bitxor
-                && gate.out.as_bytes()[0] < b'x'
-                && gate.a_wire.as_bytes()[0] < b'x'
-                && gate.b_wire.as_bytes()[0] < b'x'
-            {
-                bad_outputs.insert(gate.out);
-                continue;
+            // OR cannot go to another OR.
+            if gate.op == u8::bitxor {
+                for gate2 in &gates {
+                    if (gate.out == gate2.a_wire || gate.out == gate2.b_wire) && gate2.op == u8::bitor {
+                        bad_outputs.insert(gate.out);
+                        continue;
+                    }
+                }
+                // XOR ops can only involve inputs (x, y) or outputs (z) as nothing
+                // else must be calculated for their input
+                if gate.out.as_bytes()[0] < b'x'
+                    && gate.a_wire.as_bytes()[0] < b'x'
+                    && gate.b_wire.as_bytes()[0] < b'x'
+                {
+                    bad_outputs.insert(gate.out);
+                    continue;
+                }
             }
 
             // The result of an AND must go directly to an OR unless it is the first input
             if gate.op == u8::bitand && gate.a_wire != "x00" && gate.b_wire != "x00" {
                 for gate2 in &gates {
                     if (gate.out == gate2.a_wire || gate.out == gate2.b_wire) && gate2.op != u8::bitor {
-                        bad_outputs.insert(gate.out);
-                        continue;
-                    }
-                }
-            }
-
-            // OR cannot go to another OR.
-            if gate.op == u8::bitxor {
-                for gate2 in &gates {
-                    if (gate.out == gate2.a_wire || gate.out == gate2.b_wire) && gate2.op == u8::bitor {
                         bad_outputs.insert(gate.out);
                         continue;
                     }
