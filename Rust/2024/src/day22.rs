@@ -52,8 +52,8 @@ impl Base for Day22 {
             }
         }
 
-        let profit = *totals.values().max().unwrap();
-        return Box::new(profit);
+        let bananas = *totals.values().max().unwrap();
+        return Box::new(bananas);
     }
 }
 
